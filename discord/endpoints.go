@@ -243,8 +243,8 @@ var (
 
 	EndpointGuildCreate = "/guilds"
 
-	EndpointInvite = func(interactionID string) string {
-		return "/invites/" + interactionID
+	EndpointInvite = func(inviteID string) string {
+		return "/invites/" + inviteID
 	}
 
 	EndpointIntegrationsJoin = func(interactionID string) string {

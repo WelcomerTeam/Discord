@@ -276,7 +276,7 @@ type InteractionComponent struct {
 	Label       string                     `json:"label,omitempty"`
 	Emoji       *Emoji                     `json:"emoji,omitempty"`
 	URL         string                     `json:"url,omitempty"`
-	Options     []*ApplicationSelectOption `json:"options"`
+	Options     []*ApplicationSelectOption `json:"options,omitempty"`
 	Placeholder string                     `json:"placeholder,omitempty"`
 	MinValues   int32                      `json:"min_values,omitempty"`
 	MaxValues   int32                      `json:"max_values,omitempty"`

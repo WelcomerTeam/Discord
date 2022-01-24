@@ -110,8 +110,8 @@ type Message struct {
 type MessageParams struct {
 	Content          string                    `json:"content"`
 	TTS              bool                      `json:"tts"`
-	Embeds           []*Embed                  `json:"embeds"`
-	AllowedMentions  []*MessageAllowedMentions `json:"allowed_mentions"`
+	Embeds           []*Embed                  `json:"embeds,omitempty"`
+	AllowedMentions  []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
 	MessageReference *MessageReference         `json:"message_reference,omitempty"`
 	Components       []*InteractionComponent   `json:"components,omitempty"`
 	StickerIDs       []*discord.Snowflake      `json:"sticker_ids,omitempty"`
