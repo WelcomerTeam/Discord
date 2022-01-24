@@ -2,10 +2,9 @@ package discord
 
 import (
 	"bytes"
-	"strconv"
-
 	gotils_strconv "github.com/savsgio/gotils/strconv"
 	"golang.org/x/xerrors"
+	"strconv"
 )
 
 const (

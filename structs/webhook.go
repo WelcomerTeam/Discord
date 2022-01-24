@@ -1,6 +1,9 @@
 package discord
 
-import jsoniter "github.com/json-iterator/go"
+import (
+	"github.com/WelcomerTeam/Discord/discord"
+	jsoniter "github.com/json-iterator/go"
+)
 
 // webhook.go represents all structures to create a webhook and interact with it.
 
@@ -15,16 +18,16 @@ const (
 
 // Webhook represents a webhook on Discord.
 type Webhook struct {
-	ID   Snowflake   `json:"id"`
-	Type WebhookType `json:"type"`
+	ID   discord.Snowflake `json:"id"`
+	Type WebhookType       `json:"type"`
 
-	GuildID       *Snowflake `json:"guild_id,omitempty"`
-	ChannelID     *Snowflake `json:"channel_id,omitempty"`
-	User          *User      `json:"user,omitempty"`
-	Name          string     `json:"name"`
-	Avatar        string     `json:"avatar"`
-	Token         string     `json:"token"`
-	ApplicationID *Snowflake `json:"application_id,omitempty"`
+	GuildID       *discord.Snowflake `json:"guild_id,omitempty"`
+	ChannelID     *discord.Snowflake `json:"channel_id,omitempty"`
+	User          *User              `json:"user,omitempty"`
+	Name          string             `json:"name"`
+	Avatar        string             `json:"avatar"`
+	Token         string             `json:"token"`
+	ApplicationID *discord.Snowflake `json:"application_id,omitempty"`
 }
 
 // WebhookMessage represents a message on Discord for webhooks.

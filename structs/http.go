@@ -1,5 +1,7 @@
 package discord
 
+import "github.com/WelcomerTeam/Discord/discord"
+
 // http.go represents the structures of common endpoints we use.
 
 // Gateway represents a GET /gateway response.
@@ -28,5 +30,5 @@ type TooManyRequests struct {
 
 // CreateDMChannel create a new DM channel with a user. Returns a DM channel object.
 type CreateDMChannel struct {
-	RecipientID Snowflake `json:"recipient_id"`
+	RecipientID discord.Snowflake `json:"recipient_id"`
 }

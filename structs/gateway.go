@@ -1,6 +1,9 @@
 package discord
 
-import jsoniter "github.com/json-iterator/go"
+import (
+	"github.com/WelcomerTeam/Discord/discord"
+	jsoniter "github.com/json-iterator/go"
+)
 
 // gateway.go contains all structures for interacting with discord's gateway and contains
 // all events and structures we send to discord.
@@ -109,12 +112,12 @@ type Heartbeat int
 
 // Request guild members requests members for a guild.
 type RequestGuildMembers struct {
-	GuildID   Snowflake   `json:"guild_id"`
-	Query     string      `json:"query"`
-	Limit     int32       `json:"limit"`
-	Presences bool        `json:"presences"`
-	Nonce     string      `json:"nonce"`
-	UserIDs   []Snowflake `json:"user_ids"`
+	GuildID   discord.Snowflake   `json:"guild_id"`
+	Query     string              `json:"query"`
+	Limit     int32               `json:"limit"`
+	Presences bool                `json:"presences"`
+	Nonce     string              `json:"nonce"`
+	UserIDs   []discord.Snowflake `json:"user_ids"`
 }
 
 // Update Presence updates a client's presence.

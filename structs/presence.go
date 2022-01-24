@@ -1,5 +1,7 @@
 package discord
 
+import "github.com/WelcomerTeam/Discord/discord"
+
 // PresenceStatus represents a presence's status.
 type PresenceStatus string
 
@@ -36,18 +38,18 @@ const (
 
 // Activity represents an activity as sent as part of other packets.
 type Activity struct {
-	Name          string        `json:"name"`
-	Type          ActivityType  `json:"type"`
-	URL           string       `json:"url"`
-	Timestamps    *Timestamps   `json:"timestamps,omitempty"`
-	ApplicationID *Snowflake    `json:"application_id"`
-	Details       string       `json:"details"`
-	State         string       `json:"state"`
-	Party         *Party        `json:"party,omitempty"`
-	Assets        *Assets       `json:"assets,omitempty"`
-	Secrets       *Secrets      `json:"secrets,omitempty"`
-	Instance      bool         `json:"instance"`
-	Flags         *ActivityFlag `json:"flags,omitempty"`
+	Name          string             `json:"name"`
+	Type          ActivityType       `json:"type"`
+	URL           string             `json:"url"`
+	Timestamps    *Timestamps        `json:"timestamps,omitempty"`
+	ApplicationID *discord.Snowflake `json:"application_id"`
+	Details       string             `json:"details"`
+	State         string             `json:"state"`
+	Party         *Party             `json:"party,omitempty"`
+	Assets        *Assets            `json:"assets,omitempty"`
+	Secrets       *Secrets           `json:"secrets,omitempty"`
+	Instance      bool               `json:"instance"`
+	Flags         *ActivityFlag      `json:"flags,omitempty"`
 }
 
 // Timestamps represents the starting and ending timestamp of an activity.
@@ -59,7 +61,7 @@ type Timestamps struct {
 // Party represents an activity's current party information.
 type Party struct {
 	ID   string `json:"id,omitempty"`
-	Size []int   `json:"size,omitempty"`
+	Size []int  `json:"size,omitempty"`
 }
 
 // Assets represents an activity's images and their hover texts.

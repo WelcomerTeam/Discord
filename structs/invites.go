@@ -1,5 +1,7 @@
 package discord
 
+import "github.com/WelcomerTeam/Discord/discord"
+
 // invites.go contains all structures for invites.
 
 // InviteTargetType represents the type of an invites target.
@@ -31,10 +33,10 @@ const (
 
 // Invite represents the structure of Invite data.
 type Invite struct {
-	Code    string     `json:"code"`
-	Guild   *Guild     `json:"guild,omitempty"`
-	GuildID *Snowflake `json:"guild_id,omitempty"`
-	Channel *Channel   `json:"channel,omitempty"`
+	Code    string             `json:"code"`
+	Guild   *Guild             `json:"guild,omitempty"`
+	GuildID *discord.Snowflake `json:"guild_id,omitempty"`
+	Channel *Channel           `json:"channel,omitempty"`
 
 	Inviter                  *User                `json:"inviter,omitempty"`
 	TargetType               *InviteTargetType    `json:"target_type,omitempty"`
@@ -63,10 +65,10 @@ type InviteStageInstance struct {
 
 // ScheduledEvent represents an scheduled event.
 type ScheduledEvent struct {
-	ID                 Snowflake                 `json:"id"`
-	GuildID            Snowflake                 `json:"guild_id"`
-	ChannelID          *Snowflake                `json:"channel_id,omitempty"`
-	CreatorID          *Snowflake                `json:"creator_id,omitempty"`
+	ID                 discord.Snowflake         `json:"id"`
+	GuildID            discord.Snowflake         `json:"guild_id"`
+	ChannelID          *discord.Snowflake        `json:"channel_id,omitempty"`
+	CreatorID          *discord.Snowflake        `json:"creator_id,omitempty"`
 	Name               string                    `json:"name"`
 	Description        string                    `json:"description,omitempty"`
 	ScheduledStartTime string                    `json:"scheduled_start_time"`
@@ -74,7 +76,7 @@ type ScheduledEvent struct {
 	PrivacyLevel       *StageChannelPrivacyLevel `json:"privacy_level"`
 	Status             *EventStatus              `json:"status"`
 	EntityType         *ScheduledEntityType      `json:"entity_type"`
-	EntityID           *Snowflake                `json:"entity_id,omitempty"`
+	EntityID           *discord.Snowflake        `json:"entity_id,omitempty"`
 	EntityMetadata     *EventMetadata            `json:"entity_metadata,omitempty"`
 	Creator            *User                     `json:"creator,omitempty"`
 	UserCount          int32                     `json:"user_count,omitempty"`
@@ -87,7 +89,7 @@ type EventMetadata struct {
 
 // ScheduledEventUser represents a user subscribed to an event.
 type ScheduledEventUser struct {
-	EventID Snowflake    `json:"guild_scheduled_event_id"`
-	User    User         `json:"user"`
-	Member  *GuildMember `json:"member,omitempty"`
+	EventID discord.Snowflake `json:"guild_scheduled_event_id"`
+	User    User              `json:"user"`
+	Member  *GuildMember      `json:"member,omitempty"`
 }
