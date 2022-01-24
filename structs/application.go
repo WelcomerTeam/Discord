@@ -272,13 +272,13 @@ type InteractionComponent struct {
 	Type        InteractionComponentType   `json:"type"`
 	CustomID    string                     `json:"custom_id,omitempty"`
 	Disabled    bool                       `json:"disabled"`
-	Style       *InteractionComponentStyle `json:"style,omitempty"`
+	Style       InteractionComponentStyle  `json:"style,omitempty"`
 	Label       string                     `json:"label,omitempty"`
 	Emoji       *Emoji                     `json:"emoji,omitempty"`
 	URL         string                     `json:"url,omitempty"`
 	Options     []*ApplicationSelectOption `json:"options,omitempty"`
 	Placeholder string                     `json:"placeholder,omitempty"`
-	MinValues   int32                      `json:"min_values,omitempty"`
-	MaxValues   int32                      `json:"max_values,omitempty"`
+	MinValues   *int32                     `json:"min_values,omitempty"`
+	MaxValues   *int32                     `json:"max_values,omitempty"`
 	Components  []*InteractionComponent    `json:"components,omitempty"`
 }
