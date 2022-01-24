@@ -1,5 +1,7 @@
 package discord
 
+import "time"
+
 // embed.go contains all structures for constructing embeds
 
 type EmbedType string
@@ -19,7 +21,7 @@ type Embed struct {
 	Type        EmbedType       `json:"type,omitempty"`
 	Description string          `json:"description,omitempty"`
 	URL         string          `json:"url,omitempty"`
-	Timestamp   string          `json:"timestamp,omitempty"`
+	Timestamp   *time.Time      `json:"timestamp,omitempty"`
 	Color       int32           `json:"color,omitempty"`
 	Footer      *EmbedFooter    `json:"footer,omitempty"`
 	Image       *EmbedImage     `json:"image,omitempty"`

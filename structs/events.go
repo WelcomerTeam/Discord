@@ -1,6 +1,10 @@
 package discord
 
-import "github.com/WelcomerTeam/Discord/discord"
+import (
+	"time"
+
+	"github.com/WelcomerTeam/Discord/discord"
+)
 
 // events.go contains the structures of all received events from discord
 
@@ -55,7 +59,7 @@ type ChannelDelete *Channel
 type ChannelPinsUpdate struct {
 	GuildID          discord.Snowflake `json:"guild_id"`
 	ChannelID        discord.Snowflake `json:"channel_id"`
-	LastPinTimestamp string            `json:"last_pin_timestamp"`
+	LastPinTimestamp time.Time         `json:"last_pin_timestamp"`
 }
 
 // ThreadCreate represents a thread create event.

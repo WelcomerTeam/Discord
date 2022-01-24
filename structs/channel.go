@@ -1,6 +1,10 @@
 package discord
 
-import "github.com/WelcomerTeam/Discord/discord"
+import (
+	"time"
+
+	"github.com/WelcomerTeam/Discord/discord"
+)
 
 // channel.go contains the information relating to channels
 
@@ -59,7 +63,7 @@ type Channel struct {
 	OwnerID                    *discord.Snowflake  `json:"owner_id,omitempty"`
 	ApplicationID              *discord.Snowflake  `json:"application_id,omitempty"`
 	ParentID                   *discord.Snowflake  `json:"parent_id,omitempty"`
-	LastPinTimestamp           string              `json:"last_pin_timestamp,omitempty"`
+	LastPinTimestamp           *time.Time          `json:"last_pin_timestamp,omitempty"`
 	RTCRegion                  string              `json:"rtc_region,omitempty"`
 	VideoQualityMode           *VideoQualityMode   `json:"video_quality_mode,omitempty"`
 	MessageCount               int32               `json:"message_count,omitempty"`
@@ -88,10 +92,10 @@ const (
 
 // ThreadMetadata contains thread-specific channel fields.
 type ThreadMetadata struct {
-	Archived            bool   `json:"archived"`
-	AutoArchiveDuration int32  `json:"auto_archive_duration"`
-	ArchiveTimestamp    string `json:"archive_timestamp"`
-	Locked              bool   `json:"locked"`
+	Archived            bool      `json:"archived"`
+	AutoArchiveDuration int32     `json:"auto_archive_duration"`
+	ArchiveTimestamp    time.Time `json:"archive_timestamp"`
+	Locked              bool      `json:"locked"`
 }
 
 // ThreadMember is used to indicate whether a user has joined a thread or not.
@@ -99,7 +103,7 @@ type ThreadMember struct {
 	ID            *discord.Snowflake `json:"id,omitempty"`
 	UserID        *discord.Snowflake `json:"user_id,omitempty"`
 	GuildID       *discord.Snowflake `json:"guild_id,omitempty"`
-	JoinTimestamp string             `json:"join_timestamp"`
+	JoinTimestamp time.Time          `json:"join_timestamp"`
 	Flags         int32              `json:"flags"`
 }
 

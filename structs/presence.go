@@ -54,14 +54,14 @@ type Activity struct {
 
 // Timestamps represents the starting and ending timestamp of an activity.
 type Timestamps struct {
-	Start int `json:"start"`
-	End   int `json:"end"`
+	Start int32 `json:"start"`
+	End   int32 `json:"end"`
 }
 
 // Party represents an activity's current party information.
 type Party struct {
 	ID   string `json:"id,omitempty"`
-	Size []int  `json:"size,omitempty"`
+	Size []int32  `json:"size,omitempty"`
 }
 
 // Assets represents an activity's images and their hover texts.

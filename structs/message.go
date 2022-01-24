@@ -1,6 +1,8 @@
 package discord
 
 import (
+	"time"
+
 	"github.com/WelcomerTeam/Discord/discord"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -77,10 +79,10 @@ type Message struct {
 	Author    *User              `json:"author"`
 	Member    *GuildMember       `json:"member,omitempty"`
 
-	Content         string `json:"content"`
-	Timestamp       string `json:"timestamp"`
-	EditedTimestamp string `json:"edited_timestamp"`
-	TTS             bool   `json:"tts"`
+	Content         string    `json:"content"`
+	Timestamp       time.Time `json:"timestamp"`
+	EditedTimestamp time.Time `json:"edited_timestamp"`
+	TTS             bool      `json:"tts"`
 
 	MentionEveryone bool                     `json:"mention_everyone"`
 	Mentions        []*User                  `json:"mentions"`
