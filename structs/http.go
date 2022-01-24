@@ -1,6 +1,10 @@
 package discord
 
-import "github.com/WelcomerTeam/Discord/discord"
+import (
+	"io"
+
+	"github.com/WelcomerTeam/Discord/discord"
+)
 
 // http.go represents the structures of common endpoints we use.
 
@@ -31,4 +35,11 @@ type TooManyRequests struct {
 // CreateDMChannel create a new DM channel with a user. Returns a DM channel object.
 type CreateDMChannel struct {
 	RecipientID discord.Snowflake `json:"recipient_id"`
+}
+
+// File stores information about a file sent in a message.
+type File struct {
+	Name        string
+	ContentType string
+	Reader      io.Reader
 }

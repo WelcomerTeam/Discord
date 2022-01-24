@@ -30,8 +30,8 @@ type Webhook struct {
 	ApplicationID *discord.Snowflake `json:"application_id,omitempty"`
 }
 
-// WebhookMessage represents a message on Discord for webhooks.
-type WebhookMessage struct {
+// WebhookMessage represents the structure for sending a webhook message.
+type WebhookMessageParams struct {
 	Content         string                    `json:"content,omitempty"`
 	Username        string                    `json:"username,omitempty"`
 	AvatarURL       string                    `json:"avatar_url,omitempty"`
@@ -39,6 +39,7 @@ type WebhookMessage struct {
 	Embeds          []*Embed                  `json:"embeds,omitempty"`
 	AllowedMentions []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
 	Components      []*InteractionComponent   `json:"components,omitempty"`
+	Files           []*File                   `json:"files,omitempty"`
 	PayloadJSON     *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
 }

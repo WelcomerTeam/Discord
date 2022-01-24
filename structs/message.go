@@ -1,6 +1,9 @@
 package discord
 
-import "github.com/WelcomerTeam/Discord/discord"
+import (
+	"github.com/WelcomerTeam/Discord/discord"
+	jsoniter "github.com/json-iterator/go"
+)
 
 // message.go contains the structure that represents a discord message.
 
@@ -87,6 +90,7 @@ type Message struct {
 	Attachments []*MessageAttachment `json:"attachments"`
 	Embeds      []*Embed             `json:"embeds"`
 	Reactions   []*MessageReaction   `json:"reactions"`
+
 	// Nonce          string                  `json:"nonce,omitempty"`
 	Pinned            bool                    `json:"pinned"`
 	WebhookID         *discord.Snowflake      `json:"webhook_id,omitempty"`
@@ -100,6 +104,20 @@ type Message struct {
 	Thread            *Channel                `json:"thread,omitempty"`
 	Components        []*InteractionComponent `json:"components,omitempty"`
 	StickerItems      []*MessageSticker       `json:"sticker_items,omitempty"`
+}
+
+// MessageParams represents the structure for sending a message on Discord.
+type MessageParams struct {
+	Content          string                    `json:"content"`
+	TTS              bool                      `json:"tts"`
+	Embeds           []*Embed                  `json:"embeds"`
+	AllowedMentions  []*MessageAllowedMentions `json:"allowed_mentions"`
+	MessageReference *MessageReference         `json:"message_reference,omitempty"`
+	Components       []*InteractionComponent   `json:"components,omitempty"`
+	StickerIDs       []*discord.Snowflake      `json:"sticker_ids,omitempty"`
+	Files            []*File                   `json:"files,omitempty"`
+	PayloadJSON      *jsoniter.RawMessage      `json:"payload_json,omitempty"`
+	Attachments      []*MessageAttachment      `json:"attachments,omitempty"`
 }
 
 // MessageInteraction represents an executed interaction.
