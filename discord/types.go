@@ -2,12 +2,16 @@ package discord
 
 import (
 	"bytes"
+	"strconv"
+	"time"
+
 	gotils_strconv "github.com/savsgio/gotils/strconv"
 	"golang.org/x/xerrors"
-	"strconv"
 )
 
 const (
+	discordCreation = 1420070400000
+
 	bitSize            = 64
 	decimalBase        = 10
 	maxInt64JsonLength = 22
@@ -40,8 +44,15 @@ func (s Snowflake) MarshalJSON() ([]byte, error) {
 	return buff, nil
 }
 
-func (s *Snowflake) String() string {
-	return strconv.FormatInt(int64(*s), decimalBase)
+func (s Snowflake) String() string {
+	return strconv.FormatInt(int64(s), decimalBase)
+}
+
+// Time returns the creation time of the Snowflake.
+func (s Snowflake) Time() time.Time {
+	nsec := (int64(s) >> 22) + discordCreation
+
+	return time.Unix(0, nsec*1000000)
 }
 
 // int64 to allow for marshalling support.
@@ -69,6 +80,6 @@ func (in Int64) MarshalJSON() ([]byte, error) {
 	return buff, nil
 }
 
-func (in *Int64) String() string {
-	return strconv.FormatInt(int64(*in), decimalBase)
+func (in Int64) String() string {
+	return strconv.FormatInt(int64(in), decimalBase)
 }
