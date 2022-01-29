@@ -1,4 +1,4 @@
-package discord
+package structs
 
 import (
 	"time"
@@ -119,19 +119,19 @@ type Guild struct {
 	Channels    []*Channel     `json:"channels,omitempty"`
 	Presences   []*Activity    `json:"presences,omitempty"`
 
-	MaxPresences  int32    `json:"max_presences"`
-	MaxMembers    int32    `json:"max_members"`
+	MaxPresences  int32  `json:"max_presences"`
+	MaxMembers    int32  `json:"max_members"`
 	VanityURLCode string `json:"vanity_url_code"`
 	Description   string `json:"description"`
 	Banner        string `json:"banner"`
 
 	PremiumTier              *PremiumTier        `json:"premium_tier,omitempty"`
-	PremiumSubscriptionCount int32                 `json:"premium_subscription_count"`
+	PremiumSubscriptionCount int32               `json:"premium_subscription_count"`
 	PreferredLocale          string              `json:"preferred_locale"`
 	PublicUpdatesChannelID   *discord.Snowflake  `json:"public_updates_channel_id,omitempty"`
-	MaxVideoChannelUsers     int32                 `json:"max_video_channel_users"`
-	ApproximateMemberCount   int32                 `json:"approximate_member_count"`
-	ApproximatePresenceCount int32                 `json:"approximate_presence_count"`
+	MaxVideoChannelUsers     int32               `json:"max_video_channel_users"`
+	ApproximateMemberCount   int32               `json:"approximate_member_count"`
+	ApproximatePresenceCount int32               `json:"approximate_presence_count"`
 	NSFWLevel                *GuildNSFWLevelType `json:"nsfw_level"`
 
 	StageInstances            []*StageInstance  `json:"stage_instances,omitempty"`

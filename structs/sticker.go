@@ -1,4 +1,4 @@
-package discord
+package structs
 
 import "github.com/WelcomerTeam/Discord/discord"
 
@@ -33,7 +33,7 @@ type Sticker struct {
 	Available   bool               `json:"available"`
 	GuildID     *discord.Snowflake `json:"guild_id,omitempty"`
 	User        *User              `json:"user,omitempty"`
-	SortValue   int32                `json:"sort_value"`
+	SortValue   int32              `json:"sort_value"`
 }
 
 // MessageSticker represents a sticker in a message.

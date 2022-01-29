@@ -1,4 +1,4 @@
-package discord
+package structs
 
 import "github.com/WelcomerTeam/Discord/discord"
 
@@ -22,7 +22,7 @@ const (
 	EventStatusCanceled
 )
 
-// ScheduledEntityType represents the type of event
+// ScheduledEntityType represents the type of event.
 type ScheduledEntityType uint8
 
 const (

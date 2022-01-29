@@ -17,7 +17,7 @@ const (
 	maxInt64JsonLength = 22
 )
 
-var null = []byte{'n', 'u', 'l', 'l'}
+var null = []byte("null")
 
 // Placeholder type for easy identification.
 type Snowflake int64

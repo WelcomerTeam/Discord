@@ -1,4 +1,4 @@
-package discord
+package structs
 
 import "github.com/WelcomerTeam/Discord/discord"
 
@@ -60,8 +60,8 @@ type Timestamps struct {
 
 // Party represents an activity's current party information.
 type Party struct {
-	ID   string `json:"id,omitempty"`
-	Size []int32  `json:"size,omitempty"`
+	ID   string  `json:"id,omitempty"`
+	Size []int32 `json:"size,omitempty"`
 }
 
 // Assets represents an activity's images and their hover texts.

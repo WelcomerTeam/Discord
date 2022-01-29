@@ -1,4 +1,4 @@
-package discord
+package structs
 
 import (
 	"github.com/WelcomerTeam/Discord/discord"

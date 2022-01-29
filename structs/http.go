@@ -1,20 +1,34 @@
-package discord
+package structs
 
 import (
 	"io"
 
-	"github.com/WelcomerTeam/Discord/discord"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // http.go represents the structures of common endpoints we use.
 
+// File stores information about a file sent in a message.
+type File struct {
+	Name        string
+	ContentType string
+	Reader      io.Reader
+}
+
+// ErrorMessage represents a basic error message.
+type ErrorMessage struct {
+	Code    int                 `json:"code"`
+	Message string              `json:"message"`
+	Errors  jsoniter.RawMessage `json:"errors"`
+}
+
 // Gateway represents a GET /gateway response.
-type Gateway struct {
+type GatewayResponse struct {
 	URL string `json:"url"`
 }
 
 // GatewayBot represents a GET /gateway/bot response.
-type GatewayBot struct {
+type GatewayBotResponse struct {
 	URL               string `json:"url"`
 	Shards            int32  `json:"shards"`
 	SessionStartLimit struct {
@@ -23,23 +37,4 @@ type GatewayBot struct {
 		ResetAfter     int32 `json:"reset_after"`
 		MaxConcurrency int32 `json:"max_concurrency"`
 	} `json:"session_start_limit"`
-}
-
-// TooManyRequests represents the payload of a TooManyRequests response.
-type TooManyRequests struct {
-	Message    string `json:"message"`
-	RetryAfter int32  `json:"retry_after"`
-	Global     bool   `json:"global"`
-}
-
-// CreateDMChannel create a new DM channel with a user. Returns a DM channel object.
-type CreateDMChannel struct {
-	RecipientID discord.Snowflake `json:"recipient_id"`
-}
-
-// File stores information about a file sent in a message.
-type File struct {
-	Name        string
-	ContentType string
-	Reader      io.Reader
 }

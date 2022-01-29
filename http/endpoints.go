@@ -1,4 +1,4 @@
-package discord
+package http
 
 import (
 	"strconv"
@@ -212,8 +212,14 @@ var (
 	EndpointApplicationGuildCommands = func(applicationID, guildID string) string {
 		return EndpointApplication(applicationID) + "/guilds/" + guildID + "/commands"
 	}
-	EndpointApplicationGuildCommand = func(applicationID, guildID, channelID string) string {
-		return EndpointApplicationGuildCommands(applicationID, guildID) + "/" + channelID
+	EndpointApplicationGuildCommandsPermissions = func(applicationID, guildID string) string {
+		return EndpointApplication(applicationID) + "/guilds/" + guildID + "/commands/permissions"
+	}
+	EndpointApplicationGuildCommand = func(applicationID, guildID, commandID string) string {
+		return EndpointApplicationGuildCommands(applicationID, guildID) + "/" + commandID
+	}
+	EndpointApplicationGuildCommandPermissions = func(applicationID, guildID, commandID string) string {
+		return EndpointApplicationGuildCommands(applicationID, guildID) + "/" + commandID + "/permissions"
 	}
 	EndpointInteraction = func(applicationID string, interactionToken string) string {
 		return "/interactions/" + applicationID + "/" + interactionToken
