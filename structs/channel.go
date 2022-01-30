@@ -116,3 +116,9 @@ type StageInstance struct {
 	PrivacyLabel         *StageChannelPrivacyLevel `json:"privacy_level"`
 	DiscoverableDisabled bool                      `json:"discoverable_disabled"`
 }
+
+// FollowedChannel represents a followed channel.
+type FollowedChannel struct {
+	ChannelID discord.Snowflake `json:"channel_id"`
+	WebhookID discord.Snowflake `json:"webhook_id"`
+}

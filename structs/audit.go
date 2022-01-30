@@ -2,6 +2,8 @@ package structs
 
 import "github.com/WelcomerTeam/Discord/discord"
 
+const AuditLogReasonHeader = "X-Audit-Log-Reason"
+
 type AuditLogActionType uint8
 
 const (

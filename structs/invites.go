@@ -93,3 +93,11 @@ type ScheduledEventUser struct {
 	User    User              `json:"user"`
 	Member  *GuildMember      `json:"member,omitempty"`
 }
+
+// InviteParams represents the params to create an invite.
+type InviteParams struct {
+	MaxAge    int32 `json:"max_age"`
+	MaxUses   int32 `json:"max_uses"`
+	Temporary bool  `json:"temporary"`
+	Unique    bool  `json:"unique"`
+}

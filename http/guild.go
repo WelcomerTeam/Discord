@@ -1,44 +1,66 @@
 package http
 
-import (
-	"context"
-	"net/http"
-	"net/url"
+// TODO: CreateGuild
+// TODO: GetGuild
+// TODO: GetGuildPreview
+// TODO: ModifyGuild
+// TODO: DeleteGuild
+// TODO: GetGuildChannels
+// TODO: CreateGuildChannel
+// TODO: ModifyGuildChannelPositions
+// TODO: ListActiveThreads
 
-	"github.com/WelcomerTeam/Discord/discord"
-	"github.com/WelcomerTeam/Discord/structs"
-	"golang.org/x/xerrors"
-)
+// TODO: GetGuildMember
+// TODO: ListGuildMembers
+// TODO: SearchGuildMembers
+// TODO: AddGuildMember
+// TODO: ModifyGuildMember
+// TODO: ModifyCurrentMember
+// TODO: ModifyCurrentUserNick
+// TODO: AddGuildMemberRole
+// TODO: RemoveGuildMemberRole
+// TODO: RemoveGuildMember
 
-func (s *Session) GetGuildAuditLog(ctx context.Context, guildID discord.Snowflake, userID *discord.Snowflake, actionType *structs.AuditLogActionType, before *discord.Snowflake, limit *int32) (entries []*structs.AuditLogEntry, err error) {
-	endpoint := EndpointGuildAuditLogs(guildID.String())
+// TODO: GetGuildBans
+// TODO: GetGuildBan
+// TODO: CreateGuildBan
+// TODO: RemoveGuildBan
 
-	values := url.Values{}
+// TODO: GetGuildRoles
+// TODO: CreateGuildRole
+// TODO: ModifyGuildRolePositions
+// TODO: ModifyGuildRole
+// TODO: DeleteGuildRole
 
-	if userID != nil {
-		values.Set("user_id", userID.String())
-	}
+// TODO: GetGuildPruneCount
+// TODO: BeginGuildPrune
+// TODO: GetGuildVoiceRegions
+// TODO: GetGuildInvites
+// TODO: GetGuildIntegrations
+// TODO: DeleteGuildIntegration
+// TODO: GetGuildWidgetSettings
+// TODO: ModifyGuildWidget
+// TODO: GetGuildWidget
+// TODO: GetGuildVanityURL
+// TODO: GetGuildWidgetImage
+// TODO: GetGuildWelcomeScreen
+// TODO: ModifyGuildWelcomeScreen
+// TODO: ModifyCurrentUserVoiceState
+// TODO: ModifyUserVoiceState
 
-	if actionType != nil {
-		values.Set("action_type", string(*actionType))
-	}
+// TODO: ListScheduledEventsforGuild
+// TODO: CreateGuildScheduledEvent
+// TODO: GetGuildScheduledEvent
+// TODO: ModifyGuildScheduledEvent
+// TODO: DeleteGuildScheduledEvent
+// TODO: GetGuildScheduledEventUsers
+// TODO: GuildScheduledEventStatusUpdateAutomation
+// TODO: GuildScheduledEventPermissionsRequirements
 
-	if before != nil {
-		values.Set("before", before.String())
-	}
-
-	if limit != nil {
-		values.Set("limit", string(*limit))
-	}
-
-	if len(values) > 0 {
-		endpoint += "?" + values.Encode()
-	}
-
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &entries)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to get guild audit log: %v", err)
-	}
-
-	return entries, nil
-}
+// TODO: GetGuildTemplate
+// TODO: CreateGuildfromGuildTemplate
+// TODO: GetGuildTemplates
+// TODO: CreateGuildTemplate
+// TODO: SyncGuildTemplate
+// TODO: ModifyGuildTemplate
+// TODO: DeleteGuildTemplate

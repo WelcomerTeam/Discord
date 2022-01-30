@@ -73,7 +73,11 @@ func (tl *TwilightProxy) Fetch(ctx context.Context, method, endpoint, contentTyp
 	req.URL.Host = tl.URLHost
 	req.URL.Scheme = tl.URLScheme
 
-	req.Header = headers
+	for name, values := range headers {
+		for _, value := range values {
+			req.Header.Add(name, value)
+		}
+	}
 
 	if body != nil && len(req.Header.Get("content-type")) == 0 {
 		req.Header.Set("content-type", contentType)

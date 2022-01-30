@@ -198,8 +198,8 @@ var (
 	EndpointMessageReactions = func(channelID, messageID, emojiID string) string {
 		return EndpointChannelMessage(channelID, messageID) + "/reactions/" + emojiID
 	}
-	EndpointMessageReaction = func(channelID, messageID, emojiID, roleID string) string {
-		return EndpointMessageReactions(channelID, messageID, emojiID) + "/" + roleID
+	EndpointMessageReaction = func(channelID, messageID, emojiID, targetID string) string {
+		return EndpointMessageReactions(channelID, messageID, emojiID) + "/" + targetID
 	}
 
 	EndpointApplicationGlobalCommands = func(applicationID string) string {
