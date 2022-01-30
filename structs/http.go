@@ -17,7 +17,7 @@ type File struct {
 
 // ErrorMessage represents a basic error message.
 type ErrorMessage struct {
-	Code    int                 `json:"code"`
+	Code    int32               `json:"code"`
 	Message string              `json:"message"`
 	Errors  jsoniter.RawMessage `json:"errors"`
 }
