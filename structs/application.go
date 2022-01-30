@@ -5,7 +5,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-// application.go represents the application object and interactions.
+// application.go represents the application object and integrations.
 
 // ApplicationTeamMemberState represents the state of a member in a team.
 type ApplicationTeamMemberState uint8
@@ -48,16 +48,6 @@ const (
 	ApplicationCommandPermissionTypeUser
 )
 
-// InteractionType represents the type of interaction.
-type InteractionType uint8
-
-const (
-	InteractionTypePing InteractionType = 1 + iota
-	InteractionTypeApplicationCommand
-	InteractionTypeMessageComponent
-	InteractionTypeApplicationCommandAutocomplete
-)
-
 // IntegrationType represents the type of integration.
 type IntegrationType string
 
@@ -73,26 +63,6 @@ type IntegrationExpireBehavior uint8
 const (
 	IntegrationExpireBehaviorRemoveRole IntegrationExpireBehavior = iota
 	IntegrationExpireBehaviorKick
-)
-
-// InteractionComponentType represents the type of component.
-type InteractionComponentType uint8
-
-const (
-	InteractionComponentTypeActionRow InteractionComponentType = 1 + iota
-	InteractionComponentTypeButton
-	InteractionComponentTypeSelectMenu
-)
-
-// InteractionComponentStyle represents the style of a component.
-type InteractionComponentStyle uint8
-
-const (
-	InteractionComponentStylePrimary InteractionComponentStyle = 1 + iota
-	InteractionComponentStyleSecondary
-	InteractionComponentStyleSuccess
-	InteractionComponentStyleDanger
-	InteractionComponentStyleLink
 )
 
 // Application response from REST.
@@ -183,55 +153,6 @@ type ApplicationCommandOptionChoice struct {
 	Value jsoniter.RawMessage `json:"value"`
 }
 
-// Interaction represents the structure of an interaction.
-type Interaction struct {
-	ID            discord.Snowflake `json:"id"`
-	ApplicationID discord.Snowflake `json:"application_id"`
-	Type          *InteractionType  `json:"type"`
-	Data          *InteractionData  `json:"data,omitempty"`
-
-	GuildID     *discord.Snowflake `json:"guild_id,omitempty"`
-	ChannelID   *discord.Snowflake `json:"channel_id,omitempty"`
-	Member      *GuildMember       `json:"member,omitempty"`
-	User        *User              `json:"user,omitempty"`
-	Token       string             `json:"token"`
-	Version     int32              `json:"version"`
-	Message     *Message           `json:"message,omitempty"`
-	Locale      string             `json:"locale,omitempty"`
-	GuildLocale string             `json:"guild_locale,omitempty"`
-}
-
-// InteractionData represents the structure of interaction data.
-type InteractionData struct {
-	ID            discord.Snowflake          `json:"id"`
-	Name          string                     `json:"name"`
-	Type          ApplicationCommandType     `json:"type"`
-	Resolved      *InteractionResolvedData   `json:"resolved,omitempty"`
-	Options       []*InteractionDataOption   `json:"option,omitempty"`
-	CustomID      string                     `json:"custom_id,omitempty"`
-	ComponentType *InteractionComponentType  `json:"component_type,omitempty"`
-	Values        []*ApplicationSelectOption `json:"values,omitempty"`
-	TargetID      *discord.Snowflake         `json:"target_id,omitempty"`
-}
-
-// InteractionDataOption represents the structure of an interaction option.
-type InteractionDataOption struct {
-	Name    string                       `json:"name"`
-	Type    ApplicationCommandOptionType `json:"type"`
-	Value   jsoniter.RawMessage          `json:"value,omitempty"`
-	Options []*InteractionDataOption     `json:"options,omitempty"`
-	Focused bool                         `json:"focused"`
-}
-
-// InteractionResolvedData represents any extra payload data for an interaction.
-type InteractionResolvedData struct {
-	Users    []*User        `json:"users,omitempty"`
-	Members  []*GuildMember `json:"members,omitempty"`
-	Roles    []*Role        `json:"roles,omitempty"`
-	Channels []*Channel     `json:"channels,omitempty"`
-	Messages []*Message     `json:"messages,omitempty"`
-}
-
 // ApplicationSelectOption represents the structure of select options.
 type ApplicationSelectOption struct {
 	Label       string `json:"label"`
@@ -265,20 +186,4 @@ type Integration struct {
 type IntegrationAccount struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
-}
-
-// InteractionComponent represents the structure of a component.
-type InteractionComponent struct {
-	Type        InteractionComponentType   `json:"type"`
-	CustomID    string                     `json:"custom_id,omitempty"`
-	Disabled    bool                       `json:"disabled"`
-	Style       InteractionComponentStyle  `json:"style,omitempty"`
-	Label       string                     `json:"label,omitempty"`
-	Emoji       *Emoji                     `json:"emoji,omitempty"`
-	URL         string                     `json:"url,omitempty"`
-	Options     []*ApplicationSelectOption `json:"options,omitempty"`
-	Placeholder string                     `json:"placeholder,omitempty"`
-	MinValues   *int32                     `json:"min_values,omitempty"`
-	MaxValues   *int32                     `json:"max_values,omitempty"`
-	Components  []*InteractionComponent    `json:"components,omitempty"`
 }
