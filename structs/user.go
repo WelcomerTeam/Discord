@@ -8,21 +8,29 @@ import "github.com/WelcomerTeam/Discord/discord"
 type UserFlags int
 
 // User flags.
+const UserFlagsNone UserFlags = 0
+
 const (
-	UserFlagsNone UserFlags = 1 << iota
-	UserFlagsDiscordEmployee
+	UserFlagsDiscordEmployee UserFlags = 1 << iota
 	UserFlagsPartneredServerOwner
 	UserFlagsHypeSquadEvents
 	UserFlagsBugHunterLevel1
+	_
+	_
 	UserFlagsHouseBravery
 	UserFlagsHouseBrilliance
 	UserFlagsHouseBalance
 	UserFlagsEarlySupporter
 	UserFlagsTeamUser
-	UserFlagsSystem
+	_
+	_
+	_
 	UserFlagsBugHunterLevel2
+	_
 	UserFlagsVerifiedBot
-	UserFlagsEarlyVerifiedBotDeveloper
+	UserFlagsVerifiedDeveloper
+	UserFlagsCertifiedModerator
+	UserFlagsBotHTTPInteractions
 )
 
 // UserPremiumType represents the type of Nitro on a user's account.
