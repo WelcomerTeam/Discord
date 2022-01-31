@@ -35,8 +35,9 @@ type Session struct {
 	Logger    zerolog.Logger
 }
 
-func NewSession(token string, httpInterface RESTInterface, logger zerolog.Logger) *Session {
+func NewSession(context context.Context, token string, httpInterface RESTInterface, logger zerolog.Logger) *Session {
 	return &Session{
+		Context:   context,
 		Token:     token,
 		Interface: httpInterface,
 		Logger:    logger,
