@@ -16,3 +16,10 @@ type Emoji struct {
 	Animated      bool                `json:"animated"`
 	Available     bool                `json:"available"`
 }
+
+// EmojiParams represents the payload sent to discord.
+type EmojiParams struct {
+	Name  string               `json:"name"`
+	Image string               `json:"image,omitempty"`
+	Roles []*discord.Snowflake `json:"roles"`
+}

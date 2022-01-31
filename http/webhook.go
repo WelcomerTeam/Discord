@@ -10,8 +10,6 @@ package http
 // TODO: DeleteWebhook
 // TODO: DeleteWebhookwithToken
 // TODO: ExecuteWebhook
-// TODO: ExecuteSlack-CompatibleWebhook
-// TODO: ExecuteGitHub-CompatibleWebhook
 // TODO: GetWebhookMessage
 // TODO: EditWebhookMessage
 // TODO: DeleteWebhookMessage
