@@ -166,7 +166,7 @@ func (s *Session) DeleteAllReactionsEmoji(channelID discord.Snowflake, messageID
 func (s *Session) EditMessage(channelID discord.Snowflake, messageID discord.Snowflake, messageArg structs.Message) (message *structs.Message, err error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, nil, nil, &message)
+	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageArg, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to edit message: %v", err)
 	}
@@ -217,7 +217,7 @@ func (s *Session) EditChannelPermissions(channelID discord.Snowflake, overwriteI
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, overwriteArg, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to edit channel permissions: %v", err)
 	}
@@ -245,7 +245,7 @@ func (s *Session) CreateChannelInvite(channelID discord.Snowflake, inviteParams 
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, headers, &invite)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, inviteParams, headers, &invite)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create channel invite: %v", err)
 	}
