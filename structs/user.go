@@ -8,8 +8,6 @@ import "github.com/WelcomerTeam/Discord/discord"
 type UserFlags int
 
 // User flags.
-const UserFlagsNone UserFlags = 0
-
 const (
 	UserFlagsDiscordEmployee UserFlags = 1 << iota
 	UserFlagsPartneredServerOwner
