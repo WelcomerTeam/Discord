@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"net/http"
 	"net/url"
 
@@ -10,7 +9,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func (s *Session) GetGuildAuditLog(ctx context.Context, guildID discord.Snowflake, userID *discord.Snowflake, actionType *structs.AuditLogActionType, before *discord.Snowflake, limit *int32) (entries []*structs.AuditLogEntry, err error) {
+func (s *Session) GetGuildAuditLog(guildID discord.Snowflake, userID *discord.Snowflake, actionType *structs.AuditLogActionType, before *discord.Snowflake, limit *int32) (entries []*structs.AuditLogEntry, err error) {
 	endpoint := EndpointGuildAuditLogs(guildID.String())
 
 	values := url.Values{}
@@ -35,7 +34,7 @@ func (s *Session) GetGuildAuditLog(ctx context.Context, guildID discord.Snowflak
 		endpoint += "?" + values.Encode()
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &entries)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entries)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get guild audit log: %v", err)
 	}

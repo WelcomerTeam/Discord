@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/WelcomerTeam/Discord/discord"
@@ -9,10 +8,10 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func (s *Session) GetChannel(ctx context.Context, channelID discord.Snowflake) (channel *structs.Channel, err error) {
+func (s *Session) GetChannel(channelID discord.Snowflake) (channel *structs.Channel, err error) {
 	endpoint := EndpointChannel(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &channel)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &channel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get channel: %v", err)
 	}
@@ -20,7 +19,7 @@ func (s *Session) GetChannel(ctx context.Context, channelID discord.Snowflake) (
 	return
 }
 
-func (s *Session) ModifyChannel(ctx context.Context, channelID discord.Snowflake, channelArg structs.Channel, reason *string) (channel *structs.Channel, err error) {
+func (s *Session) ModifyChannel(channelID discord.Snowflake, channelArg structs.Channel, reason *string) (channel *structs.Channel, err error) {
 	endpoint := EndpointChannel(channelID.String())
 
 	headers := http.Header{}
@@ -29,7 +28,7 @@ func (s *Session) ModifyChannel(ctx context.Context, channelID discord.Snowflake
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, channelArg, headers, &channel)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, channelArg, headers, &channel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to modify channel: %v", err)
 	}
@@ -37,7 +36,7 @@ func (s *Session) ModifyChannel(ctx context.Context, channelID discord.Snowflake
 	return
 }
 
-func (s *Session) DeleteChannel(ctx context.Context, channelID discord.Snowflake, reason *string) (err error) {
+func (s *Session) DeleteChannel(channelID discord.Snowflake, reason *string) (err error) {
 	endpoint := EndpointChannel(channelID.String())
 
 	headers := http.Header{}
@@ -46,7 +45,7 @@ func (s *Session) DeleteChannel(ctx context.Context, channelID discord.Snowflake
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete channel: %v", err)
 	}
@@ -54,10 +53,10 @@ func (s *Session) DeleteChannel(ctx context.Context, channelID discord.Snowflake
 	return
 }
 
-func (s *Session) GetChannelMessages(ctx context.Context, channelID discord.Snowflake) (messages []*structs.Message, err error) {
+func (s *Session) GetChannelMessages(channelID discord.Snowflake) (messages []*structs.Message, err error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &messages)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &messages)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get channel messages: %v", err)
 	}
@@ -65,10 +64,10 @@ func (s *Session) GetChannelMessages(ctx context.Context, channelID discord.Snow
 	return
 }
 
-func (s *Session) GetChannelMessage(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake) (message *structs.Message, err error) {
+func (s *Session) GetChannelMessage(channelID discord.Snowflake, messageID discord.Snowflake) (message *structs.Message, err error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &message)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get channel message: %v", err)
 	}
@@ -76,10 +75,10 @@ func (s *Session) GetChannelMessage(ctx context.Context, channelID discord.Snowf
 	return
 }
 
-func (s *Session) CreateMessage(ctx context.Context, channelID discord.Snowflake, messageArg structs.Message) (message *structs.Message, err error) {
+func (s *Session) CreateMessage(channelID discord.Snowflake, messageArg structs.Message) (message *structs.Message, err error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPost, endpoint, messageArg, nil, &message)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageArg, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create message: %v", err)
 	}
@@ -87,10 +86,10 @@ func (s *Session) CreateMessage(ctx context.Context, channelID discord.Snowflake
 	return
 }
 
-func (s *Session) CrosspostMessage(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake) (message *structs.Message, err error) {
+func (s *Session) CrosspostMessage(channelID discord.Snowflake, messageID discord.Snowflake) (message *structs.Message, err error) {
 	endpoint := EndpointChannelMessageCrosspost(channelID.String(), messageID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPost, endpoint, nil, nil, &message)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to crosspost message: %v", err)
 	}
@@ -98,10 +97,10 @@ func (s *Session) CrosspostMessage(ctx context.Context, channelID discord.Snowfl
 	return
 }
 
-func (s *Session) CreateReaction(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, emoji string) (err error) {
+func (s *Session) CreateReaction(channelID discord.Snowflake, messageID discord.Snowflake, emoji string) (err error) {
 	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emoji, "@me")
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPut, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to create reaction: %v", err)
 	}
@@ -109,10 +108,10 @@ func (s *Session) CreateReaction(ctx context.Context, channelID discord.Snowflak
 	return
 }
 
-func (s *Session) DeleteOwnReaction(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, emoji string) (err error) {
+func (s *Session) DeleteOwnReaction(channelID discord.Snowflake, messageID discord.Snowflake, emoji string) (err error) {
 	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emoji, "@me")
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete own reaction: %v", err)
 	}
@@ -120,10 +119,10 @@ func (s *Session) DeleteOwnReaction(ctx context.Context, channelID discord.Snowf
 	return
 }
 
-func (s *Session) DeleteUserReaction(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, emoji string, userID discord.Snowflake) (err error) {
+func (s *Session) DeleteUserReaction(channelID discord.Snowflake, messageID discord.Snowflake, emoji string, userID discord.Snowflake) (err error) {
 	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emoji, userID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete user reaction: %v", err)
 	}
@@ -131,10 +130,10 @@ func (s *Session) DeleteUserReaction(ctx context.Context, channelID discord.Snow
 	return
 }
 
-func (s *Session) GetReactions(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, emoji string, after *discord.Snowflake, limit *int) (users []*structs.User, err error) {
+func (s *Session) GetReactions(channelID discord.Snowflake, messageID discord.Snowflake, emoji string, after *discord.Snowflake, limit *int) (users []*structs.User, err error) {
 	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emoji)
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &users)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &users)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get reactions: %v", err)
 	}
@@ -142,10 +141,10 @@ func (s *Session) GetReactions(ctx context.Context, channelID discord.Snowflake,
 	return
 }
 
-func (s *Session) DeleteAllReactions(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake) (err error) {
+func (s *Session) DeleteAllReactions(channelID discord.Snowflake, messageID discord.Snowflake) (err error) {
 	endpoint := EndpointMessageReactionsAll(channelID.String(), messageID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete all reactions: %v", err)
 	}
@@ -153,10 +152,10 @@ func (s *Session) DeleteAllReactions(ctx context.Context, channelID discord.Snow
 	return
 }
 
-func (s *Session) DeleteAllReactionsEmoji(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, emoji string) (err error) {
+func (s *Session) DeleteAllReactionsEmoji(channelID discord.Snowflake, messageID discord.Snowflake, emoji string) (err error) {
 	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emoji)
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete all reactions emoji: %v", err)
 	}
@@ -164,10 +163,10 @@ func (s *Session) DeleteAllReactionsEmoji(ctx context.Context, channelID discord
 	return
 }
 
-func (s *Session) EditMessage(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, messageArg structs.Message) (message *structs.Message, err error) {
+func (s *Session) EditMessage(channelID discord.Snowflake, messageID discord.Snowflake, messageArg structs.Message) (message *structs.Message, err error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPatch, endpoint, nil, nil, &message)
+	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to edit message: %v", err)
 	}
@@ -175,7 +174,7 @@ func (s *Session) EditMessage(ctx context.Context, channelID discord.Snowflake, 
 	return
 }
 
-func (s *Session) DeleteMessage(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, reason *string) (err error) {
+func (s *Session) DeleteMessage(channelID discord.Snowflake, messageID discord.Snowflake, reason *string) (err error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
 	headers := http.Header{}
@@ -184,7 +183,7 @@ func (s *Session) DeleteMessage(ctx context.Context, channelID discord.Snowflake
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delet emessage: %v", err)
 	}
@@ -192,7 +191,7 @@ func (s *Session) DeleteMessage(ctx context.Context, channelID discord.Snowflake
 	return
 }
 
-func (s *Session) BulkDeleteMessages(ctx context.Context, channelID discord.Snowflake, messageIDs []discord.Snowflake, reason *string) (err error) {
+func (s *Session) BulkDeleteMessages(channelID discord.Snowflake, messageIDs []discord.Snowflake, reason *string) (err error) {
 	endpoint := EndpointChannelMessagesBulkDelete(channelID.String())
 
 	headers := http.Header{}
@@ -201,7 +200,7 @@ func (s *Session) BulkDeleteMessages(ctx context.Context, channelID discord.Snow
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to bulk delete messages: %v", err)
 	}
@@ -209,7 +208,7 @@ func (s *Session) BulkDeleteMessages(ctx context.Context, channelID discord.Snow
 	return
 }
 
-func (s *Session) EditChannelPermissions(ctx context.Context, channelID discord.Snowflake, overwriteID discord.Snowflake, overwriteArg structs.ChannelOverwrite, reason *string) (err error) {
+func (s *Session) EditChannelPermissions(channelID discord.Snowflake, overwriteID discord.Snowflake, overwriteArg structs.ChannelOverwrite, reason *string) (err error) {
 	endpoint := EndpointChannelPermission(channelID.String(), overwriteID.String())
 
 	headers := http.Header{}
@@ -218,7 +217,7 @@ func (s *Session) EditChannelPermissions(ctx context.Context, channelID discord.
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPut, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to edit channel permissions: %v", err)
 	}
@@ -226,10 +225,10 @@ func (s *Session) EditChannelPermissions(ctx context.Context, channelID discord.
 	return
 }
 
-func (s *Session) GetChannelInvites(ctx context.Context, channelID discord.Snowflake) (invites []*structs.Invite, err error) {
+func (s *Session) GetChannelInvites(channelID discord.Snowflake) (invites []*structs.Invite, err error) {
 	endpoint := EndpointChannelInvites(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, nil)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get channel invites: %v", err)
 	}
@@ -237,7 +236,7 @@ func (s *Session) GetChannelInvites(ctx context.Context, channelID discord.Snowf
 	return
 }
 
-func (s *Session) CreateChannelInvite(ctx context.Context, channelID discord.Snowflake, inviteParams structs.InviteParams, reason *string) (invite *structs.Invite, err error) {
+func (s *Session) CreateChannelInvite(channelID discord.Snowflake, inviteParams structs.InviteParams, reason *string) (invite *structs.Invite, err error) {
 	endpoint := EndpointChannelInvites(channelID.String())
 
 	headers := http.Header{}
@@ -246,7 +245,7 @@ func (s *Session) CreateChannelInvite(ctx context.Context, channelID discord.Sno
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPost, endpoint, nil, headers, &invite)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, headers, &invite)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create channel invite: %v", err)
 	}
@@ -254,7 +253,7 @@ func (s *Session) CreateChannelInvite(ctx context.Context, channelID discord.Sno
 	return
 }
 
-func (s *Session) DeleteChannelPermission(ctx context.Context, channelID discord.Snowflake, overwriteID discord.Snowflake, reason *string) (err error) {
+func (s *Session) DeleteChannelPermission(channelID discord.Snowflake, overwriteID discord.Snowflake, reason *string) (err error) {
 	endpoint := EndpointChannelPermission(channelID.String(), overwriteID.String())
 
 	headers := http.Header{}
@@ -263,7 +262,7 @@ func (s *Session) DeleteChannelPermission(ctx context.Context, channelID discord
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete channel permission: %v", err)
 	}
@@ -271,10 +270,10 @@ func (s *Session) DeleteChannelPermission(ctx context.Context, channelID discord
 	return
 }
 
-func (s *Session) FollowNewsChannel(ctx context.Context, channelID discord.Snowflake, webhookChannelID discord.Snowflake) (followedChannel *structs.FollowedChannel, err error) {
+func (s *Session) FollowNewsChannel(channelID discord.Snowflake, webhookChannelID discord.Snowflake) (followedChannel *structs.FollowedChannel, err error) {
 	endpoint := EndpointChannelFollow(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPost, endpoint, nil, nil, &followedChannel)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, &followedChannel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to follow news channel: %v", err)
 	}
@@ -282,10 +281,10 @@ func (s *Session) FollowNewsChannel(ctx context.Context, channelID discord.Snowf
 	return
 }
 
-func (s *Session) TriggerTypingIndicator(ctx context.Context, channelID discord.Snowflake) (err error) {
+func (s *Session) TriggerTypingIndicator(channelID discord.Snowflake) (err error) {
 	endpoint := EndpointChannelTyping(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPost, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to trigger typing indicator: %v", err)
 	}
@@ -293,10 +292,10 @@ func (s *Session) TriggerTypingIndicator(ctx context.Context, channelID discord.
 	return
 }
 
-func (s *Session) GetPinnedMessages(ctx context.Context, channelID discord.Snowflake) (pinnedMessages []*structs.Message, err error) {
+func (s *Session) GetPinnedMessages(channelID discord.Snowflake) (pinnedMessages []*structs.Message, err error) {
 	endpoint := EndpointChannelMessagesPins(channelID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &pinnedMessages)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &pinnedMessages)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get pinned messages: %v", err)
 	}
@@ -304,7 +303,7 @@ func (s *Session) GetPinnedMessages(ctx context.Context, channelID discord.Snowf
 	return
 }
 
-func (s *Session) PinMessage(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, reason *string) (err error) {
+func (s *Session) PinMessage(channelID discord.Snowflake, messageID discord.Snowflake, reason *string) (err error) {
 	endpoint := EndpointChannelMessagePin(channelID.String(), messageID.String())
 
 	headers := http.Header{}
@@ -313,7 +312,7 @@ func (s *Session) PinMessage(ctx context.Context, channelID discord.Snowflake, m
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPut, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to pin message: %v", err)
 	}
@@ -321,7 +320,7 @@ func (s *Session) PinMessage(ctx context.Context, channelID discord.Snowflake, m
 	return
 }
 
-func (s *Session) UnpinMessage(ctx context.Context, channelID discord.Snowflake, messageID discord.Snowflake, reason *string) (err error) {
+func (s *Session) UnpinMessage(channelID discord.Snowflake, messageID discord.Snowflake, reason *string) (err error) {
 	endpoint := EndpointChannelMessagePin(channelID.String(), messageID.String())
 
 	headers := http.Header{}
@@ -330,7 +329,7 @@ func (s *Session) UnpinMessage(ctx context.Context, channelID discord.Snowflake,
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to unpin message: %v", err)
 	}

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -11,7 +10,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func (s *Session) GetInvite(ctx context.Context, inviteCode string, withCounts *bool, withExpiration *bool, guildScheduledEventID *discord.Snowflake) (invite *structs.Invite, err error) {
+func (s *Session) GetInvite(inviteCode string, withCounts *bool, withExpiration *bool, guildScheduledEventID *discord.Snowflake) (invite *structs.Invite, err error) {
 	endpoint := EndpointInvite(inviteCode)
 
 	var values url.Values
@@ -32,7 +31,7 @@ func (s *Session) GetInvite(ctx context.Context, inviteCode string, withCounts *
 		endpoint += "?" + values.Encode()
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &invite)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &invite)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get invite: %v", err)
 	}
@@ -40,7 +39,7 @@ func (s *Session) GetInvite(ctx context.Context, inviteCode string, withCounts *
 	return
 }
 
-func (s *Session) DeleteInvite(ctx context.Context, inviteCode string, reason *string) (err error) {
+func (s *Session) DeleteInvite(inviteCode string, reason *string) (err error) {
 	endpoint := EndpointInvite(inviteCode)
 
 	headers := http.Header{}
@@ -49,7 +48,7 @@ func (s *Session) DeleteInvite(ctx context.Context, inviteCode string, reason *s
 		headers.Add(structs.AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, headers, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to delete invite: %v", err)
 	}

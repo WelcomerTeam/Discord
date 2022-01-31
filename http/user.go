@@ -13,7 +13,7 @@ import (
 func (s *Session) GetCurrentUser(ctx context.Context) (user *structs.User, err error) {
 	endpoint := EndpointUser("@me")
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &user)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &user)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get current user: %v", err)
 	}
@@ -21,10 +21,10 @@ func (s *Session) GetCurrentUser(ctx context.Context) (user *structs.User, err e
 	return
 }
 
-func (s *Session) GetUser(ctx context.Context, userID discord.Snowflake) (user *structs.User, err error) {
+func (s *Session) GetUser(userID discord.Snowflake) (user *structs.User, err error) {
 	endpoint := EndpointUser(userID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &user)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &user)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get user: %v", err)
 	}
@@ -32,10 +32,10 @@ func (s *Session) GetUser(ctx context.Context, userID discord.Snowflake) (user *
 	return
 }
 
-func (s *Session) ModifyCurrentUser(ctx context.Context, userParam structs.UserParam) (user *structs.User, err error) {
+func (s *Session) ModifyCurrentUser(userParam structs.UserParam) (user *structs.User, err error) {
 	endpoint := EndpointUser("@me")
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPatch, endpoint, userParam, nil, &user)
+	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, userParam, nil, &user)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to modify current user: %v", err)
 	}
@@ -46,7 +46,7 @@ func (s *Session) ModifyCurrentUser(ctx context.Context, userParam structs.UserP
 func (s *Session) GetCurrentUserGuilds(ctx context.Context) (guilds []*structs.Guild, err error) {
 	endpoint := EndpointUserGuilds("@me")
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &guilds)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guilds)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get current user guilds: %v", err)
 	}
@@ -54,10 +54,10 @@ func (s *Session) GetCurrentUserGuilds(ctx context.Context) (guilds []*structs.G
 	return
 }
 
-func (s *Session) GetCurrentUserGuildMember(ctx context.Context, guildID discord.Snowflake) (guildMember *structs.GuildMember, err error) {
+func (s *Session) GetCurrentUserGuildMember(guildID discord.Snowflake) (guildMember *structs.GuildMember, err error) {
 	endpoint := EndpointUserGuildMember("@me", guildID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodGet, endpoint, nil, nil, &guildMember)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guildMember)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get current user guild member: %v", err)
 	}
@@ -65,10 +65,10 @@ func (s *Session) GetCurrentUserGuildMember(ctx context.Context, guildID discord
 	return
 }
 
-func (s *Session) LeaveGuild(ctx context.Context, guildID discord.Snowflake) (err error) {
+func (s *Session) LeaveGuild(guildID discord.Snowflake) (err error) {
 	endpoint := EndpointUserGuild("@me", guildID.String())
 
-	err = s.Interface.FetchJJ(ctx, http.MethodDelete, endpoint, nil, nil, nil)
+	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return xerrors.Errorf("Failed to leave guild: %v", err)
 	}
@@ -76,7 +76,7 @@ func (s *Session) LeaveGuild(ctx context.Context, guildID discord.Snowflake) (er
 	return
 }
 
-func (s *Session) CreateDM(ctx context.Context, recipientID discord.Snowflake) (channel *structs.Channel, err error) {
+func (s *Session) CreateDM(recipientID discord.Snowflake) (channel *structs.Channel, err error) {
 	endpoint := EndpointUserChannels("@me")
 
 	var values url.Values
@@ -85,7 +85,7 @@ func (s *Session) CreateDM(ctx context.Context, recipientID discord.Snowflake) (
 
 	endpoint += "?" + values.Encode()
 
-	err = s.Interface.FetchJJ(ctx, http.MethodPost, endpoint, nil, nil, &channel)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, &channel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create dm: %v", err)
 	}
