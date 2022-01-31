@@ -54,3 +54,9 @@ type User struct {
 	PublicFlags   *UserFlags         `json:"public_flags,omitempty"`
 	DMChannelID   *discord.Snowflake `json:"dm_channel_id,omitempty"`
 }
+
+// UserParam represents the payload sent to modify a user.
+type UserParam struct {
+	Username string `json:"username"`
+	Avatar   string `json:"avatar,omitempty"`
+}

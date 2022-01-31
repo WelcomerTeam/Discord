@@ -52,6 +52,9 @@ var (
 	EndpointGuild = func(guildID string) string {
 		return EndpointGuilds + guildID
 	}
+	EndpointGuildVanityURL = func(guildID string) string {
+		return EndpointGuilds + guildID + "/vanity-url"
+	}
 	EndpointGuildPreview = func(guildID string) string {
 		return EndpointGuilds + guildID + "/preview"
 	}
@@ -61,17 +64,20 @@ var (
 	EndpointGuildMembers = func(guildID string) string {
 		return EndpointGuilds + guildID + "/members"
 	}
-	EndpointGuildMember = func(guildID, roleID string) string {
-		return EndpointGuilds + guildID + "/members/" + roleID
+	EndpointGuildMembersSearch = func(guildID string) string {
+		return EndpointGuildMembers(guildID) + "/search"
+	}
+	EndpointGuildMember = func(guildID, userID string) string {
+		return EndpointGuilds + guildID + "/members/" + userID
 	}
 	EndpointGuildMemberRole = func(guildID, userID, roleID string) string {
-		return EndpointGuilds + guildID + "/members/" + roleID + "/roles/" + roleID
+		return EndpointGuilds + guildID + "/members/" + userID + "/roles/" + roleID
 	}
 	EndpointGuildBans = func(guildID string) string {
 		return EndpointGuilds + guildID + "/bans"
 	}
-	EndpointGuildBan = func(guildID, roleID string) string {
-		return EndpointGuilds + guildID + "/bans/" + roleID
+	EndpointGuildBan = func(guildID, userID string) string {
+		return EndpointGuilds + guildID + "/bans/" + userID
 	}
 	EndpointGuildIntegrations = func(guildID string) string {
 		return EndpointGuilds + guildID + "/integrations"

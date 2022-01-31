@@ -122,3 +122,11 @@ type FollowedChannel struct {
 	ChannelID discord.Snowflake `json:"channel_id"`
 	WebhookID discord.Snowflake `json:"webhook_id"`
 }
+
+// ChannelPermissionsParams represents the arguments to modify guild channel permissions.
+type ChannelPermissionsParams struct {
+	ID              discord.Snowflake `json:"id"`
+	Position        int32             `json:"position"`
+	LockPermissions bool              `json:"lock_permissions"`
+	ParentID        discord.Snowflake `json:"parent_id"`
+}

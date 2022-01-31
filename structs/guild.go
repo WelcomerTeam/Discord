@@ -178,3 +178,17 @@ type VoiceState struct {
 	Suppress                bool               `json:"suppress"`
 	RequestToSpeakTimestamp time.Time          `json:"request_to_speak_timestamp"`
 }
+
+// GuildBan represents a ban entry.
+type GuildBan struct {
+	GuildID *discord.Snowflake `json:"guild_id,omitempty"`
+	Reason  string
+	User    *User `json:"user"`
+}
+
+// GuildPruneParam represents the arguments for a guild prune.
+type GuildPruneParam struct {
+	Days              *int32               `json:"days,omitempty"`
+	ComputePruneCount bool                 `json:"compute_prune_count"`
+	IncludeRoles      []*discord.Snowflake `json:"include_roles"`
+}

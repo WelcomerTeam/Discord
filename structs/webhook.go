@@ -43,3 +43,9 @@ type WebhookMessageParams struct {
 	PayloadJSON     *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
 }
+
+// WebhookParam represents the data sent to discord to create a webhook.
+type WebhookParam struct {
+	Name   string `json:"name"`
+	Avatar string `json:"avatar,omitempty"`
+}

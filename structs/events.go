@@ -101,16 +101,10 @@ type GuildUpdate *Guild
 type GuildDelete *UnavailableGuild
 
 // GuildBanAdd represents a guild ban add event.
-type GuildBanAdd struct {
-	GuildID discord.Snowflake `json:"guild_id"`
-	User    *User             `json:"user"`
-}
+type GuildBanAdd *GuildBan
 
 // GuildBanRemove represents a guild ban remove event.
-type GuildBanRemove struct {
-	GuildID discord.Snowflake `json:"guild_id"`
-	User    *User             `json:"user"`
-}
+type GuildBanRemove *GuildBan
 
 // GuildEmojisUpdate represents a guild emojis update event.
 type GuildEmojisUpdate struct {

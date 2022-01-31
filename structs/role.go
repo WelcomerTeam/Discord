@@ -26,3 +26,9 @@ type RoleTag struct {
 	BotID             *discord.Snowflake `json:"bot_id,omitempty"`
 	IntegrationID     *discord.Snowflake `json:"integration_id,omitempty"`
 }
+
+// ModifyGuildRolePosition represents the argument for modifying guild role positions.
+type ModifyGuildRolePosition struct {
+	ID       discord.Snowflake `json:"id"`
+	Position *int32            `json:"position,omitempty"`
+}
