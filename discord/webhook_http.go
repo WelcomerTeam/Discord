@@ -126,6 +126,8 @@ func DeleteWebhookWithToken(s *Session, webhookID Snowflake, webhookToken string
 func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messageParam WebhookMessageParams) (message *WebhookMessage, err error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
+	// TODO: Handle file uploads
+
 	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParam, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
@@ -147,6 +149,8 @@ func GetWebhookMessage(s *Session, webhookID Snowflake, webhookToken string, mes
 
 func EditWebhookMessage(s *Session, webhookID Snowflake, webhookToken string, messageID Snowflake, messageParam WebhookMessageParams) (message *WebhookMessage, err error) {
 	endpoint := EndpointWebhookMessage(webhookID.String(), webhookToken, messageID.String())
+
+	// TODO: Handle file uploads
 
 	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
 	if err != nil {

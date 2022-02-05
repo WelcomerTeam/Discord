@@ -132,7 +132,7 @@ func (m *Message) Delete(s *Session, reason *string) (err error) {
 
 // Edit edits a message.
 // messageArg: arguments for editing the message.
-func (m *Message) Edit(s *Session, messageArg Message) (message *Message, err error) {
+func (m *Message) Edit(s *Session, messageArg MessageParams) (message *Message, err error) {
 	return EditMessage(s, m.ChannelID, m.ID, messageArg)
 }
 
@@ -155,11 +155,19 @@ func (m *Message) RemoveReaction(s *Session, emoji string, user User) (err error
 }
 
 // Reply will send a new message in the same channel as the target message and references the target.
-// This is the same as using Send() and setting the message as the ReferencedMessage.
+// This is the same as using Send() and setting the message as the MessageReference.
 // messageArg: arguments for sending a message.
-func (m *Message) Reply(s *Session, messageArg Message) (message *Message, err error) {
-	messageArg.ReferencedMessage = m
-	return CreateMessage(s, m.ChannelID, messageArg)
+func (m *Message) Reply(s *Session, messageArg MessageParams) (message *Message, err error) {
+	messageArg.MessageReference = &MessageReference{
+		ID:              &m.ID,
+		ChannelID:       &m.ChannelID,
+		GuildID:         m.GuildID,
+		FailIfNotExists: true,
+	}
+
+	channel := &Channel{ID: m.ChannelID}
+
+	return channel.Send(s, messageArg)
 }
 
 // Unpin unpins a message.
@@ -168,7 +176,7 @@ func (m *Message) Unpin(s *Session, reason *string) (err error) {
 	return UnpinMessage(s, m.ChannelID, m.ID, reason)
 }
 
-// MessageParams represents the structure for sending a message on
+// MessageParams represents the structure for sending a message on discord.
 type MessageParams struct {
 	Content          string                    `json:"content"`
 	TTS              bool                      `json:"tts"`
@@ -206,7 +214,7 @@ type MessageReference struct {
 	FailIfNotExists bool       `json:"fail_if_not_exists"`
 }
 
-// MessageReaction represents a reaction to a message on
+// MessageReaction represents a reaction to a message on discord.
 type MessageReaction struct {
 	Count int32  `json:"count"`
 	Me    bool   `json:"me"`
@@ -221,7 +229,7 @@ type MessageAllowedMentions struct {
 	RepliedUser bool                         `json:"replied_user"`
 }
 
-// MessageAttachment represents a message attachment on
+// MessageAttachment represents a message attachment on discord.
 type MessageAttachment struct {
 	ID        Snowflake `json:"id"`
 	Filename  string    `json:"filename"`
@@ -233,7 +241,7 @@ type MessageAttachment struct {
 	Ephemeral bool      `json:"ephemeral"`
 }
 
-// MessageActivity represents a message activity on
+// MessageActivity represents a message activity on discord.
 type MessageActivity struct {
 	Type    MessageActivityType `json:"type"`
 	PartyID string              `json:"party_id,omitempty"`

@@ -15,7 +15,7 @@ const (
 	WebhookTypeChannelFollower
 )
 
-// Webhook represents a webhook on
+// Webhook represents a webhook on discord.
 type Webhook struct {
 	ID   Snowflake   `json:"id"`
 	Type WebhookType `json:"type"`

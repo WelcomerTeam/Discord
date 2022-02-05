@@ -2,10 +2,13 @@ package discord
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 
 	"golang.org/x/xerrors"
 )
+
+var emojiEscaper = strings.NewReplacer("#", "%23")
 
 func GetChannel(s *Session, channelID Snowflake) (channel *Channel, err error) {
 	endpoint := EndpointChannel(channelID.String())
@@ -18,7 +21,7 @@ func GetChannel(s *Session, channelID Snowflake) (channel *Channel, err error) {
 	return
 }
 
-func ModifyChannel(s *Session, channelID Snowflake, channelArg Channel, reason *string) (channel *Channel, err error) {
+func ModifyChannel(s *Session, channelID Snowflake, channelArg ChannelParams, reason *string) (channel *Channel, err error) {
 	endpoint := EndpointChannel(channelID.String())
 
 	headers := http.Header{}
@@ -52,15 +55,37 @@ func DeleteChannel(s *Session, channelID Snowflake, reason *string) (err error) 
 	return
 }
 
-func GetChannelMessages(s *Session, channelID Snowflake) (messages []*Message, err error) {
+func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) (messages []*Message, err error) {
 	endpoint := EndpointChannelMessages(channelID.String())
+
+	var values url.Values
+
+	if around != nil {
+		values.Add("around", around.String())
+	}
+
+	if before != nil {
+		values.Add("before", before.String())
+	}
+
+	if after != nil {
+		values.Add("after", after.String())
+	}
+
+	if limit != nil {
+		values.Add("limit", string(*limit))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &messages)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get channel messages: %v", err)
 	}
 
-	return
+	return messages, nil
 }
 
 func GetChannelMessage(s *Session, channelID Snowflake, messageID Snowflake) (message *Message, err error) {
@@ -74,8 +99,10 @@ func GetChannelMessage(s *Session, channelID Snowflake, messageID Snowflake) (me
 	return
 }
 
-func CreateMessage(s *Session, channelID Snowflake, messageArg Message) (message *Message, err error) {
+func CreateMessage(s *Session, channelID Snowflake, messageArg MessageParams) (message *Message, err error) {
 	endpoint := EndpointChannelMessages(channelID.String())
+
+	// TODO: Handle file uploads
 
 	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageArg, nil, &message)
 	if err != nil {
@@ -97,7 +124,7 @@ func CrosspostMessage(s *Session, channelID Snowflake, messageID Snowflake) (mes
 }
 
 func CreateReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji string) (err error) {
-	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), strings.Replace(emoji, "#", "%23", -1), "@me")
+	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji), "@me")
 
 	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, nil, nil)
 	if err != nil {
@@ -108,7 +135,7 @@ func CreateReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji 
 }
 
 func DeleteOwnReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji string) (err error) {
-	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), strings.Replace(emoji, "#", "%23", -1), "@me")
+	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji), "@me")
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
@@ -119,7 +146,7 @@ func DeleteOwnReaction(s *Session, channelID Snowflake, messageID Snowflake, emo
 }
 
 func DeleteUserReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji string, userID Snowflake) (err error) {
-	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), strings.Replace(emoji, "#", "%23", -1), userID.String())
+	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji), userID.String())
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
@@ -130,7 +157,7 @@ func DeleteUserReaction(s *Session, channelID Snowflake, messageID Snowflake, em
 }
 
 func GetReactions(s *Session, channelID Snowflake, messageID Snowflake, emoji string, after *Snowflake, limit *int) (users []*User, err error) {
-	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), strings.Replace(emoji, "#", "%23", -1))
+	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji))
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &users)
 	if err != nil {
@@ -152,7 +179,7 @@ func DeleteAllReactions(s *Session, channelID Snowflake, messageID Snowflake) (e
 }
 
 func DeleteAllReactionsEmoji(s *Session, channelID Snowflake, messageID Snowflake, emoji string) (err error) {
-	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), strings.Replace(emoji, "#", "%23", -1))
+	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji))
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
@@ -162,8 +189,10 @@ func DeleteAllReactionsEmoji(s *Session, channelID Snowflake, messageID Snowflak
 	return
 }
 
-func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messageArg Message) (message *Message, err error) {
+func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messageArg MessageParams) (message *Message, err error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
+
+	// TODO: Handle file uploads
 
 	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageArg, nil, &message)
 	if err != nil {

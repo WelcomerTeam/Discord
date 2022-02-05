@@ -53,6 +53,12 @@ type Invite struct {
 	CreatedAt string `json:"created_at"`
 }
 
+// Delete deletes an invite.
+// reason: Reason for deleting an invite.
+func (i *Invite) Delete(s *Session, reason *string) (err error) {
+	return DeleteInvite(s, i.Code, reason)
+}
+
 // InviteStageInstance represents the structure of an invite stage instance.
 type InviteStageInstance struct {
 	Members          []*GuildMember `json:"members"`

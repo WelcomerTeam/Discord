@@ -40,7 +40,7 @@ func GetGuildPreview(s *Session, guildID Snowflake) (guildPreview *Guild, err er
 	return
 }
 
-func ModifyGuild(s *Session, guildID Snowflake, guildArg Guild, reason *string) (guild *Guild, err error) {
+func ModifyGuild(s *Session, guildID Snowflake, guildArg GuildParam, reason *string) (guild *Guild, err error) {
 	endpoint := EndpointGuild(guildID.String())
 
 	headers := http.Header{}
@@ -79,7 +79,7 @@ func GetGuildChannels(s *Session, guildID Snowflake) (channels []*Channel, err e
 	return
 }
 
-func CreateGuildChannel(s *Session, guildID Snowflake, channelArg Channel, reason *string) (channel *Channel, err error) {
+func CreateGuildChannel(s *Session, guildID Snowflake, channelArg ChannelParams, reason *string) (channel *Channel, err error) {
 	endpoint := EndpointGuildChannels(guildID.String())
 
 	headers := http.Header{}
@@ -322,7 +322,7 @@ func GetGuildRoles(s *Session, guildID Snowflake) (roles []*Role, err error) {
 	return
 }
 
-func CreateGuildRole(s *Session, guildID Snowflake, roleArg Role, reason *string) (role *Role, err error) {
+func CreateGuildRole(s *Session, guildID Snowflake, roleArg RoleParams, reason *string) (role *Role, err error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
 	headers := http.Header{}
@@ -428,11 +428,24 @@ func GetGuildPruneCount(s *Session, guildID Snowflake, days *int32, includedRole
 
 	pruned = &prunedStruct.Pruned
 
-	return
+	return pruned, nil
 }
 
-func BeginGuildPrune(s *Session, guildID Snowflake, pruneArg GuildPruneParam, reason *string) (pruned *int32, err error) {
+func BeginGuildPrune(s *Session, guildID Snowflake, days *int32, includedRoles []Snowflake, computePruneCount bool, reason *string) (pruned *int32, err error) {
 	endpoint := EndpointGuildPrune(guildID.String())
+
+	pruneArg := GuildPruneParam{
+		ComputePruneCount: computePruneCount,
+	}
+
+	if days != nil {
+		pruneArg.Days = days
+	}
+
+	for _, includedRole := range includedRoles {
+		role := includedRole
+		pruneArg.IncludeRoles = append(pruneArg.IncludeRoles, &role)
+	}
 
 	headers := http.Header{}
 
@@ -451,7 +464,7 @@ func BeginGuildPrune(s *Session, guildID Snowflake, pruneArg GuildPruneParam, re
 
 	pruned = &prunedStruct.Pruned
 
-	return
+	return pruned, nil
 }
 
 func GetGuildInvites(s *Session, guildID Snowflake) (invites []*Invite, err error) {

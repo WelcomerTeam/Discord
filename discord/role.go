@@ -2,7 +2,7 @@ package discord
 
 // role.go represents all structures for a discord guild role.
 
-// Role represents a role on
+// Role represents a role on discord.
 type Role struct {
 	ID           Snowflake  `json:"id"`
 	GuildID      *Snowflake `json:"guild_id,omitempty"`
@@ -16,6 +16,17 @@ type Role struct {
 	Managed      bool       `json:"managed"`
 	Mentionable  bool       `json:"mentionable"`
 	Tags         *RoleTag   `json:"tags,omitempty"`
+}
+
+// RoleParams represents the structure used to create a role.
+type RoleParams struct {
+	Name         *string `json:"name,omitempty"`
+	Permissions  *Int64  `json:"permissions,omitempty"`
+	Color        *int32  `json:"color,omitempty"`
+	Hoist        *bool   `json:"hoist,omitempty"`
+	Icon         *string `json:"icon,omitempty"`
+	UnicodeEmoji *string `json:"unicode_emoji,omitempty"`
+	Mentionable  *bool   `json:"mentionable,omitempty"`
 }
 
 // Delete deletes a guild role.

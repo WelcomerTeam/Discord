@@ -138,6 +138,197 @@ type Guild struct {
 	PremiumProgressBarEnabled bool              `json:"premium_progress_bar_enabled"`
 }
 
+// GuildParams represents the parameters sent when modifying a guild.
+type GuildParam struct {
+	Name                        *string                     `json:"name,omitempty"`
+	Region                      *string                     `json:"region,omitempty"`
+	VerificationLevel           *VerificationLevel          `json:"verification_level,omitempty"`
+	DefaultMessageNotifications *MessageNotificationLevel   `json:"default_message_notifications,omitempty"`
+	ExplicitContentFilter       *ExplicitContentFilterLevel `json:"explicit_content_filter,omitempty"`
+	Icon                        *string                     `json:"icon,omitempty"`
+	OwnerID                     *Snowflake                  `json:"owner_id,omitempty"`
+	Splash                      *string                     `json:"splash,omitempty"`
+	Banner                      *string                     `json:"banner,omitempty"`
+	DiscoverySplash             *string                     `json:"discovery_splash,omitempty"`
+	AFKChannelID                *Snowflake                  `json:"afk_channel_id,omitempty"`
+	AFKTimeout                  *int32                      `json:"afk_timeout,omitempty"`
+	SystemChannelID             *Snowflake                  `json:"system_channel_id,omitempty"`
+	SystemChannelFlags          *SystemChannelFlags         `json:"system_channel_flags,omitempty"`
+	RulesChannelID              *Snowflake                  `json:"rules_channel_id,omitempty"`
+	PublicUpdatesChannelID      *Snowflake                  `json:"public_updates_channel_id,omitempty"`
+	PreferredLocale             *string                     `json:"preferred_locale,omitempty"`
+	Features                    []string                    `json:"features,omitempty"`
+	Description                 *string                     `json:"description,omitempty"`
+	PremiumProgressBarEnabled   *bool                       `json:"premium_progress_bar_enabled,omitempty"`
+}
+
+// AuditLogs returns all audit logs matching query.
+// userID: Filters audit logs by the userID provided.
+// actionType: The action type to filter audit logs by.
+// before: Only show audit logs before a certain snowflake.
+// limit: Maximum number of audit log entries to return.
+func (g *Guild) AuditLogs(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) (entries []*AuditLogEntry, err error) {
+	return GetGuildAuditLog(s, g.ID, userID, actionType, before, limit)
+}
+
+// Ban bans a user.
+// userID: ID of user that is getting banned.
+// reason: Reason for ban.
+func (g *Guild) Ban(s *Session, userID Snowflake, reason *string) (err error) {
+	return CreateGuildBan(s, g.ID, userID, reason)
+}
+
+// Bans returns a list of guild bans.
+func (g *Guild) Bans(s *Session) (bans []*GuildBan, err error) {
+	return GetGuildBans(s, g.ID)
+}
+
+// CloneChannel creates a copy of the target channel.
+// reason: Reason for creating the channel.
+func (g *Guild) CloneChannel(s *Session, c *Channel, reason *string) (channel *Channel, err error) {
+	return g.CreateChannel(s, ChannelParams{
+		Name:                 c.Name,
+		Type:                 c.Type,
+		Topic:                c.Topic,
+		Bitrate:              c.Bitrate,
+		UserLimit:            c.UserLimit,
+		RateLimitPerUser:     c.RateLimitPerUser,
+		Position:             c.Position,
+		PermissionOverwrites: c.PermissionOverwrites,
+		ParentID:             c.ParentID,
+		NSFW:                 c.NSFW,
+	}, reason)
+}
+
+// CreateChannel creates a channel.
+// channelArg: Parameters passed for creating a channel.
+// reason: Reason for creating the channel.
+func (g *Guild) CreateChannel(s *Session, channelArg ChannelParams, reason *string) (channel *Channel, err error) {
+	return CreateGuildChannel(s, g.ID, channelArg, reason)
+}
+
+// CreateCustomEmojis creates an emoji for a guild.
+// name: Name of the custom emoji.
+// image: Bytes representing the image file to upload.
+// roles: Roles that this emoji is limited to.
+// reason: Reason for creating the emoji.
+func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles []*Snowflake, reason *string) (emoji *Emoji, err error) {
+	params := EmojiParams{
+		Name:  name,
+		Roles: roles,
+	}
+
+	imageData, err := bytesToBase64Data(image)
+	if err != nil {
+		return
+	}
+
+	params.Image = imageData
+
+	return CreateGuildEmoji(s, g.ID, params, reason)
+}
+
+// CreateRole creates a role.
+// roleArg: Parameters passed for creating a role.
+// reason: Reason for creating the role.
+func (g *Guild) CreateRole(s *Session, roleArg RoleParams, reason *string) (role *Role, err error) {
+	return CreateGuildRole(s, g.ID, roleArg, reason)
+}
+
+// Delete deletes a guild.
+func (g *Guild) Delete(s *Session) (err error) {
+	return DeleteGuild(s, g.ID)
+}
+
+// Edit edits a guild.
+// guildArg: Parameters passed for editing a guild.
+// reason: Reason for editing the guild.
+func (g *Guild) Edit(s *Session, guildArg GuildParam, reason *string) (err error) {
+	newGuild, err := ModifyGuild(s, g.ID, guildArg, reason)
+	if err != nil {
+		return
+	}
+
+	*g = *newGuild
+
+	return
+}
+
+// EditRolePositions edits role positions in a guild.
+// guildRolePositionArgs: List of roles and their new role position.
+func (g *Guild) EditRolePositions(s *Session, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) (roles []*Role, err error) {
+	return ModifyGuildRolePositions(s, g.ID, guildRolePositionArgs, reason)
+}
+
+// EstimatePrunedMembers returns an estimate of how many people will be pruned from a guild based on arguments.
+// days: The number of days since speaking.
+// includedRoles: By default pruning only removes users with no roles, any role in this list will be included.
+func (g *Guild) EstimatePrunedMembers(s *Session, days *int32, includedRoles []Snowflake) (pruned *int32, err error) {
+	return GetGuildPruneCount(s, g.ID, days, includedRoles)
+}
+
+// Integrations returns all guild integrations.
+func (g *Guild) Integrations(s *Session) (integrations []*Integration, err error) {
+	return GetGuildIntegrations(s, g.ID)
+}
+
+// Invites returns all guild invites.
+func (g *Guild) Invites(s *Session) (invites []*Invite, err error) {
+	return GetGuildInvites(s, g.ID)
+}
+
+// Kick kicks a user from the guild.
+// userID: ID of user to kick.
+// reason: Reason for kicking the user.
+func (g *Guild) Kick(s *Session, userID Snowflake, reason *string) (err error) {
+	return RemoveGuildMember(s, g.ID, userID, reason)
+}
+
+// Leave leaves a guild.
+func (g *Guild) Leave(s *Session) (err error) {
+	return LeaveGuild(s, g.ID)
+}
+
+// PruneMembers prunes users from a guild based on arguments.
+// days: The number of days since speaking.
+// includedRoles: By default pruning only removes users with no roles, any role in this list will be included.
+// computePruneCount: Returns how many users were pruned, usage on larger guilds is discouraged.
+// reason: Reason for pruning members.
+func (g *Guild) PruneMembers(s *Session, guildID Snowflake, days *int32, includedRoles []Snowflake, computePruneCount bool, reason *string) (pruned *int32, err error) {
+	return BeginGuildPrune(s, g.ID, days, includedRoles, computePruneCount, reason)
+}
+
+// QueryMembers returns guild members whose username or nickname matches query.
+// query: Query string to match usernames and nicknames against.
+// limit: Maximum number of members to return.
+func (g *Guild) QueryMembers(s *Session, query string, limit *int32) (guildMembers []*GuildMember, err error) {
+	return SearchGuildMembers(s, g.ID, query, limit)
+}
+
+// Unban unbans a user from a guild.
+// userID: ID of user to unban.
+// reason: Reason for unbanning.
+func (g *Guild) Unban(s *Session, userID Snowflake, reason *string) (err error) {
+	return RemoveGuildBan(s, g.ID, userID, reason)
+}
+
+// VanityInvite returns the vanity invite for a guild.
+func (g *Guild) VanityInvite(s *Session) (invite *Invite, err error) {
+	invite, err = GetGuildVanityURL(s, g.ID)
+	if err != nil {
+		return
+	}
+
+	g.VanityURLCode = invite.Code
+
+	return
+}
+
+// Webhooks returns all webhooks for a guild.
+func (g *Guild) Webhooks(s *Session) (webhooks []*Webhook, err error) {
+	return GetGuildWebhooks(s, g.ID)
+}
+
 // UnavailableGuild represents an unavailable guild.
 type UnavailableGuild struct {
 	ID          Snowflake `json:"id"`
@@ -159,6 +350,18 @@ type GuildMember struct {
 	Permissions                *Int64      `json:"permissions"`
 	CommunicationDisabledUntil string      `json:"communication_disabled_until,omitempty"`
 }
+
+// TODO: AddRoles
+// TODO: Ban
+// TODO: CreateDM
+// TODO: Edit
+// TODO: Kick
+// TODO: MoveTo
+// TODO: Pins
+// TODO: RemoveRoles
+// TODO: Send
+// TODO: Unban
+// TODO: Unblock
 
 // VoiceState represents the voice state on discord.
 type VoiceState struct {

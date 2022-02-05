@@ -6,21 +6,23 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) (interaction *Interaction, err error) {
+func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) (err error) {
 	endpoint := EndpointInteractionResponse(interactionID.String(), interactionToken)
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, interactionResponse, nil, &interaction)
+	// TODO: Handle file uploads
+
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, interactionResponse, nil, nil)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to create interaction response: %v", err)
+		return xerrors.Errorf("Failed to create interaction response: %v", err)
 	}
 
 	return
 }
 
-func GetOrigionalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string) (interaction *Interaction, err error) {
+func GetoriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string) (message *Message, err error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
-	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &interaction)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to get original interaction response: %v", err)
 	}
@@ -28,10 +30,12 @@ func GetOrigionalInteractionResponse(s *Session, applicationID Snowflake, intera
 	return
 }
 
-func EditOriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (interaction *Interaction, err error) {
+func EditOriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (message *Message, err error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &interaction)
+	// TODO: Handle file uploads
+
+	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to edit original interaction response: %v", err)
 	}
@@ -52,6 +56,8 @@ func DeleteOriginalInteractionResponse(s *Session, applicationID Snowflake, inte
 
 func CreateFollowupMessage(s *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (message *Message, err error) {
 	endpoint := EndpointFollowupMessage(applicationID.String(), interactionToken)
+
+	// TODO: Handle file uploads
 
 	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
 	if err != nil {
@@ -74,6 +80,8 @@ func GetFollowupMessage(s *Session, applicationID Snowflake, interactionToken st
 
 func EditFollowupMessage(s *Session, applicationID Snowflake, interactionToken string, messageID Snowflake, messageParams WebhookMessageParams) (message *Message, err error) {
 	endpoint := EndpointFollowupMessageActions(applicationID.String(), interactionToken, messageID.String())
+
+	// TODO: Handle file uploads
 
 	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
 	if err != nil {

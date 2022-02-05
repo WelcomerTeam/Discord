@@ -39,7 +39,7 @@ const (
 	UserPremiumTypeNitro
 )
 
-// User represents a user on
+// User represents a user on discord.
 type User struct {
 	ID            Snowflake        `json:"id"`
 	Username      string           `json:"username"`
@@ -91,8 +91,8 @@ func (u *User) Send(s *Session, params MessageParams) (message *Message, err err
 type ClientUser User
 
 // Edit modifies the current user.
-// username: The new username to change to
-// avatar
+// username: The new username to change to.
+// avatar: File of new avatar to change to.
 func (u *ClientUser) Edit(s *Session, username *string, avatar *[]byte) (err error) {
 	params := UserParam{
 		Username: username,
@@ -101,7 +101,7 @@ func (u *ClientUser) Edit(s *Session, username *string, avatar *[]byte) (err err
 	if avatar != nil {
 		avatarBase64, err := bytesToBase64Data(*avatar)
 		if err != nil {
-			return nil
+			return err
 		}
 
 		params.Avatar = &avatarBase64

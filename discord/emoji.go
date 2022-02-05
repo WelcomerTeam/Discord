@@ -15,6 +15,32 @@ type Emoji struct {
 	Available     bool        `json:"available"`
 }
 
+// Delete deletes the emoji.
+// reason: Reason for deleting the emoji.
+func (e *Emoji) Delete(s *Session, reason *string) (err error) {
+	return DeleteGuildEmoji(s, *e.GuildID, e.ID, reason)
+}
+
+// Edit edits the emoji.
+// name: The name of the emoji
+// roles: Roles this emoji is limited to.
+// reason: Reason for editing the emoji.
+func (e *Emoji) Edit(s *Session, name string, roles []*Snowflake, reason *string) (err error) {
+	params := EmojiParams{
+		Name:  name,
+		Roles: roles,
+	}
+
+	newEmoji, err := ModifyGuildEmoji(s, *e.GuildID, e.ID, params, reason)
+	if err != nil {
+		return
+	}
+
+	*e = *newEmoji
+
+	return
+}
+
 // EmojiParams represents the payload sent to discord.
 type EmojiParams struct {
 	Name  string       `json:"name"`

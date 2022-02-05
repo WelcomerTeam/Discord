@@ -79,7 +79,13 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	for i, file := range files {
 		header := make(textproto.MIMEHeader)
-		header.Set("Content-Disposition", fmt.Sprintf(`form-data; name="file%d"; filename="%s"`, i, quoteEscaper.Replace(file.Name)))
+		header.Set(
+			"Content-Disposition",
+			fmt.Sprintf(
+				`form-data; name="file%d"; filename="%s"`,
+				i, quoteEscaper.Replace(file.Name),
+			),
+		)
 
 		fileContentType := file.ContentType
 		if fileContentType == "" {

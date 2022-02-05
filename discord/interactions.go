@@ -22,7 +22,7 @@ type InteractionCallbackType uint8
 const (
 	InteractionCallbackTypePong InteractionCallbackType = 1 + iota
 
-	// InteractionCallbackTypeChannelMessageSource responds to an interaction with a message
+	// InteractionCallbackTypeChannelMessageSource responds to an interaction with a message.
 	InteractionCallbackTypeChannelMessageSource
 
 	// InteractionCallbackTypeDeferredChannelMessageSource acknowledges an interaction and
@@ -78,6 +78,62 @@ type Interaction struct {
 	GuildLocale string       `json:"guild_locale,omitempty"`
 }
 
+// SendResponse sends an interacion response.
+// interactionType: The type of interaction callback.
+// messageArg: arguments for sending message.
+// choices: optional autocomplete choices.
+func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, messageArg WebhookMessageParams, choices []*ApplicationCommandOptionChoice) (err error) {
+	return CreateInteractionResponse(s, i.ID, i.Token, InteractionResponse{
+		Type: &interactionType,
+		Data: &InteractionCallbackData{
+			WebhookMessageParams: &messageArg,
+			Choices:              choices,
+		},
+	})
+}
+
+// EditOriginalResponse edits the original interaction response.
+// messageArg: arguments for editing message.
+func (i *Interaction) EditOriginalResponse(s *Session, messageArg WebhookMessageParams) (message *Message, err error) {
+	return EditOriginalInteractionResponse(s, i.ApplicationID, s.Token, messageArg)
+}
+
+// DeleteOriginalResponse deletes the original interaction response.
+func (i *Interaction) DeleteOriginalResponse(s *Session) (err error) {
+	return DeleteOriginalInteractionResponse(s, i.ApplicationID, i.Token)
+}
+
+// SendFollowup sends a followup message.
+// messageArg: arguments for sending message.
+func (i *Interaction) SendFollowup(s *Session, messageArg WebhookMessageParams) (followup *InteractionFollowup, err error) {
+	message, err := CreateFollowupMessage(s, i.ApplicationID, i.Token, messageArg)
+	if err != nil {
+		return
+	}
+
+	return &InteractionFollowup{
+		Message:     message,
+		Interaction: i,
+	}, nil
+}
+
+// InteractionFollowup represents a follow up message containing both message and the interaction parent.
+type InteractionFollowup struct {
+	*Message
+	*Interaction
+}
+
+// EditFollowup edits the followup message.
+// messageArg: arguments for editing message.
+func (inf *InteractionFollowup) EditFollowup(s *Session, messageArg WebhookMessageParams) (message *Message, err error) {
+	return EditFollowupMessage(s, inf.ApplicationID, inf.Token, inf.Message.ID, messageArg)
+}
+
+// DeleteFollowup deletes the followup message.
+func (inf *InteractionFollowup) DeleteFollowup(s *Session) (err error) {
+	return DeleteFollowupMessage(s, inf.ApplicationID, inf.Token, inf.Message.ID)
+}
+
 // InteractionResponse represents the interaction response object.
 type InteractionResponse struct {
 	Type *InteractionCallbackType `json:"type"`
@@ -101,7 +157,7 @@ type InteractionData struct {
 // Not all message fields are supported, allowed fields are: tts, content
 // embeds, allowed_mentions, flags, components and attachments.
 type InteractionCallbackData struct {
-	*Message
+	*WebhookMessageParams
 	Choices []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 }
 
