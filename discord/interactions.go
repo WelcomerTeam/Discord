@@ -186,11 +186,78 @@ type InteractionComponent struct {
 	Disabled    bool                       `json:"disabled"`
 	Style       InteractionComponentStyle  `json:"style,omitempty"`
 	Label       string                     `json:"label,omitempty"`
-	Emoji       *Emoji                     `json:"emoji,omitempty"`
+	Emoji       string                     `json:"emoji,omitempty"`
 	URL         string                     `json:"url,omitempty"`
 	Options     []*ApplicationSelectOption `json:"options,omitempty"`
 	Placeholder string                     `json:"placeholder,omitempty"`
 	MinValues   *int32                     `json:"min_values,omitempty"`
 	MaxValues   *int32                     `json:"max_values,omitempty"`
 	Components  []*InteractionComponent    `json:"components,omitempty"`
+}
+
+func NewInteractionComponent(componentType InteractionComponentType) *InteractionComponent {
+	return &InteractionComponent{
+		Type: componentType,
+	}
+}
+
+func (ic *InteractionComponent) SetCustomID(customID string) *InteractionComponent {
+	ic.CustomID = customID
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetDisabled(disabled bool) *InteractionComponent {
+	ic.Disabled = disabled
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetStyle(style InteractionComponentStyle) *InteractionComponent {
+	ic.Style = style
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetLabel(label string) *InteractionComponent {
+	ic.Label = label
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetEmoji(emoji string) *InteractionComponent {
+	ic.Emoji = emoji
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetURL(url string) *InteractionComponent {
+	ic.URL = url
+
+	return ic
+}
+
+func (ic *InteractionComponent) AddOption(option *ApplicationSelectOption) *InteractionComponent {
+	ic.Options = append(ic.Options, option)
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetPlaceholder(placeholder string) *InteractionComponent {
+	ic.Placeholder = placeholder
+
+	return ic
+}
+
+func (ic *InteractionComponent) SetMinMaxValues(minValue *int32, maxValue *int32) *InteractionComponent {
+	ic.MinValues = minValue
+	ic.MaxValues = maxValue
+
+	return ic
+}
+
+func (ic *InteractionComponent) AddComponent(component *InteractionComponent) *InteractionComponent {
+	ic.Components = append(ic.Components, component)
+
+	return ic
 }

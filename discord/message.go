@@ -188,6 +188,43 @@ type MessageParams struct {
 	Files            []*File                   `json:"-"`
 	PayloadJSON      *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments      []*MessageAttachment      `json:"attachments,omitempty"`
+	Flags            MessageFlags              `json:"flags,omitempty"`
+}
+
+func NewMessage(content string) *MessageParams {
+	return &MessageParams{
+		Content: content,
+	}
+}
+
+func (m *MessageParams) SetTTS(tts bool) *MessageParams {
+	m.TTS = tts
+
+	return m
+}
+
+func (m *MessageParams) AddEmbed(embed Embed) *MessageParams {
+	m.Embeds = append(m.Embeds, &embed)
+
+	return m
+}
+
+func (m *MessageParams) AddAllowedMention(allowedMention MessageAllowedMentions) *MessageParams {
+	m.AllowedMentions = append(m.AllowedMentions, &allowedMention)
+
+	return m
+}
+
+func (m *MessageParams) AddComponent(component InteractionComponent) *MessageParams {
+	m.Components = append(m.Components, &component)
+
+	return m
+}
+
+func (m *MessageParams) AddFile(file File) *MessageParams {
+	m.Files = append(m.Files, &file)
+
+	return m
 }
 
 // MessageInteraction represents an executed interaction.
@@ -218,7 +255,7 @@ type MessageReference struct {
 type MessageReaction struct {
 	Count int32  `json:"count"`
 	Me    bool   `json:"me"`
-	Emoji *Emoji `json:"emoji"`
+	Emoji string `json:"emoji"`
 }
 
 // MessageAllowedMentions is the structure of the allowed mentions entry.

@@ -207,7 +207,7 @@ type MessageReactionAdd struct {
 	MessageID Snowflake    `json:"message_id"`
 	GuildID   Snowflake    `json:"guild_id,omitempty"`
 	Member    *GuildMember `json:"member,omitempty"`
-	Emoji     *Emoji       `json:"emoji"`
+	Emoji     string       `json:"emoji"`
 }
 
 // MessageReactionRemove represents a message reaction remove event.
@@ -216,7 +216,7 @@ type MessageReactionRemove struct {
 	ChannelID Snowflake  `json:"channel_id"`
 	MessageID Snowflake  `json:"message_id"`
 	GuildID   *Snowflake `json:"guild_id,omitempty"`
-	Emoji     *Emoji     `json:"emoji"`
+	Emoji     string     `json:"emoji"`
 }
 
 // MessageReactionRemoveAll represents a message reaction remove all event.
