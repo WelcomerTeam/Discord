@@ -114,7 +114,7 @@ type WebhookMessageParams struct {
 	Embeds          []*Embed                  `json:"embeds,omitempty"`
 	AllowedMentions []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
 	Components      []*InteractionComponent   `json:"components,omitempty"`
-	Files           []*File                   `json:"files,omitempty"`
+	Files           []*File                   `json:"-"`
 	PayloadJSON     *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
 }

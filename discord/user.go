@@ -59,7 +59,7 @@ type User struct {
 	DMChannelID   *Snowflake       `json:"dm_channel_id,omitempty"`
 }
 
-// CreateDM creates a DMChannel with a user. This should not need to be called as Send() transparent does this.
+// CreateDM creates a DMChannel with a user. This should not need to be called as Send() transparently does this.
 // If the user already has a DMChannel created, this will return a partial channel with just an ID set.
 func (u *User) CreateDM(s *Session) (channel *Channel, err error) {
 	if u.DMChannelID != nil {

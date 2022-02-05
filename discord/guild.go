@@ -203,8 +203,8 @@ func (g *Guild) CloneChannel(s *Session, c *Channel, reason *string) (channel *C
 // CreateChannel creates a channel.
 // channelArg: Parameters passed for creating a channel.
 // reason: Reason for creating the channel.
-func (g *Guild) CreateChannel(s *Session, channelArg ChannelParams, reason *string) (channel *Channel, err error) {
-	return CreateGuildChannel(s, g.ID, channelArg, reason)
+func (g *Guild) CreateChannel(s *Session, channelParams ChannelParams, reason *string) (channel *Channel, err error) {
+	return CreateGuildChannel(s, g.ID, channelParams, reason)
 }
 
 // CreateCustomEmojis creates an emoji for a guild.
@@ -231,8 +231,8 @@ func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles [
 // CreateRole creates a role.
 // roleArg: Parameters passed for creating a role.
 // reason: Reason for creating the role.
-func (g *Guild) CreateRole(s *Session, roleArg RoleParams, reason *string) (role *Role, err error) {
-	return CreateGuildRole(s, g.ID, roleArg, reason)
+func (g *Guild) CreateRole(s *Session, roleParams RoleParams, reason *string) (role *Role, err error) {
+	return CreateGuildRole(s, g.ID, roleParams, reason)
 }
 
 // Delete deletes a guild.
@@ -351,17 +351,147 @@ type GuildMember struct {
 	CommunicationDisabledUntil string      `json:"communication_disabled_until,omitempty"`
 }
 
-// TODO: AddRoles
-// TODO: Ban
-// TODO: CreateDM
-// TODO: Edit
-// TODO: Kick
-// TODO: MoveTo
-// TODO: Pins
-// TODO: RemoveRoles
-// TODO: Send
-// TODO: Unban
-// TODO: Unblock
+// GuildMemberParams represents the arguments used to modify a guild member.
+type GuildMemberParams struct {
+	Nick                       *string     `json:"nick,omitempty,omitempty"`
+	Roles                      []Snowflake `json:"roles,omitempty"`
+	Deaf                       *bool       `json:"deaf,omitempty"`
+	Mute                       *bool       `json:"mute,omitempty"`
+	ChannelID                  *Snowflake  `json:"channel_id,omitempty"`
+	CommunicationDisabledUntil *string     `json:"communication_disabled_until,omitempty"`
+}
+
+// AddRoles adds roles to a guild member.
+// roles: List of roles to add to the guild member.
+// reason: Reason for adding the roles to the guild member.
+// atomic: When true, will send multiple AddGuildMemberRole requests instead of at once.
+func (gm *GuildMember) AddRoles(s *Session, roles []Snowflake, reason *string, atomic bool) (err error) {
+	guildMemberRoles := make(map[Snowflake]bool)
+
+	for _, guildMemberRole := range gm.Roles {
+		guildMemberRoles[guildMemberRole] = true
+	}
+
+	if atomic {
+		for _, roleID := range roles {
+			if _, ok := guildMemberRoles[roleID]; !ok {
+				err = AddGuildMemberRole(s, *gm.GuildID, gm.User.ID, roleID, reason)
+				if err != nil {
+					return
+				}
+
+				gm.Roles = append(gm.Roles, roleID)
+			}
+		}
+
+		return
+	}
+
+	for _, addedRoleID := range roles {
+		guildMemberRoles[addedRoleID] = true
+	}
+
+	newRoles := make([]Snowflake, 0, len(guildMemberRoles))
+
+	for roleID := range guildMemberRoles {
+		newRoles = append(newRoles, roleID)
+	}
+
+	return gm.Edit(s, GuildMemberParams{Roles: newRoles}, reason)
+}
+
+// Ban bans the guild member from the guild.
+// reason: Reason for banning the guild member.
+func (gm *GuildMember) Ban(s *Session, reason *string) (err error) {
+	return CreateGuildBan(s, *gm.GuildID, gm.User.ID, reason)
+}
+
+// CreateDM creates a DMChannel with a user. This should not need to be called as Send() transparently does this.
+// If the user already has a DMChannel created, this will return a partial channel with just an ID set.
+func (gm *GuildMember) CreateDM(s *Session) (channel *Channel, err error) {
+	return gm.User.CreateDM(s)
+}
+
+// Edit edits a guild member.
+// guildMemberArg: Parameters used to update a guild member.
+// reason: Reason for editing the guild member.
+func (gm *GuildMember) Edit(s *Session, guildMemberParams GuildMemberParams, reason *string) (err error) {
+	newMember, err := ModifyGuildMember(s, *gm.GuildID, gm.User.ID, guildMemberParams, reason)
+	if err != nil {
+		return
+	}
+
+	*gm = *newMember
+
+	return
+}
+
+// Kick kicks the guild member.
+// reason: Reason for kicking the guild member.
+func (gm *GuildMember) Kick(s *Session, reason *string) (err error) {
+	return RemoveGuildMember(s, *gm.GuildID, gm.User.ID, reason)
+}
+
+// MoveTo moves the guild member to a different voice channel.
+// channelID: Channel to move the user to, if nil they are removed from voice.
+// reason: Reason for moving the guild member
+func (gm *GuildMember) MoveTo(s *Session, channelID *Snowflake, reason *string) (err error) {
+	return gm.Edit(s, GuildMemberParams{ChannelID: channelID}, reason)
+}
+
+// RemoveRoles removes roles from a guild member.
+func (gm *GuildMember) RemoveRoles(s *Session, roles []Snowflake, reason *string, atomic bool) (err error) {
+	guildMemberRoles := make(map[Snowflake]bool)
+
+	for _, guildMemberRole := range gm.Roles {
+		guildMemberRoles[guildMemberRole] = true
+	}
+
+	if atomic {
+		for _, roleID := range roles {
+			if _, ok := guildMemberRoles[roleID]; ok {
+				err = RemoveGuildMemberRole(s, *gm.GuildID, gm.User.ID, roleID, reason)
+				if err != nil {
+					return
+				}
+
+				delete(guildMemberRoles, roleID)
+
+				// Remove role from guild member roles.
+				// Whilst inefficient, we reconstruct the roles
+				// on every pass incase one errors.
+
+				newRoles := make([]Snowflake, 0, len(guildMemberRoles))
+
+				for roleID := range guildMemberRoles {
+					newRoles = append(newRoles, roleID)
+				}
+
+				gm.Roles = newRoles
+			}
+		}
+
+		return
+	}
+
+	for _, removedRoleID := range roles {
+		delete(guildMemberRoles, removedRoleID)
+	}
+
+	newRoles := make([]Snowflake, 0, len(guildMemberRoles))
+
+	for roleID := range guildMemberRoles {
+		newRoles = append(newRoles, roleID)
+	}
+
+	return gm.Edit(s, GuildMemberParams{Roles: newRoles}, reason)
+}
+
+// Send sends a DM message to a user. This will create a DMChannel if one is not present.
+// params: The message parameters used to send the message.
+func (gm *GuildMember) Send(s *Session, params MessageParams) (message *Message, err error) {
+	return gm.User.Send(s, params)
+}
 
 // VoiceState represents the voice state on discord.
 type VoiceState struct {

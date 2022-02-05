@@ -89,8 +89,8 @@ type ChannelParams struct {
 // CreateInvite creates an invite to a channel.
 // inviteArg: Parameters passed for creating an invite.
 // reason: Reason for creating the invite.
-func (c *Channel) CreateInvite(s *Session, inviteArg InviteParams, reason *string) (invite *Invite, err error) {
-	return CreateChannelInvite(s, c.ID, inviteArg, reason)
+func (c *Channel) CreateInvite(s *Session, inviteParams InviteParams, reason *string) (invite *Invite, err error) {
+	return CreateChannelInvite(s, c.ID, inviteParams, reason)
 }
 
 // CreateWebhook creates a webhook for a channel.
@@ -116,8 +116,8 @@ func (c *Channel) DeleteMessages(s *Session, messageIDs []Snowflake, reason *str
 // Edit edits a channel.
 // channelArg: Parameters passed for editing a channel.
 // reason: Reason for editing the channel.
-func (c *Channel) Edit(s *Session, channelArg ChannelParams, reason *string) (err error) {
-	newChannel, err := ModifyChannel(s, c.ID, channelArg, reason)
+func (c *Channel) Edit(s *Session, channelParams ChannelParams, reason *string) (err error) {
+	newChannel, err := ModifyChannel(s, c.ID, channelParams, reason)
 	if err != nil {
 		return
 	}
@@ -169,8 +169,8 @@ func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after 
 
 // Sends a message in a channel.
 // messageArg: Parameters used to send a message.
-func (c *Channel) Send(s *Session, messageArg MessageParams) (message *Message, err error) {
-	return CreateMessage(s, c.ID, messageArg)
+func (c *Channel) Send(s *Session, messageParams MessageParams) (message *Message, err error) {
+	return CreateMessage(s, c.ID, messageParams)
 }
 
 // SetPermissions sets permission overwrites.

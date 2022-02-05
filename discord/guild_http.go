@@ -79,7 +79,7 @@ func GetGuildChannels(s *Session, guildID Snowflake) (channels []*Channel, err e
 	return
 }
 
-func CreateGuildChannel(s *Session, guildID Snowflake, channelArg ChannelParams, reason *string) (channel *Channel, err error) {
+func CreateGuildChannel(s *Session, guildID Snowflake, channelParams ChannelParams, reason *string) (channel *Channel, err error) {
 	endpoint := EndpointGuildChannels(guildID.String())
 
 	headers := http.Header{}
@@ -88,7 +88,7 @@ func CreateGuildChannel(s *Session, guildID Snowflake, channelArg ChannelParams,
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, channelArg, headers, &channel)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, channelParams, headers, &channel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create guild channel: %v", err)
 	}
@@ -170,7 +170,7 @@ func SearchGuildMembers(s *Session, guildID Snowflake, query string, limit *int3
 	return
 }
 
-func ModifyGuildMember(s *Session, guildID Snowflake, userID Snowflake, guildMemberArg GuildMember, reason *string) (guildMember *GuildMember, err error) {
+func ModifyGuildMember(s *Session, guildID Snowflake, userID Snowflake, guildMemberParams GuildMemberParams, reason *string) (guildMember *GuildMember, err error) {
 	endpoint := EndpointGuildMember(guildID.String(), userID.String())
 
 	headers := http.Header{}
@@ -179,7 +179,7 @@ func ModifyGuildMember(s *Session, guildID Snowflake, userID Snowflake, guildMem
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, guildMemberArg, headers, &guildMember)
+	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, guildMemberParams, headers, &guildMember)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to modify guild member: %v", err)
 	}
@@ -322,7 +322,7 @@ func GetGuildRoles(s *Session, guildID Snowflake) (roles []*Role, err error) {
 	return
 }
 
-func CreateGuildRole(s *Session, guildID Snowflake, roleArg RoleParams, reason *string) (role *Role, err error) {
+func CreateGuildRole(s *Session, guildID Snowflake, roleParams RoleParams, reason *string) (role *Role, err error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
 	headers := http.Header{}
@@ -331,7 +331,7 @@ func CreateGuildRole(s *Session, guildID Snowflake, roleArg RoleParams, reason *
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, roleArg, headers, &role)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, roleParams, headers, &role)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create guild role: %v", err)
 	}

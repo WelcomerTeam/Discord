@@ -123,16 +123,26 @@ func DeleteWebhookWithToken(s *Session, webhookID Snowflake, webhookToken string
 	return
 }
 
-func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messageParam WebhookMessageParams) (message *WebhookMessage, err error) {
+func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messageParams WebhookMessageParams) (message *WebhookMessage, err error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
-	// TODO: Handle file uploads
+	if len(messageParams.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParam, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
+		}
 	}
-
+	
 	return
 }
 
@@ -150,11 +160,22 @@ func GetWebhookMessage(s *Session, webhookID Snowflake, webhookToken string, mes
 func EditWebhookMessage(s *Session, webhookID Snowflake, webhookToken string, messageID Snowflake, messageParam WebhookMessageParams) (message *WebhookMessage, err error) {
 	endpoint := EndpointWebhookMessage(webhookID.String(), webhookToken, messageID.String())
 
-	// TODO: Handle file uploads
+	if len(messageParam.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParam, messageParam.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit webhook message: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit webhook message: %v", err)
+		}
+	
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit webhook message: %v", err)
+		}	
 	}
 
 	return

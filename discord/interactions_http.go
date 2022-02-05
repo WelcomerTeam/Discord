@@ -9,11 +9,21 @@ import (
 func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) (err error) {
 	endpoint := EndpointInteractionResponse(interactionID.String(), interactionToken)
 
-	// TODO: Handle file uploads
+	if len(interactionResponse.Data.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(interactionResponse, interactionResponse.Data.Files)
+		if err != nil {
+			return err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, interactionResponse, nil, nil)
-	if err != nil {
-		return xerrors.Errorf("Failed to create interaction response: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, nil)
+		if err != nil {
+			return xerrors.Errorf("Failed to create interaction response: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, interactionResponse, nil, nil)
+		if err != nil {
+			return xerrors.Errorf("Failed to create interaction response: %v", err)
+		}
 	}
 
 	return
@@ -30,14 +40,24 @@ func GetoriginalInteractionResponse(s *Session, applicationID Snowflake, interac
 	return
 }
 
-func EditOriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (message *Message, err error) {
+func EditOriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string, messageParam WebhookMessageParams) (message *Message, err error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
-	// TODO: Handle file uploads
+	if len(messageParam.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParam, messageParam.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit original interaction response: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit original interaction response: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit original interaction response: %v", err)
+		}
 	}
 
 	return
@@ -57,11 +77,21 @@ func DeleteOriginalInteractionResponse(s *Session, applicationID Snowflake, inte
 func CreateFollowupMessage(s *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (message *Message, err error) {
 	endpoint := EndpointFollowupMessage(applicationID.String(), interactionToken)
 
-	// TODO: Handle file uploads
+	if len(messageParams.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to create followup message: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to create followup message: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to create followup message: %v", err)
+		}
 	}
 
 	return
@@ -81,11 +111,21 @@ func GetFollowupMessage(s *Session, applicationID Snowflake, interactionToken st
 func EditFollowupMessage(s *Session, applicationID Snowflake, interactionToken string, messageID Snowflake, messageParams WebhookMessageParams) (message *Message, err error) {
 	endpoint := EndpointFollowupMessageActions(applicationID.String(), interactionToken, messageID.String())
 
-	// TODO: Handle file uploads
+	if len(messageParams.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit followup message: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit followup message: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit followup message: %v", err)
+		}
 	}
 
 	return

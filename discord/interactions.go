@@ -82,11 +82,11 @@ type Interaction struct {
 // interactionType: The type of interaction callback.
 // messageArg: arguments for sending message.
 // choices: optional autocomplete choices.
-func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, messageArg WebhookMessageParams, choices []*ApplicationCommandOptionChoice) (err error) {
+func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, messageParams WebhookMessageParams, choices []*ApplicationCommandOptionChoice) (err error) {
 	return CreateInteractionResponse(s, i.ID, i.Token, InteractionResponse{
 		Type: &interactionType,
 		Data: &InteractionCallbackData{
-			WebhookMessageParams: &messageArg,
+			WebhookMessageParams: &messageParams,
 			Choices:              choices,
 		},
 	})
@@ -94,8 +94,8 @@ func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallba
 
 // EditOriginalResponse edits the original interaction response.
 // messageArg: arguments for editing message.
-func (i *Interaction) EditOriginalResponse(s *Session, messageArg WebhookMessageParams) (message *Message, err error) {
-	return EditOriginalInteractionResponse(s, i.ApplicationID, s.Token, messageArg)
+func (i *Interaction) EditOriginalResponse(s *Session, messageParams WebhookMessageParams) (message *Message, err error) {
+	return EditOriginalInteractionResponse(s, i.ApplicationID, s.Token, messageParams)
 }
 
 // DeleteOriginalResponse deletes the original interaction response.
@@ -105,8 +105,8 @@ func (i *Interaction) DeleteOriginalResponse(s *Session) (err error) {
 
 // SendFollowup sends a followup message.
 // messageArg: arguments for sending message.
-func (i *Interaction) SendFollowup(s *Session, messageArg WebhookMessageParams) (followup *InteractionFollowup, err error) {
-	message, err := CreateFollowupMessage(s, i.ApplicationID, i.Token, messageArg)
+func (i *Interaction) SendFollowup(s *Session, messageParams WebhookMessageParams) (followup *InteractionFollowup, err error) {
+	message, err := CreateFollowupMessage(s, i.ApplicationID, i.Token, messageParams)
 	if err != nil {
 		return
 	}
@@ -125,8 +125,8 @@ type InteractionFollowup struct {
 
 // EditFollowup edits the followup message.
 // messageArg: arguments for editing message.
-func (inf *InteractionFollowup) EditFollowup(s *Session, messageArg WebhookMessageParams) (message *Message, err error) {
-	return EditFollowupMessage(s, inf.ApplicationID, inf.Token, inf.Message.ID, messageArg)
+func (inf *InteractionFollowup) EditFollowup(s *Session, messageParams WebhookMessageParams) (message *Message, err error) {
+	return EditFollowupMessage(s, inf.ApplicationID, inf.Token, inf.Message.ID, messageParams)
 }
 
 // DeleteFollowup deletes the followup message.

@@ -17,10 +17,10 @@ func GetGlobalApplicationCommands(s *Session, applicationID Snowflake) (commands
 	return
 }
 
-func CreateGlobalApplicationCommand(s *Session, applicationID Snowflake, commandArgs ApplicationCommand) (command *ApplicationCommand, err error) {
+func CreateGlobalApplicationCommand(s *Session, applicationID Snowflake, commandArg ApplicationCommand) (command *ApplicationCommand, err error) {
 	endpoint := EndpointApplicationGlobalCommands(applicationID.String())
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, commandArgs, nil, &command)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, commandArg, nil, &command)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create global application command: %v", err)
 	}

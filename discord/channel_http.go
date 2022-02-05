@@ -21,7 +21,7 @@ func GetChannel(s *Session, channelID Snowflake) (channel *Channel, err error) {
 	return
 }
 
-func ModifyChannel(s *Session, channelID Snowflake, channelArg ChannelParams, reason *string) (channel *Channel, err error) {
+func ModifyChannel(s *Session, channelID Snowflake, channelParams ChannelParams, reason *string) (channel *Channel, err error) {
 	endpoint := EndpointChannel(channelID.String())
 
 	headers := http.Header{}
@@ -30,7 +30,7 @@ func ModifyChannel(s *Session, channelID Snowflake, channelArg ChannelParams, re
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, channelArg, headers, &channel)
+	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, channelParams, headers, &channel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to modify channel: %v", err)
 	}
@@ -99,14 +99,24 @@ func GetChannelMessage(s *Session, channelID Snowflake, messageID Snowflake) (me
 	return
 }
 
-func CreateMessage(s *Session, channelID Snowflake, messageArg MessageParams) (message *Message, err error) {
+func CreateMessage(s *Session, channelID Snowflake, messageParams MessageParams) (message *Message, err error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
-	// TODO: Handle file uploads
+	if len(messageParams.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageArg, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to create message: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to create message: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to create message: %v", err)
+		}
 	}
 
 	return
@@ -189,14 +199,24 @@ func DeleteAllReactionsEmoji(s *Session, channelID Snowflake, messageID Snowflak
 	return
 }
 
-func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messageArg MessageParams) (message *Message, err error) {
+func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messageParams MessageParams) (message *Message, err error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
-	// TODO: Handle file uploads
+	if len(messageParams.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
+		if err != nil {
+			return nil, err
+		}
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageArg, nil, &message)
-	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit message: %v", err)
+		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit message: %v", err)
+		}
+	} else {
+		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
+		if err != nil {
+			return nil, xerrors.Errorf("Failed to edit message: %v", err)
+		}
 	}
 
 	return

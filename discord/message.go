@@ -132,8 +132,8 @@ func (m *Message) Delete(s *Session, reason *string) (err error) {
 
 // Edit edits a message.
 // messageArg: arguments for editing the message.
-func (m *Message) Edit(s *Session, messageArg MessageParams) (message *Message, err error) {
-	return EditMessage(s, m.ChannelID, m.ID, messageArg)
+func (m *Message) Edit(s *Session, messageParams MessageParams) (message *Message, err error) {
+	return EditMessage(s, m.ChannelID, m.ID, messageParams)
 }
 
 // Pin pins a message in a channel.
@@ -157,8 +157,8 @@ func (m *Message) RemoveReaction(s *Session, emoji string, user User) (err error
 // Reply will send a new message in the same channel as the target message and references the target.
 // This is the same as using Send() and setting the message as the MessageReference.
 // messageArg: arguments for sending a message.
-func (m *Message) Reply(s *Session, messageArg MessageParams) (message *Message, err error) {
-	messageArg.MessageReference = &MessageReference{
+func (m *Message) Reply(s *Session, messageParams MessageParams) (message *Message, err error) {
+	messageParams.MessageReference = &MessageReference{
 		ID:              &m.ID,
 		ChannelID:       &m.ChannelID,
 		GuildID:         m.GuildID,
@@ -167,7 +167,7 @@ func (m *Message) Reply(s *Session, messageArg MessageParams) (message *Message,
 
 	channel := &Channel{ID: m.ChannelID}
 
-	return channel.Send(s, messageArg)
+	return channel.Send(s, messageParams)
 }
 
 // Unpin unpins a message.
@@ -185,7 +185,7 @@ type MessageParams struct {
 	MessageReference *MessageReference         `json:"message_reference,omitempty"`
 	Components       []*InteractionComponent   `json:"components,omitempty"`
 	StickerIDs       []*Snowflake              `json:"sticker_ids,omitempty"`
-	Files            []*File                   `json:"files,omitempty"`
+	Files            []*File                   `json:"-"`
 	PayloadJSON      *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments      []*MessageAttachment      `json:"attachments,omitempty"`
 }
