@@ -2,7 +2,6 @@ package discord
 
 import (
 	"net/http"
-	"net/url"
 
 	"golang.org/x/xerrors"
 )
@@ -76,19 +75,14 @@ func LeaveGuild(s *Session, guildID Snowflake) (err error) {
 func CreateDM(s *Session, recipientID Snowflake) (channel *Channel, err error) {
 	endpoint := EndpointUserChannels("@me")
 
-	var values url.Values
+	createDMStruct := struct {
+		RecipientID Snowflake `json:"recipient_id"`
+	}{recipientID}
 
-	values.Add("recipient_id", recipientID.String())
-
-	endpoint += "?" + values.Encode()
-
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, &channel)
+	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, createDMStruct, nil, &channel)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create dm: %v", err)
 	}
 
 	return
 }
-
-// TODO: CreateGroupDM
-// TODO: GetUserConnections
