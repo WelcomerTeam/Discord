@@ -186,7 +186,7 @@ type InteractionComponent struct {
 	Disabled    bool                       `json:"disabled"`
 	Style       InteractionComponentStyle  `json:"style,omitempty"`
 	Label       string                     `json:"label,omitempty"`
-	Emoji       string                     `json:"emoji,omitempty"`
+	Emoji       *Emoji                     `json:"emoji,omitempty"`
 	URL         string                     `json:"url,omitempty"`
 	Options     []*ApplicationSelectOption `json:"options,omitempty"`
 	Placeholder string                     `json:"placeholder,omitempty"`
@@ -225,7 +225,7 @@ func (ic *InteractionComponent) SetLabel(label string) *InteractionComponent {
 	return ic
 }
 
-func (ic *InteractionComponent) SetEmoji(emoji string) *InteractionComponent {
+func (ic *InteractionComponent) SetEmoji(emoji *Emoji) *InteractionComponent {
 	ic.Emoji = emoji
 
 	return ic
