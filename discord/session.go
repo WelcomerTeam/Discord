@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
@@ -14,7 +15,7 @@ import (
 )
 
 const (
-	APIVersion = "9"
+	APIVersion = "v9"
 )
 
 type RESTInterface interface {
@@ -73,6 +74,10 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 
 	req.URL.Host = tl.URLHost
 	req.URL.Scheme = tl.URLScheme
+
+	if tl.APIVersion != "" && !strings.HasPrefix(req.URL.Path, "/api") {
+		req.URL.Path = "/api/" + tl.APIVersion + endpoint
+	}
 
 	for name, values := range headers {
 		for _, value := range values {

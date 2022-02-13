@@ -106,15 +106,15 @@ type ApplicationTeamMember struct {
 
 // ApplicationCommand represents an application's command.
 type ApplicationCommand struct {
-	ID                Snowflake                   `json:"id"`
+	ID                *Snowflake                  `json:"id,omitempty"`
 	Type              *ApplicationCommandType     `json:"type,omitempty"`
-	ApplicationID     Snowflake                   `json:"application_id"`
+	ApplicationID     *Snowflake                  `json:"application_id,omitempty"`
 	GuildID           *Snowflake                  `json:"guild_id,omitempty"`
 	Name              string                      `json:"name"`
-	Description       string                      `json:"description"`
+	Description       string                      `json:"description,omitempty"`
 	Options           []*ApplicationCommandOption `json:"options,omitempty"`
-	DefaultPermission bool                        `json:"default_permission"`
-	Version           int32                       `json:"version"`
+	DefaultPermission bool                        `json:"default_permission,omitempty"`
+	Version           *Int64                      `json:"version,omitempty"`
 }
 
 // GuildApplicationCommandPermissions represent a guilds application permissions.
@@ -136,14 +136,14 @@ type ApplicationCommandPermissions struct {
 type ApplicationCommandOption struct {
 	Type         ApplicationCommandOptionType      `json:"type"`
 	Name         string                            `json:"name"`
-	Description  string                            `json:"description"`
-	Required     bool                              `json:"required"`
+	Description  string                            `json:"description,omitempty"`
+	Required     bool                              `json:"required,omitempty"`
 	Choices      []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 	Options      []*ApplicationCommandOption       `json:"options,omitempty"`
 	ChannelTypes []*ChannelType                    `json:"channel_types,omitempty"`
 	MinValue     int32                             `json:"min_value,omitempty"`
 	MaxValue     int32                             `json:"max_value,omitempty"`
-	Autocomplete bool                              `json:"autocomplete"`
+	Autocomplete bool                              `json:"autocomplete,omitempty"`
 }
 
 // ApplicationCommandOptionChoice represents the different choices.
