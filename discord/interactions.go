@@ -22,6 +22,9 @@ type InteractionCallbackType uint8
 const (
 	InteractionCallbackTypePong InteractionCallbackType = 1 + iota
 
+	_
+	_
+
 	// InteractionCallbackTypeChannelMessageSource responds to an interaction with a message.
 	InteractionCallbackTypeChannelMessageSource
 
@@ -84,9 +87,9 @@ type Interaction struct {
 // choices: optional autocomplete choices.
 func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, messageParams WebhookMessageParams, choices []*ApplicationCommandOptionChoice) (err error) {
 	return CreateInteractionResponse(s, i.ID, i.Token, InteractionResponse{
-		Type: &interactionType,
-		Data: &InteractionCallbackData{
-			WebhookMessageParams: &messageParams,
+		Type: interactionType,
+		Data: InteractionCallbackData{
+			WebhookMessageParams: messageParams,
 			Choices:              choices,
 		},
 	})
@@ -136,8 +139,8 @@ func (inf *InteractionFollowup) DeleteFollowup(s *Session) (err error) {
 
 // InteractionResponse represents the interaction response object.
 type InteractionResponse struct {
-	Type *InteractionCallbackType `json:"type"`
-	Data *InteractionCallbackData `json:"data,omitempty"`
+	Type InteractionCallbackType `json:"type"`
+	Data InteractionCallbackData `json:"data,omitempty"`
 }
 
 // InteractionData represents the structure of interaction data.
@@ -157,7 +160,7 @@ type InteractionData struct {
 // Not all message fields are supported, allowed fields are: tts, content
 // embeds, allowed_mentions, flags, components and attachments.
 type InteractionCallbackData struct {
-	*WebhookMessageParams
+	WebhookMessageParams
 	Choices []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 }
 
@@ -172,11 +175,11 @@ type InteractionDataOption struct {
 
 // InteractionResolvedData represents any extra payload data for an interaction.
 type InteractionResolvedData struct {
-	Users    []*User        `json:"users,omitempty"`
-	Members  []*GuildMember `json:"members,omitempty"`
-	Roles    []*Role        `json:"roles,omitempty"`
-	Channels []*Channel     `json:"channels,omitempty"`
-	Messages []*Message     `json:"messages,omitempty"`
+	Users    map[Snowflake]*User        `json:"users,omitempty"`
+	Members  map[Snowflake]*GuildMember `json:"members,omitempty"`
+	Roles    map[Snowflake]*Role        `json:"roles,omitempty"`
+	Channels map[Snowflake]*Channel     `json:"channels,omitempty"`
+	Messages map[Snowflake]*Message     `json:"messages,omitempty"`
 }
 
 // InteractionComponent represents the structure of a component.
