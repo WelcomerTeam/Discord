@@ -149,7 +149,7 @@ type InteractionData struct {
 	Name          string                     `json:"name"`
 	Type          ApplicationCommandType     `json:"type"`
 	Resolved      *InteractionResolvedData   `json:"resolved,omitempty"`
-	Options       []*InteractionDataOption   `json:"option,omitempty"`
+	Options       []*InteractionDataOption   `json:"options,omitempty"`
 	CustomID      string                     `json:"custom_id,omitempty"`
 	ComponentType *InteractionComponentType  `json:"component_type,omitempty"`
 	Values        []*ApplicationSelectOption `json:"values,omitempty"`

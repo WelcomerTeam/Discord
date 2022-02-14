@@ -122,9 +122,11 @@ func (tl *TwilightProxy) FetchBJ(session *Session, method, endpoint, contentType
 		return err
 	}
 
-	err = jsoniter.Unmarshal(resp, response)
-	if err != nil {
-		return xerrors.Errorf("Failed to unmarshal response: %v", err)
+	if response != nil {
+		err = jsoniter.Unmarshal(resp, response)
+		if err != nil {
+			return xerrors.Errorf("Failed to unmarshal response: %v", err)
+		}
 	}
 
 	return nil
