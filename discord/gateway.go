@@ -44,6 +44,7 @@ const (
 	IntentDirectMessages
 	IntentDirectMessageReactions
 	IntentDirectMessageTyping
+	IntentMessageContent
 )
 
 // Gateway close codes.

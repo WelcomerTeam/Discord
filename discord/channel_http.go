@@ -395,7 +395,6 @@ func UnpinMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *
 // TODO: RemoveThreadMember
 // TODO: GetThreadMember
 // TODO: ListThreadMembers
-// TODO: ListActiveThreads
 // TODO: ListPublicArchivedThreads
 // TODO: ListPrivateArchivedThreads
 // TODO: ListJoinedPrivateArchivedThreads

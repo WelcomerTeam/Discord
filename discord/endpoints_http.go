@@ -6,7 +6,7 @@ import (
 
 // Endpoints.
 var (
-	EndpointDiscord = "https://com"
+	EndpointDiscord = "https://discord.com"
 	EndpointCDN     = "https://cdn.discordapp.com"
 
 	EndpointGuilds     = "/guilds/"

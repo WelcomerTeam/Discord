@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	APIVersion = "v9"
+	APIVersion = "v10"
 )
 
 type RESTInterface interface {

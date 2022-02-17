@@ -525,7 +525,6 @@ func GetGuildVanityURL(s *Session, guildID Snowflake) (invite *Invite, err error
 // TODO: GetGuildWidgetSettings
 // TODO: AddGuildMember
 // TODO: GetGuildVoiceRegions
-// TODO: ListActiveThreads
 
 // TODO: ModifyCurrentUserVoiceState
 // TODO: ModifyUserVoiceState

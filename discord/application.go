@@ -76,7 +76,6 @@ type Application struct {
 	TermsOfServiceURL   string           `json:"terms_of_service,omitempty"`
 	PrivacyPolicyURL    string           `json:"privacy_policy_url,omitempty"`
 	Owner               *User            `json:"owner,omitempty"`
-	Summary             string           `json:"summary"`
 	VerifyKey           string           `json:"verify_key"`
 	Team                *ApplicationTeam `json:"team,omitempty"`
 	GuildID             *Snowflake       `json:"guild_id,omitempty"`
