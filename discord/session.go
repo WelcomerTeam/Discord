@@ -52,6 +52,8 @@ type TwilightProxy struct {
 	URLHost    string
 	URLScheme  string
 	UserAgent  string
+
+	Debug bool
 }
 
 func NewTwilightProxy(url url.URL) RESTInterface {
@@ -101,6 +103,10 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 	response, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to read body: %v", err)
+	}
+
+	if tl.Debug {
+		println(method, endpoint, resp.StatusCode, contentType, string(body), string(response))
 	}
 
 	switch resp.StatusCode {
