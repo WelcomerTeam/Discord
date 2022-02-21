@@ -2,10 +2,9 @@ package discord
 
 import (
 	"fmt"
-	"net/http"
-
 	jsoniter "github.com/json-iterator/go"
 	"golang.org/x/xerrors"
+	"net/http"
 )
 
 var (

@@ -1,9 +1,8 @@
 package discord
 
 import (
-	"time"
-
 	jsoniter "github.com/json-iterator/go"
+	"time"
 )
 
 // message.go contains the structure that represents a discord message.

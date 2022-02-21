@@ -1,9 +1,8 @@
 package discord
 
 import (
-	"net/http"
-
 	"golang.org/x/xerrors"
+	"net/http"
 )
 
 func CreateWebhook(s *Session, channelID Snowflake, webhookParam WebhookParam, reason *string) (webhook *Webhook, err error) {
@@ -142,7 +141,7 @@ func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messag
 			return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
 		}
 	}
-	
+
 	return
 }
 
@@ -170,12 +169,12 @@ func EditWebhookMessage(s *Session, webhookID Snowflake, webhookToken string, me
 		if err != nil {
 			return nil, xerrors.Errorf("Failed to edit webhook message: %v", err)
 		}
-	
+
 	} else {
 		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
 		if err != nil {
 			return nil, xerrors.Errorf("Failed to edit webhook message: %v", err)
-		}	
+		}
 	}
 
 	return

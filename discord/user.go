@@ -108,7 +108,6 @@ func (u *ClientUser) Edit(s *Session, username *string, avatar *[]byte) (err err
 	}
 
 	newUser, err := ModifyCurrentUser(s, params)
-
 	if err != nil {
 		return
 	}

@@ -3,15 +3,14 @@ package discord
 import (
 	"bytes"
 	"context"
+	jsoniter "github.com/json-iterator/go"
+	"github.com/rs/zerolog"
+	"golang.org/x/xerrors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-
-	jsoniter "github.com/json-iterator/go"
-	"github.com/rs/zerolog"
-	"golang.org/x/xerrors"
 )
 
 const (
@@ -24,6 +23,8 @@ type RESTInterface interface {
 	Fetch(s *Session, method, endpoint, contentType string, body []byte, headers http.Header) (response []byte, err error)
 	FetchBJ(s *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) (err error)
 	FetchJJ(s *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) (err error)
+
+	SetDebug(value bool)
 }
 
 // Session contains the context for the discord rest interface.
@@ -145,4 +146,8 @@ func (tl *TwilightProxy) FetchJJ(session *Session, method, endpoint string, payl
 	}
 
 	return tl.FetchBJ(session, method, endpoint, "application/json", body, headers, response)
+}
+
+func (tl *TwilightProxy) SetDebug(value bool) {
+	tl.Debug = value
 }

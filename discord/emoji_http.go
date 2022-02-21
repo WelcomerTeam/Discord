@@ -1,9 +1,8 @@
 package discord
 
 import (
-	"net/http"
-
 	"golang.org/x/xerrors"
+	"net/http"
 )
 
 func ListGuildEmojis(s *Session, guildID Snowflake) (emojis []*Emoji, err error) {

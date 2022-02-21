@@ -1,10 +1,9 @@
 package discord
 
 import (
+	"golang.org/x/xerrors"
 	"net/http"
 	"net/url"
-
-	"golang.org/x/xerrors"
 )
 
 func CreateGuild(s *Session, guildArg Guild) (guild *Guild, err error) {

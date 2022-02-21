@@ -1,9 +1,8 @@
 package discord
 
 import (
-	"net/http"
-
 	"golang.org/x/xerrors"
+	"net/http"
 )
 
 func GetGlobalApplicationCommands(s *Session, applicationID Snowflake) (commands []*ApplicationCommand, err error) {

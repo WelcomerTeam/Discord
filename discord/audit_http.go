@@ -1,10 +1,9 @@
 package discord
 
 import (
+	"golang.org/x/xerrors"
 	"net/http"
 	"net/url"
-
-	"golang.org/x/xerrors"
 )
 
 func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) (entries []*AuditLogEntry, err error) {

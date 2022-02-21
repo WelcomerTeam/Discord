@@ -1,9 +1,8 @@
 package discord
 
 import (
-	"net/http"
-
 	"golang.org/x/xerrors"
+	"net/http"
 )
 
 func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) (err error) {

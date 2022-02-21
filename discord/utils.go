@@ -4,13 +4,12 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	jsoniter "github.com/json-iterator/go"
+	"golang.org/x/xerrors"
 	"io"
 	"mime/multipart"
 	"net/textproto"
 	"strings"
-
-	jsoniter "github.com/json-iterator/go"
-	"golang.org/x/xerrors"
 )
 
 var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")

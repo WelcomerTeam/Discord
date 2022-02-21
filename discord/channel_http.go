@@ -1,11 +1,10 @@
 package discord
 
 import (
+	"golang.org/x/xerrors"
 	"net/http"
 	"net/url"
 	"strings"
-
-	"golang.org/x/xerrors"
 )
 
 var emojiEscaper = strings.NewReplacer("#", "%23")

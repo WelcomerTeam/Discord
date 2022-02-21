@@ -1,11 +1,10 @@
 package discord
 
 import (
+	"golang.org/x/xerrors"
 	"net/http"
 	"net/url"
 	"strconv"
-
-	"golang.org/x/xerrors"
 )
 
 func GetInvite(s *Session, inviteCode string, withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (invite *Invite, err error) {
