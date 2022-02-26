@@ -107,7 +107,7 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 	}
 
 	if tl.Debug {
-		println(method, endpoint, resp.StatusCode, contentType, string(body), string(response))
+		println(method, req.URL.String(), resp.StatusCode, contentType, string(body), string(response))
 	}
 
 	switch resp.StatusCode {
