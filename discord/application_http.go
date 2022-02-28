@@ -60,7 +60,7 @@ func DeleteGlobalApplicationCommand(s *Session, applicationID Snowflake, command
 	return
 }
 
-func BulkOverwriteGloblApplicationCommands(s *Session, applicationID Snowflake, commandArgs []ApplicationCommand) (commands []*ApplicationCommand, err error) {
+func BulkOverwriteGlobalApplicationCommands(s *Session, applicationID Snowflake, commandArgs []ApplicationCommand) (commands []*ApplicationCommand, err error) {
 	endpoint := EndpointApplicationGlobalCommands(applicationID.String())
 
 	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, commandArgs, nil, &commands)
