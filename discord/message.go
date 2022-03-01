@@ -37,7 +37,7 @@ const (
 )
 
 // MessageFlags represents the extra information on a message.
-type MessageFlags uint8
+type MessageFlags uint16
 
 const (
 	MessageFlagCrossposted MessageFlags = 1 << iota
@@ -48,6 +48,7 @@ const (
 	MessageFlagHasThread
 	MessageFlaEphemeral
 	MessageFlagLoading
+	MessageFlagFailedToMentionSomeRolesInThread
 )
 
 // MessageAllowedMentionsType represents all the allowed mention types.
