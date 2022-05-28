@@ -72,8 +72,8 @@ func (w *Webhook) Edit(s *Session, name *string, avatar *[]byte, reason *string)
 
 // Send sends a webhook message.
 // params: The message parameters to send.
-func (w *Webhook) Send(s *Session, params WebhookMessageParams) (message *WebhookMessage, err error) {
-	return ExecuteWebhook(s, w.ID, w.Token, params)
+func (w *Webhook) Send(s *Session, params WebhookMessageParams, wait bool) (message *WebhookMessage, err error) {
+	return ExecuteWebhook(s, w.ID, w.Token, params, wait)
 }
 
 // EditMessage edits a webhook message.

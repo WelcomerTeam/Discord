@@ -1,8 +1,10 @@
 package discord
 
 import (
-	"golang.org/x/xerrors"
 	"net/http"
+	"net/url"
+
+	"golang.org/x/xerrors"
 )
 
 func CreateWebhook(s *Session, channelID Snowflake, webhookParam WebhookParam, reason *string) (webhook *Webhook, err error) {
@@ -122,8 +124,18 @@ func DeleteWebhookWithToken(s *Session, webhookID Snowflake, webhookToken string
 	return
 }
 
-func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messageParams WebhookMessageParams) (message *WebhookMessage, err error) {
+func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messageParams WebhookMessageParams, wait bool) (message *WebhookMessage, err error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
+
+	var values url.Values
+
+	if wait {
+		values.Set("wait", "true")
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
 
 	if len(messageParams.Files) > 0 {
 		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
@@ -131,12 +143,22 @@ func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messag
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		if wait {
+			err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, nil)
+		} else {
+			err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		}
+
 		if err != nil {
 			return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
 		}
 	} else {
-		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		if wait {
+			err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, nil)
+		} else {
+			err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		}
+
 		if err != nil {
 			return nil, xerrors.Errorf("Failed to execute webhook: %v", err)
 		}
