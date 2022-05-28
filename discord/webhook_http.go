@@ -144,9 +144,9 @@ func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messag
 		}
 
 		if wait {
-			err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, nil)
-		} else {
 			err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		} else {
+			err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, nil)
 		}
 
 		if err != nil {
@@ -154,9 +154,9 @@ func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messag
 		}
 	} else {
 		if wait {
-			err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, nil)
-		} else {
 			err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		} else {
+			err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, nil)
 		}
 
 		if err != nil {
