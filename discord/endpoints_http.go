@@ -276,6 +276,7 @@ var (
 	}
 
 	EndpointOAuth2             = "/oauth2"
+	EndpointOAuth2Me           = EndpointOAuth2 + "/@me"
 	EndpointOAuth2Applications = EndpointOAuth2 + "/applications"
 	EndpointOAuth2Authorize    = EndpointOAuth2 + "/authorize"
 	EndpointOAuth2Token        = EndpointOAuth2 + "/token"

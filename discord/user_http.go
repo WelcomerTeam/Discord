@@ -1,8 +1,9 @@
 package discord
 
 import (
-	"golang.org/x/xerrors"
 	"net/http"
+
+	"golang.org/x/xerrors"
 )
 
 func GetCurrentUser(s *Session) (user *User, err error) {

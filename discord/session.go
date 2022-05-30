@@ -3,14 +3,15 @@ package discord
 import (
 	"bytes"
 	"context"
-	jsoniter "github.com/json-iterator/go"
-	"github.com/rs/zerolog"
-	"golang.org/x/xerrors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	jsoniter "github.com/json-iterator/go"
+	"github.com/rs/zerolog"
+	"golang.org/x/xerrors"
 )
 
 const (
@@ -43,6 +44,104 @@ func NewSession(context context.Context, token string, httpInterface RESTInterfa
 		Interface: httpInterface,
 		Logger:    logger,
 	}
+}
+
+// BaseInterface
+type BaseInterface struct {
+	HTTP       *http.Client
+	APIVersion string
+	UserAgent  string
+
+	Debug bool
+}
+
+func NewBaseInterface() RESTInterface {
+	return &BaseInterface{
+		HTTP: &http.Client{
+			Timeout: 20 * time.Second,
+		},
+		UserAgent: "Sandwich (github.com/WelcomerTeam/Discord)",
+	}
+}
+
+func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType string, body []byte, headers http.Header) (response []byte, err error) {
+	req, err := http.NewRequestWithContext(session.Context, method, endpoint, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, xerrors.Errorf("Failed to create new request: %v", err)
+	}
+
+	if bi.APIVersion != "" && !strings.HasPrefix(req.URL.Path, "/api") {
+		req.URL.Path = "/api/" + bi.APIVersion + endpoint
+	}
+
+	for name, values := range headers {
+		for _, value := range values {
+			req.Header.Add(name, value)
+		}
+	}
+
+	if body != nil && len(req.Header.Get("content-type")) == 0 {
+		req.Header.Set("content-type", contentType)
+	}
+
+	req.Header.Set("authorization", session.Token)
+
+	resp, err := bi.HTTP.Do(req)
+	if err != nil {
+		return nil, xerrors.Errorf("Failed to do request: %v", err)
+	}
+
+	defer resp.Body.Close()
+
+	response, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, xerrors.Errorf("Failed to read body: %v", err)
+	}
+
+	if bi.Debug {
+		println(method, req.URL.String(), resp.StatusCode, contentType, string(body), string(response))
+	}
+
+	switch resp.StatusCode {
+	case http.StatusOK:
+	case http.StatusCreated:
+	case http.StatusNoContent:
+	case http.StatusUnauthorized:
+		return response, ErrUnauthorized
+	default:
+		return response, NewRestError(req, resp, body)
+	}
+
+	return response, nil
+}
+
+func (bi *BaseInterface) FetchBJ(session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) (err error) {
+	resp, err := bi.Fetch(session, method, endpoint, contentType, body, headers)
+	if err != nil {
+		return err
+	}
+
+	if response != nil {
+		err = jsoniter.Unmarshal(resp, response)
+		if err != nil {
+			return xerrors.Errorf("Failed to unmarshal response: %v", err)
+		}
+	}
+
+	return nil
+}
+
+func (bi *BaseInterface) FetchJJ(session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) (err error) {
+	body, err := jsoniter.Marshal(payload)
+	if err != nil {
+		return xerrors.Errorf("Failed to marshal payload: %v", err)
+	}
+
+	return bi.FetchBJ(session, method, endpoint, "application/json", body, headers, response)
+}
+
+func (bi *BaseInterface) SetDebug(value bool) {
+	bi.Debug = value
 }
 
 // TwilightProxy is a proxy that requests are sent through, instead of directly to discord that will handle
