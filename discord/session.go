@@ -46,21 +46,29 @@ func NewSession(context context.Context, token string, httpInterface RESTInterfa
 	}
 }
 
-// BaseInterface
+// BaseInterface is the default HTTP Interface and simply handles routing to discord. Careful,
+// this does not handle rate limiting.
 type BaseInterface struct {
 	HTTP       *http.Client
 	APIVersion string
+	URLHost    string
+	URLScheme  string
 	UserAgent  string
 
 	Debug bool
 }
 
 func NewBaseInterface() RESTInterface {
+	url, _ := url.Parse(EndpointDiscord)
+
 	return &BaseInterface{
 		HTTP: &http.Client{
 			Timeout: 20 * time.Second,
 		},
-		UserAgent: "Sandwich (github.com/WelcomerTeam/Discord)",
+		APIVersion: APIVersion,
+		URLHost:    url.Host,
+		URLScheme:  url.Scheme,
+		UserAgent:  "Sandwich (github.com/WelcomerTeam/Discord)",
 	}
 }
 
@@ -69,6 +77,9 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create new request: %v", err)
 	}
+
+	req.URL.Host = bi.URLHost
+	req.URL.Scheme = bi.URLScheme
 
 	if bi.APIVersion != "" && !strings.HasPrefix(req.URL.Path, "/api") {
 		req.URL.Path = "/api/" + bi.APIVersion + endpoint
