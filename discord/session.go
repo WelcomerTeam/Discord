@@ -143,9 +143,15 @@ func (bi *BaseInterface) FetchBJ(session *Session, method, endpoint, contentType
 }
 
 func (bi *BaseInterface) FetchJJ(session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) (err error) {
-	body, err := jsoniter.Marshal(payload)
-	if err != nil {
-		return xerrors.Errorf("Failed to marshal payload: %v", err)
+	var body []byte
+
+	if payload != nil {
+		body, err = jsoniter.Marshal(payload)
+		if err != nil {
+			return xerrors.Errorf("Failed to marshal payload: %v", err)
+		}
+	} else {
+		body = make([]byte, 0)
 	}
 
 	return bi.FetchBJ(session, method, endpoint, "application/json", body, headers, response)
@@ -250,9 +256,15 @@ func (tl *TwilightProxy) FetchBJ(session *Session, method, endpoint, contentType
 }
 
 func (tl *TwilightProxy) FetchJJ(session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) (err error) {
-	body, err := jsoniter.Marshal(payload)
-	if err != nil {
-		return xerrors.Errorf("Failed to marshal payload: %v", err)
+	var body []byte
+
+	if payload != nil {
+		body, err = jsoniter.Marshal(payload)
+		if err != nil {
+			return xerrors.Errorf("Failed to marshal payload: %v", err)
+		}
+	} else {
+		body = make([]byte, 0)
 	}
 
 	return tl.FetchBJ(session, method, endpoint, "application/json", body, headers, response)
