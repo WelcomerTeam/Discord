@@ -16,6 +16,7 @@ import (
 
 const (
 	APIVersion = "v10"
+	UserAgent  = "Sandwich (github.com/WelcomerTeam/Discord)"
 )
 
 type RESTInterface interface {
@@ -59,16 +60,20 @@ type BaseInterface struct {
 }
 
 func NewBaseInterface() RESTInterface {
-	url, _ := url.Parse(EndpointDiscord)
+	return NewInterface(&http.Client{
+		Timeout: 20 * time.Second,
+	}, EndpointDiscord, APIVersion, UserAgent)
+}
+
+func NewInterface(httpClient *http.Client, endpoint string, version string, useragent string) RESTInterface {
+	url, _ := url.Parse(endpoint)
 
 	return &BaseInterface{
-		HTTP: &http.Client{
-			Timeout: 20 * time.Second,
-		},
-		APIVersion: APIVersion,
+		HTTP:       httpClient,
+		APIVersion: version,
 		URLHost:    url.Host,
 		URLScheme:  url.Scheme,
-		UserAgent:  "Sandwich (github.com/WelcomerTeam/Discord)",
+		UserAgent:  useragent,
 	}
 }
 
