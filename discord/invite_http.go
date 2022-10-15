@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"golang.org/x/xerrors"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -30,7 +30,7 @@ func GetInvite(s *Session, inviteCode string, withCounts *bool, withExpiration *
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &invite)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get invite: %v", err)
+		return nil, fmt.Errorf("Failed to get invite: %v", err)
 	}
 
 	return
@@ -47,7 +47,7 @@ func DeleteInvite(s *Session, inviteCode string, reason *string) (err error) {
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
-		return xerrors.Errorf("Failed to delete invite: %v", err)
+		return fmt.Errorf("Failed to delete invite: %v", err)
 	}
 
 	return

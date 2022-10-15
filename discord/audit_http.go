@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"golang.org/x/xerrors"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -33,7 +33,7 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entries)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get guild audit log: %v", err)
+		return nil, fmt.Errorf("Failed to get guild audit log: %v", err)
 	}
 
 	return entries, nil

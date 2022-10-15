@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
-	jsoniter "github.com/json-iterator/go"
-	"golang.org/x/xerrors"
 	"io"
 	"mime/multipart"
 	"net/textproto"
 	"strings"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
@@ -25,7 +25,7 @@ func bytesToBase64Data(b []byte) (data string, err error) {
 
 	_, err = w.Write(b)
 	if err != nil {
-		return "", xerrors.Errorf("Failed to base64 bytes: %v", err)
+		return "", fmt.Errorf("Failed to base64 bytes: %v", err)
 	}
 
 	defer w.Close()
@@ -57,7 +57,7 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	payload, err := jsoniter.Marshal(data)
 	if err != nil {
-		return "", nil, xerrors.Errorf("Failed to marshal payload: %v", err)
+		return "", nil, fmt.Errorf("Failed to marshal payload: %v", err)
 	}
 
 	var part io.Writer
@@ -68,12 +68,12 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	part, err = writer.CreatePart(header)
 	if err != nil {
-		return "", nil, xerrors.Errorf("Failed to create part: %v", err)
+		return "", nil, fmt.Errorf("Failed to create part: %v", err)
 	}
 
 	_, err = part.Write(payload)
 	if err != nil {
-		return "", nil, xerrors.Errorf("Failed to write payload: %v", err)
+		return "", nil, fmt.Errorf("Failed to write payload: %v", err)
 	}
 
 	for i, file := range files {
@@ -95,18 +95,18 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 		part, err = writer.CreatePart(header)
 		if err != nil {
-			return "", nil, xerrors.Errorf("Failed to create part: %v", err)
+			return "", nil, fmt.Errorf("Failed to create part: %v", err)
 		}
 
 		_, err = io.Copy(part, file.Reader)
 		if err != nil {
-			return "", nil, xerrors.Errorf("Failed to copy file: %v", err)
+			return "", nil, fmt.Errorf("Failed to copy file: %v", err)
 		}
 	}
 
 	err = writer.Close()
 	if err != nil {
-		return "", nil, xerrors.Errorf("Failed to close writer")
+		return "", nil, fmt.Errorf("Failed to close writer")
 	}
 
 	return writer.FormDataContentType(), requestBody.Bytes(), nil

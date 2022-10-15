@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"golang.org/x/xerrors"
+	"fmt"
 	"net/http"
 )
 
@@ -16,12 +16,12 @@ func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionT
 
 		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, nil)
 		if err != nil {
-			return xerrors.Errorf("Failed to create interaction response: %v", err)
+			return fmt.Errorf("Failed to create interaction response: %v", err)
 		}
 	} else {
 		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, interactionResponse, nil, nil)
 		if err != nil {
-			return xerrors.Errorf("Failed to create interaction response: %v", err)
+			return fmt.Errorf("Failed to create interaction response: %v", err)
 		}
 	}
 
@@ -33,7 +33,7 @@ func GetoriginalInteractionResponse(s *Session, applicationID Snowflake, interac
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get original interaction response: %v", err)
+		return nil, fmt.Errorf("Failed to get original interaction response: %v", err)
 	}
 
 	return
@@ -50,12 +50,12 @@ func EditOriginalInteractionResponse(s *Session, applicationID Snowflake, intera
 
 		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
-			return nil, xerrors.Errorf("Failed to edit original interaction response: %v", err)
+			return nil, fmt.Errorf("Failed to edit original interaction response: %v", err)
 		}
 	} else {
 		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
 		if err != nil {
-			return nil, xerrors.Errorf("Failed to edit original interaction response: %v", err)
+			return nil, fmt.Errorf("Failed to edit original interaction response: %v", err)
 		}
 	}
 
@@ -67,7 +67,7 @@ func DeleteOriginalInteractionResponse(s *Session, applicationID Snowflake, inte
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return xerrors.Errorf("Failed to create interaction response: %v", err)
+		return fmt.Errorf("Failed to create interaction response: %v", err)
 	}
 
 	return
@@ -84,12 +84,12 @@ func CreateFollowupMessage(s *Session, applicationID Snowflake, interactionToken
 
 		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
 		if err != nil {
-			return nil, xerrors.Errorf("Failed to create followup message: %v", err)
+			return nil, fmt.Errorf("Failed to create followup message: %v", err)
 		}
 	} else {
 		err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
 		if err != nil {
-			return nil, xerrors.Errorf("Failed to create followup message: %v", err)
+			return nil, fmt.Errorf("Failed to create followup message: %v", err)
 		}
 	}
 
@@ -101,7 +101,7 @@ func GetFollowupMessage(s *Session, applicationID Snowflake, interactionToken st
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get followup message: %v", err)
+		return nil, fmt.Errorf("Failed to get followup message: %v", err)
 	}
 
 	return
@@ -118,12 +118,12 @@ func EditFollowupMessage(s *Session, applicationID Snowflake, interactionToken s
 
 		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
-			return nil, xerrors.Errorf("Failed to edit followup message: %v", err)
+			return nil, fmt.Errorf("Failed to edit followup message: %v", err)
 		}
 	} else {
 		err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
 		if err != nil {
-			return nil, xerrors.Errorf("Failed to edit followup message: %v", err)
+			return nil, fmt.Errorf("Failed to edit followup message: %v", err)
 		}
 	}
 
@@ -135,7 +135,7 @@ func DeleteFollowupMessage(s *Session, applicationID Snowflake, interactionToken
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return xerrors.Errorf("Failed to delete followup message: %v", err)
+		return fmt.Errorf("Failed to delete followup message: %v", err)
 	}
 
 	return

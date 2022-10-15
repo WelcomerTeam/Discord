@@ -1,7 +1,7 @@
 package discord
 
 import (
-	"golang.org/x/xerrors"
+	"fmt"
 	"net/http"
 )
 
@@ -10,7 +10,7 @@ func GetGlobalApplicationCommands(s *Session, applicationID Snowflake) (commands
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &commands)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get global application commands: %v", err)
+		return nil, fmt.Errorf("Failed to get global application commands: %v", err)
 	}
 
 	return
@@ -21,7 +21,7 @@ func CreateGlobalApplicationCommand(s *Session, applicationID Snowflake, command
 
 	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, commandArg, nil, &command)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to create global application command: %v", err)
+		return nil, fmt.Errorf("Failed to create global application command: %v", err)
 	}
 
 	return
@@ -32,7 +32,7 @@ func GetGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID 
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &command)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get global application command: %v", err)
+		return nil, fmt.Errorf("Failed to get global application command: %v", err)
 	}
 
 	return
@@ -43,7 +43,7 @@ func EditGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID
 
 	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, commandArg, nil, &command)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit global application command: %v", err)
+		return nil, fmt.Errorf("Failed to edit global application command: %v", err)
 	}
 
 	return
@@ -54,7 +54,7 @@ func DeleteGlobalApplicationCommand(s *Session, applicationID Snowflake, command
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return xerrors.Errorf("Failed to delete global application command: %v", err)
+		return fmt.Errorf("Failed to delete global application command: %v", err)
 	}
 
 	return
@@ -65,7 +65,7 @@ func BulkOverwriteGlobalApplicationCommands(s *Session, applicationID Snowflake,
 
 	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, commandArgs, nil, &commands)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to bulk overwrite global application commands: %v", err)
+		return nil, fmt.Errorf("Failed to bulk overwrite global application commands: %v", err)
 	}
 
 	return
@@ -76,7 +76,7 @@ func GetGuildApplicationCommands(s *Session, applicationID Snowflake, guildID Sn
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &commands)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get guild application commands: %v", err)
+		return nil, fmt.Errorf("Failed to get guild application commands: %v", err)
 	}
 
 	return
@@ -87,7 +87,7 @@ func CreateGuildApplicationCommand(s *Session, applicationID Snowflake, guildID 
 
 	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, commandArg, nil, &command)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to create guild application command: %v", err)
+		return nil, fmt.Errorf("Failed to create guild application command: %v", err)
 	}
 
 	return
@@ -98,7 +98,7 @@ func GetGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Sno
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &command)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get guild application command: %v", err)
+		return nil, fmt.Errorf("Failed to get guild application command: %v", err)
 	}
 
 	return
@@ -109,7 +109,7 @@ func EditGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Sn
 
 	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, commandArg, nil, &command)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit guild application command: %v", err)
+		return nil, fmt.Errorf("Failed to edit guild application command: %v", err)
 	}
 
 	return
@@ -120,7 +120,7 @@ func DeleteGuildApplicationCommand(s *Session, applicationID Snowflake, guildID 
 
 	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return xerrors.Errorf("Failed to delete guild application command: %v", err)
+		return fmt.Errorf("Failed to delete guild application command: %v", err)
 	}
 
 	return
@@ -131,7 +131,7 @@ func BulkOverwriteGuildApplicationCommands(s *Session, applicationID Snowflake, 
 
 	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, commandArgs, nil, &commands)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to bulk overwrite guild application commands: %v", err)
+		return nil, fmt.Errorf("Failed to bulk overwrite guild application commands: %v", err)
 	}
 
 	return
@@ -142,7 +142,7 @@ func GetGuildApplicationCommandPermissions(s *Session, applicationID Snowflake, 
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &permissions)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get guild application command permissions: %v", err)
+		return nil, fmt.Errorf("Failed to get guild application command permissions: %v", err)
 	}
 
 	return
@@ -153,7 +153,7 @@ func GetApplicationCommandPermissions(s *Session, applicationID Snowflake, guild
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &permissions)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to get application command permissions: %v", err)
+		return nil, fmt.Errorf("Failed to get application command permissions: %v", err)
 	}
 
 	return
@@ -164,7 +164,7 @@ func EditApplicationCommandPermissions(s *Session, applicationID Snowflake, guil
 
 	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, permissionsArg, nil, &permissions)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to edit application command permissions: %v", err)
+		return nil, fmt.Errorf("Failed to edit application command permissions: %v", err)
 	}
 
 	return
@@ -175,7 +175,7 @@ func BatchEditApplicationCommandPermissions(s *Session, applicationID Snowflake,
 
 	err = s.Interface.FetchJJ(s, http.MethodPut, endpoint, permissionsArg, nil, &permissions)
 	if err != nil {
-		return nil, xerrors.Errorf("Failed to batch edit application command permissions: %v", err)
+		return nil, fmt.Errorf("Failed to batch edit application command permissions: %v", err)
 	}
 
 	return

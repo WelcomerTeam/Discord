@@ -1,15 +1,16 @@
 package discord
 
 import (
+	"errors"
 	"fmt"
-	jsoniter "github.com/json-iterator/go"
-	"golang.org/x/xerrors"
 	"net/http"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 var (
-	ErrUnauthorized         = xerrors.New("Inproper token was passed")
-	ErrUnsupportedImageType = xerrors.New("Unsupported image type given")
+	ErrUnauthorized         = errors.New("improper token was passed")
+	ErrUnsupportedImageType = errors.New("unsupported image type given")
 )
 
 // RestError contains the error structure that is returned by discord.

@@ -2,10 +2,11 @@ package discord
 
 import (
 	"bytes"
-	gotils_strconv "github.com/savsgio/gotils/strconv"
-	"golang.org/x/xerrors"
+	"fmt"
 	"strconv"
 	"time"
+
+	gotils_strconv "github.com/savsgio/gotils/strconv"
 )
 
 const (
@@ -25,7 +26,7 @@ func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		i, err := strconv.ParseInt(gotils_strconv.B2S(b[1:len(b)-1]), decimalBase, bitSize)
 		if err != nil {
-			return xerrors.Errorf("Failed to unmarshal json: %v", err)
+			return fmt.Errorf("Failed to unmarshal json: %v", err)
 		}
 
 		*s = Snowflake(i)
@@ -61,7 +62,7 @@ func (in *Int64) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		i, err := strconv.ParseInt(gotils_strconv.B2S(b[1:len(b)-1]), decimalBase, bitSize)
 		if err != nil {
-			return xerrors.Errorf("Failed to unmarshal json: %v", err)
+			return fmt.Errorf("Failed to unmarshal json: %v", err)
 		}
 
 		*in = Int64(i)
