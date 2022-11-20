@@ -3,10 +3,21 @@ package discord
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
-func GetGlobalApplicationCommands(s *Session, applicationID Snowflake) (commands []*ApplicationCommand, err error) {
+func GetGlobalApplicationCommands(s *Session, applicationID Snowflake, withLocalizations bool) (commands []*ApplicationCommand, err error) {
 	endpoint := EndpointApplicationGlobalCommands(applicationID.String())
+
+	values := url.Values{}
+
+	if withLocalizations {
+		values.Set("with_localizations", "true")
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &commands)
 	if err != nil {
@@ -27,8 +38,18 @@ func CreateGlobalApplicationCommand(s *Session, applicationID Snowflake, command
 	return
 }
 
-func GetGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID Snowflake) (command *ApplicationCommand, err error) {
+func GetGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID Snowflake, withLocalizations bool) (command *ApplicationCommand, err error) {
 	endpoint := EndpointApplicationGlobalCommand(applicationID.String(), commandID.String())
+
+	values := url.Values{}
+
+	if withLocalizations {
+		values.Set("with_localizations", "true")
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
 
 	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &command)
 	if err != nil {

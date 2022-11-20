@@ -37,6 +37,7 @@ const (
 	ApplicationCommandOptionTypeRole
 	ApplicationCommandOptionTypeMentionable
 	ApplicationCommandOptionTypeNumber
+	ApplicationCommandOptionTypeAttachment
 )
 
 // ApplicationCommandPermissionType represents the target for a command permission.
@@ -105,15 +106,20 @@ type ApplicationTeamMember struct {
 
 // ApplicationCommand represents an application's command.
 type ApplicationCommand struct {
-	ID                *Snowflake                  `json:"id,omitempty"`
-	Type              *ApplicationCommandType     `json:"type,omitempty"`
-	ApplicationID     *Snowflake                  `json:"application_id,omitempty"`
-	GuildID           *Snowflake                  `json:"guild_id,omitempty"`
-	Name              string                      `json:"name"`
-	Description       string                      `json:"description,omitempty"`
-	Options           []*ApplicationCommandOption `json:"options,omitempty"`
-	DefaultPermission bool                        `json:"default_permission,omitempty"`
-	Version           *Int64                      `json:"version,omitempty"`
+	ID                       *Snowflake              `json:"id,omitempty"`
+	Type                     *ApplicationCommandType `json:"type,omitempty"`
+	ApplicationID            *Snowflake              `json:"application_id,omitempty"`
+	GuildID                  *Snowflake              `json:"guild_id,omitempty"`
+	Name                     string                  `json:"name"`
+	NameLocalizations        map[string]string       `json:"name_localizations,omitempty"`
+	Description              string                  `json:"description,omitempty"`
+	DescriptionLocalizations map[string]string       `json:"description_localizations,omitempty"`
+
+	Options                 []*ApplicationCommandOption `json:"options,omitempty"`
+	DefaultMemberPermission *int64                      `json:"default_member_permissions"`
+	DMPermission            bool                        `json:"dm_permission,omitempty"`
+	DefaultPermission       bool                        `json:"default_permission,omitempty"`
+	Version                 *Int64                      `json:"version,omitempty"`
 }
 
 // GuildApplicationCommandPermissions represent a guilds application permissions.
@@ -133,22 +139,30 @@ type ApplicationCommandPermissions struct {
 
 // ApplicationCommandOption represents the options for an application command.
 type ApplicationCommandOption struct {
-	Type         ApplicationCommandOptionType      `json:"type"`
-	Name         string                            `json:"name"`
-	Description  string                            `json:"description,omitempty"`
+	Type                     ApplicationCommandOptionType `json:"type"`
+	Name                     string                       `json:"name"`
+	NameLocalizations        map[string]string            `json:"name_localizations,omitempty"`
+	Description              string                       `json:"description,omitempty"`
+	DescriptionLocalizations map[string]string            `json:"description_localizations,omitempty"`
+
 	Required     bool                              `json:"required,omitempty"`
 	Choices      []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 	Options      []*ApplicationCommandOption       `json:"options,omitempty"`
 	ChannelTypes []*ChannelType                    `json:"channel_types,omitempty"`
-	MinValue     int32                             `json:"min_value,omitempty"`
-	MaxValue     int32                             `json:"max_value,omitempty"`
-	Autocomplete bool                              `json:"autocomplete,omitempty"`
+
+	MinValue  int32 `json:"min_value,omitempty"`
+	MaxValue  int32 `json:"max_value,omitempty"`
+	MinLength int32 `json:"min_length,omitempty"`
+	MaxLength int32 `json:"max_length,omitempty"`
+
+	Autocomplete bool `json:"autocomplete,omitempty"`
 }
 
 // ApplicationCommandOptionChoice represents the different choices.
 type ApplicationCommandOptionChoice struct {
-	Name  string              `json:"name"`
-	Value jsoniter.RawMessage `json:"value"`
+	Name              string              `json:"name"`
+	NameLocalizations map[string]string   `json:"name_localizations,omitempty"`
+	Value             jsoniter.RawMessage `json:"value"`
 }
 
 // ApplicationSelectOption represents the structure of select options.
@@ -157,7 +171,7 @@ type ApplicationSelectOption struct {
 	Value       string `json:"value"`
 	Description string `json:"description,omitempty"`
 	Emoji       *Emoji `json:"emoji,omitempty"`
-	Default     bool   `json:"default"`
+	Default     bool   `json:"default,omitempty"`
 }
 
 // Integration represents the structure of an integration.

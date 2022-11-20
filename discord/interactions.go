@@ -14,6 +14,7 @@ const (
 	InteractionTypeApplicationCommand
 	InteractionTypeMessageComponent
 	InteractionTypeApplicationCommandAutocomplete
+	InteractionTypeModalSubmit
 )
 
 // InteractionCallbackType represents the type of interaction callbacks.
@@ -41,6 +42,9 @@ const (
 
 	// InteractionCallbackTypeAutocompleteResult responds to an autocomplete interaction.
 	InteractionCallbackTypeAutocompleteResult
+
+	// InteractionCallbackTypeModal responds to an interaction with a popup modal.
+	InteractionCallbackTypeModal
 )
 
 // InteractionComponentType represents the type of component.
@@ -49,7 +53,12 @@ type InteractionComponentType uint8
 const (
 	InteractionComponentTypeActionRow InteractionComponentType = 1 + iota
 	InteractionComponentTypeButton
-	InteractionComponentTypeSelectMenu
+	InteractionComponentTypeStringSelect
+	InteractionComponentTypeTextInput
+	InteractionComponentTypeUserInput
+	InteractionComponentTypeRoleSelect
+	InteractionComponentTypeMentionableSelect
+	InteractionComponentTypeChannelSelect
 )
 
 // InteractionComponentStyle represents the style of a component.
@@ -70,15 +79,16 @@ type Interaction struct {
 	Type          *InteractionType `json:"type"`
 	Data          *InteractionData `json:"data,omitempty"`
 
-	GuildID     *Snowflake   `json:"guild_id,omitempty"`
-	ChannelID   *Snowflake   `json:"channel_id,omitempty"`
-	Member      *GuildMember `json:"member,omitempty"`
-	User        *User        `json:"user,omitempty"`
-	Token       string       `json:"token"`
-	Version     int32        `json:"version"`
-	Message     *Message     `json:"message,omitempty"`
-	Locale      string       `json:"locale,omitempty"`
-	GuildLocale string       `json:"guild_locale,omitempty"`
+	GuildID        *Snowflake   `json:"guild_id,omitempty"`
+	ChannelID      *Snowflake   `json:"channel_id,omitempty"`
+	Member         *GuildMember `json:"member,omitempty"`
+	User           *User        `json:"user,omitempty"`
+	Token          string       `json:"token"`
+	Version        int32        `json:"version"`
+	Message        *Message     `json:"message,omitempty"`
+	AppPermissions int64        `json:"app_permissions"`
+	Locale         string       `json:"locale,omitempty"`
+	GuildLocale    string       `json:"guild_locale,omitempty"`
 }
 
 // SendResponse sends an interacion response.
@@ -145,15 +155,18 @@ type InteractionResponse struct {
 
 // InteractionData represents the structure of interaction data.
 type InteractionData struct {
-	ID            Snowflake                  `json:"id"`
-	Name          string                     `json:"name"`
-	Type          ApplicationCommandType     `json:"type"`
-	Resolved      *InteractionResolvedData   `json:"resolved,omitempty"`
-	Options       []*InteractionDataOption   `json:"options,omitempty"`
+	ID       Snowflake                `json:"id"`
+	Name     string                   `json:"name"`
+	Type     ApplicationCommandType   `json:"type"`
+	Resolved *InteractionResolvedData `json:"resolved,omitempty"`
+	Options  []*InteractionDataOption `json:"options,omitempty"`
+	GuildID  *Snowflake               `json:"guild_id,omitempty"`
+	TargetID *Snowflake               `json:"target_id,omitempty"`
+
 	CustomID      string                     `json:"custom_id,omitempty"`
 	ComponentType *InteractionComponentType  `json:"component_type,omitempty"`
 	Values        []*ApplicationSelectOption `json:"values,omitempty"`
-	TargetID      *Snowflake                 `json:"target_id,omitempty"`
+	Components    []*InteractionComponent    `json:"components,omitempty"`
 }
 
 // InteractionData represents the structure of the interaction callback data.
@@ -161,7 +174,11 @@ type InteractionData struct {
 // embeds, allowed_mentions, flags, components and attachments.
 type InteractionCallbackData struct {
 	WebhookMessageParams
-	Choices []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
+
+	Title      string                            `json:"title,omitempty"`
+	CustomID   string                            `json:"custom_id,omitempty"`
+	Components []*InteractionComponent           `json:"components,omitempty"`
+	Choices    []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 }
 
 // InteractionDataOption represents the structure of an interaction option.
@@ -170,32 +187,36 @@ type InteractionDataOption struct {
 	Type    ApplicationCommandOptionType `json:"type"`
 	Value   jsoniter.RawMessage          `json:"value,omitempty"`
 	Options []*InteractionDataOption     `json:"options,omitempty"`
-	Focused bool                         `json:"focused"`
+	Focused bool                         `json:"focused,omitempty"`
 }
 
 // InteractionResolvedData represents any extra payload data for an interaction.
 type InteractionResolvedData struct {
-	Users    map[Snowflake]*User        `json:"users,omitempty"`
-	Members  map[Snowflake]*GuildMember `json:"members,omitempty"`
-	Roles    map[Snowflake]*Role        `json:"roles,omitempty"`
-	Channels map[Snowflake]*Channel     `json:"channels,omitempty"`
-	Messages map[Snowflake]*Message     `json:"messages,omitempty"`
+	Users       map[Snowflake]*User              `json:"users,omitempty"`
+	Members     map[Snowflake]*GuildMember       `json:"members,omitempty"`
+	Roles       map[Snowflake]*Role              `json:"roles,omitempty"`
+	Channels    map[Snowflake]*Channel           `json:"channels,omitempty"`
+	Messages    map[Snowflake]*Message           `json:"messages,omitempty"`
+	Attachments map[Snowflake]*MessageAttachment `json:"attachments,omitempty"`
 }
 
 // InteractionComponent represents the structure of a component.
 type InteractionComponent struct {
-	Type        InteractionComponentType   `json:"type"`
-	CustomID    string                     `json:"custom_id,omitempty"`
-	Disabled    bool                       `json:"disabled"`
-	Style       InteractionComponentStyle  `json:"style,omitempty"`
-	Label       string                     `json:"label,omitempty"`
-	Emoji       *Emoji                     `json:"emoji,omitempty"`
-	URL         string                     `json:"url,omitempty"`
-	Options     []*ApplicationSelectOption `json:"options,omitempty"`
-	Placeholder string                     `json:"placeholder,omitempty"`
-	MinValues   *int32                     `json:"min_values,omitempty"`
-	MaxValues   *int32                     `json:"max_values,omitempty"`
-	Components  []*InteractionComponent    `json:"components,omitempty"`
+	Type     InteractionComponentType  `json:"type"`
+	Style    InteractionComponentStyle `json:"style,omitempty"`
+	Label    string                    `json:"label,omitempty"`
+	Emoji    *Emoji                    `json:"emoji,omitempty"`
+	CustomID string                    `json:"custom_id,omitempty"`
+	URL      string                    `json:"url,omitempty"`
+	Disabled bool                      `json:"disabled"`
+
+	Options      []*ApplicationSelectOption `json:"options,omitempty"`
+	ChannelTypes []*ChannelType             `json:"channel_types,omitempty"`
+	Placeholder  string                     `json:"placeholder,omitempty"`
+	MinValues    *int32                     `json:"min_values,omitempty"`
+	MaxValues    *int32                     `json:"max_values,omitempty"`
+
+	Components []*InteractionComponent `json:"components,omitempty"`
 }
 
 func NewInteractionComponent(componentType InteractionComponentType) *InteractionComponent {
