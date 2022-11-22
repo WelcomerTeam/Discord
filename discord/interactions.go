@@ -76,7 +76,7 @@ const (
 type Interaction struct {
 	ID            Snowflake        `json:"id"`
 	ApplicationID Snowflake        `json:"application_id"`
-	Type          *InteractionType `json:"type"`
+	Type          InteractionType  `json:"type"`
 	Data          *InteractionData `json:"data,omitempty"`
 
 	GuildID        *Snowflake   `json:"guild_id,omitempty"`
@@ -149,8 +149,8 @@ func (inf *InteractionFollowup) DeleteFollowup(s *Session) (err error) {
 
 // InteractionResponse represents the interaction response object.
 type InteractionResponse struct {
-	Type InteractionCallbackType `json:"type"`
-	Data InteractionCallbackData `json:"data,omitempty"`
+	Type InteractionCallbackType  `json:"type"`
+	Data *InteractionCallbackData `json:"data,omitempty"`
 }
 
 // InteractionData represents the structure of interaction data.
