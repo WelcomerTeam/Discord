@@ -98,7 +98,7 @@ type Interaction struct {
 func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, messageParams WebhookMessageParams, choices []*ApplicationCommandOptionChoice) (err error) {
 	return CreateInteractionResponse(s, i.ID, i.Token, InteractionResponse{
 		Type: interactionType,
-		Data: InteractionCallbackData{
+		Data: &InteractionCallbackData{
 			WebhookMessageParams: messageParams,
 			Choices:              choices,
 		},
