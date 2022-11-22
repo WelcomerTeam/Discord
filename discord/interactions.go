@@ -86,7 +86,7 @@ type Interaction struct {
 	Token          string       `json:"token"`
 	Version        int32        `json:"version"`
 	Message        *Message     `json:"message,omitempty"`
-	AppPermissions int64        `json:"app_permissions"`
+	AppPermissions *Int64       `json:"app_permissions"`
 	Locale         string       `json:"locale,omitempty"`
 	GuildLocale    string       `json:"guild_locale,omitempty"`
 }
