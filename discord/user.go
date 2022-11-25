@@ -61,24 +61,26 @@ type User struct {
 
 // CreateDM creates a DMChannel with a user. This should not need to be called as Send() transparently does this.
 // If the user already has a DMChannel created, this will return a partial channel with just an ID set.
-func (u *User) CreateDM(s *Session) (channel *Channel, err error) {
+func (u *User) CreateDM(s *Session) (*Channel, error) {
 	if u.DMChannelID != nil {
 		return &Channel{ID: *u.DMChannelID}, nil
 	}
 
-	channel, err = CreateDM(s, u.ID)
+	var channel *Channel
+
+	channel, err := CreateDM(s, u.ID)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	u.DMChannelID = &channel.ID
 
-	return
+	return channel, nil
 }
 
 // Send sends a DM message to a user. This will create a DMChannel if one is not present.
 // params: The message parameters used to send the message.
-func (u *User) Send(s *Session, params MessageParams) (message *Message, err error) {
+func (u *User) Send(s *Session, params MessageParams) (*Message, error) {
 	dmChannel, err := u.CreateDM(s)
 	if err != nil {
 		return nil, err
@@ -93,7 +95,7 @@ type ClientUser User
 // Edit modifies the current user.
 // username: The new username to change to.
 // avatar: File of new avatar to change to.
-func (u *ClientUser) Edit(s *Session, username *string, avatar *[]byte) (err error) {
+func (u *ClientUser) Edit(s *Session, username *string, avatar *[]byte) error {
 	params := UserParam{
 		Username: username,
 	}
@@ -109,12 +111,12 @@ func (u *ClientUser) Edit(s *Session, username *string, avatar *[]byte) (err err
 
 	newUser, err := ModifyCurrentUser(s, params)
 	if err != nil {
-		return
+		return err
 	}
 
 	*u = *(*ClientUser)(newUser)
 
-	return
+	return nil
 }
 
 // UserParam represents the payload sent to modify a user.

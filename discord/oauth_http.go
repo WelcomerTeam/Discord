@@ -5,24 +5,28 @@ import (
 	"net/http"
 )
 
-func GetCurrentBotApplicationInformation(s *Session) (application *Application, err error) {
+func GetCurrentBotApplicationInformation(s *Session) (*Application, error) {
 	endpoint := EndpointOAuth2Application("@me")
 
-	err = s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &application)
+	var application *Application
+
+	err := s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &application)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get current bot application information: %v", err)
+		return nil, fmt.Errorf("failed to get current bot application information: %v", err)
 	}
 
-	return
+	return application, nil
 }
 
-func GetCurrentAuthorizationInformation(s *Session) (authorizationInformation *AuthorizationInformation, err error) {
+func GetCurrentAuthorizationInformation(s *Session) (*AuthorizationInformation, error) {
 	endpoint := EndpointOAuth2Me
 
-	err = s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
+	var authorizationInformation *AuthorizationInformation
+
+	err := s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get current authorization information: %v", err)
+		return nil, fmt.Errorf("failed to get current authorization information: %v", err)
 	}
 
-	return
+	return authorizationInformation, nil
 }

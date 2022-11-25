@@ -167,25 +167,25 @@ type GuildParam struct {
 // actionType: The action type to filter audit logs by.
 // before: Only show audit logs before a certain snowflake.
 // limit: Maximum number of audit log entries to return.
-func (g *Guild) AuditLogs(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) (entries []*AuditLogEntry, err error) {
+func (g *Guild) AuditLogs(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]*AuditLogEntry, error) {
 	return GetGuildAuditLog(s, g.ID, userID, actionType, before, limit)
 }
 
 // Ban bans a user.
 // userID: ID of user that is getting banned.
 // reason: Reason for ban.
-func (g *Guild) Ban(s *Session, userID Snowflake, reason *string) (err error) {
+func (g *Guild) Ban(s *Session, userID Snowflake, reason *string) error {
 	return CreateGuildBan(s, g.ID, userID, reason)
 }
 
 // Bans returns a list of guild bans.
-func (g *Guild) Bans(s *Session) (bans []*GuildBan, err error) {
+func (g *Guild) Bans(s *Session) ([]*GuildBan, error) {
 	return GetGuildBans(s, g.ID)
 }
 
 // CloneChannel creates a copy of the target channel.
 // reason: Reason for creating the channel.
-func (g *Guild) CloneChannel(s *Session, c *Channel, reason *string) (channel *Channel, err error) {
+func (g *Guild) CloneChannel(s *Session, c *Channel, reason *string) (*Channel, error) {
 	return g.CreateChannel(s, ChannelParams{
 		Name:                 c.Name,
 		Type:                 c.Type,
@@ -203,7 +203,7 @@ func (g *Guild) CloneChannel(s *Session, c *Channel, reason *string) (channel *C
 // CreateChannel creates a channel.
 // channelArg: Parameters passed for creating a channel.
 // reason: Reason for creating the channel.
-func (g *Guild) CreateChannel(s *Session, channelParams ChannelParams, reason *string) (channel *Channel, err error) {
+func (g *Guild) CreateChannel(s *Session, channelParams ChannelParams, reason *string) (*Channel, error) {
 	return CreateGuildChannel(s, g.ID, channelParams, reason)
 }
 
@@ -212,7 +212,7 @@ func (g *Guild) CreateChannel(s *Session, channelParams ChannelParams, reason *s
 // image: Bytes representing the image file to upload.
 // roles: Roles that this emoji is limited to.
 // reason: Reason for creating the emoji.
-func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles []*Snowflake, reason *string) (emoji *Emoji, err error) {
+func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles []*Snowflake, reason *string) (*Emoji, error) {
 	params := EmojiParams{
 		Name:  name,
 		Roles: roles,
@@ -220,7 +220,7 @@ func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles [
 
 	imageData, err := bytesToBase64Data(image)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	params.Image = imageData
@@ -231,61 +231,61 @@ func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles [
 // CreateRole creates a role.
 // roleArg: Parameters passed for creating a role.
 // reason: Reason for creating the role.
-func (g *Guild) CreateRole(s *Session, roleParams RoleParams, reason *string) (role *Role, err error) {
+func (g *Guild) CreateRole(s *Session, roleParams RoleParams, reason *string) (*Role, error) {
 	return CreateGuildRole(s, g.ID, roleParams, reason)
 }
 
 // Delete deletes a guild.
-func (g *Guild) Delete(s *Session) (err error) {
+func (g *Guild) Delete(s *Session) error {
 	return DeleteGuild(s, g.ID)
 }
 
 // Edit edits a guild.
 // guildArg: Parameters passed for editing a guild.
 // reason: Reason for editing the guild.
-func (g *Guild) Edit(s *Session, guildArg GuildParam, reason *string) (err error) {
+func (g *Guild) Edit(s *Session, guildArg GuildParam, reason *string) error {
 	newGuild, err := ModifyGuild(s, g.ID, guildArg, reason)
 	if err != nil {
-		return
+		return err
 	}
 
 	*g = *newGuild
 
-	return
+	return nil
 }
 
 // EditRolePositions edits role positions in a guild.
 // guildRolePositionArgs: List of roles and their new role position.
-func (g *Guild) EditRolePositions(s *Session, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) (roles []*Role, err error) {
+func (g *Guild) EditRolePositions(s *Session, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]*Role, error) {
 	return ModifyGuildRolePositions(s, g.ID, guildRolePositionArgs, reason)
 }
 
 // EstimatePrunedMembers returns an estimate of how many people will be pruned from a guild based on arguments.
 // days: The number of days since speaking.
 // includedRoles: By default pruning only removes users with no roles, any role in this list will be included.
-func (g *Guild) EstimatePrunedMembers(s *Session, days *int32, includedRoles []Snowflake) (pruned *int32, err error) {
+func (g *Guild) EstimatePrunedMembers(s *Session, days *int32, includedRoles []Snowflake) (*int32, error) {
 	return GetGuildPruneCount(s, g.ID, days, includedRoles)
 }
 
 // Integrations returns all guild integrations.
-func (g *Guild) Integrations(s *Session) (integrations []*Integration, err error) {
+func (g *Guild) Integrations(s *Session) ([]*Integration, error) {
 	return GetGuildIntegrations(s, g.ID)
 }
 
 // Invites returns all guild invites.
-func (g *Guild) Invites(s *Session) (invites []*Invite, err error) {
+func (g *Guild) Invites(s *Session) ([]*Invite, error) {
 	return GetGuildInvites(s, g.ID)
 }
 
 // Kick kicks a user from the guild.
 // userID: ID of user to kick.
 // reason: Reason for kicking the user.
-func (g *Guild) Kick(s *Session, userID Snowflake, reason *string) (err error) {
+func (g *Guild) Kick(s *Session, userID Snowflake, reason *string) error {
 	return RemoveGuildMember(s, g.ID, userID, reason)
 }
 
 // Leave leaves a guild.
-func (g *Guild) Leave(s *Session) (err error) {
+func (g *Guild) Leave(s *Session) error {
 	return LeaveGuild(s, g.ID)
 }
 
@@ -294,38 +294,38 @@ func (g *Guild) Leave(s *Session) (err error) {
 // includedRoles: By default pruning only removes users with no roles, any role in this list will be included.
 // computePruneCount: Returns how many users were pruned, usage on larger guilds is discouraged.
 // reason: Reason for pruning members.
-func (g *Guild) PruneMembers(s *Session, guildID Snowflake, days *int32, includedRoles []Snowflake, computePruneCount bool, reason *string) (pruned *int32, err error) {
+func (g *Guild) PruneMembers(s *Session, guildID Snowflake, days *int32, includedRoles []Snowflake, computePruneCount bool, reason *string) (*int32, error) {
 	return BeginGuildPrune(s, g.ID, days, includedRoles, computePruneCount, reason)
 }
 
 // QueryMembers returns guild members whose username or nickname matches query.
 // query: Query string to match usernames and nicknames against.
 // limit: Maximum number of members to return.
-func (g *Guild) QueryMembers(s *Session, query string, limit *int32) (guildMembers []*GuildMember, err error) {
+func (g *Guild) QueryMembers(s *Session, query string, limit *int32) ([]*GuildMember, error) {
 	return SearchGuildMembers(s, g.ID, query, limit)
 }
 
 // Unban unbans a user from a guild.
 // userID: ID of user to unban.
 // reason: Reason for unbanning.
-func (g *Guild) Unban(s *Session, userID Snowflake, reason *string) (err error) {
+func (g *Guild) Unban(s *Session, userID Snowflake, reason *string) error {
 	return RemoveGuildBan(s, g.ID, userID, reason)
 }
 
 // VanityInvite returns the vanity invite for a guild.
-func (g *Guild) VanityInvite(s *Session) (invite *Invite, err error) {
-	invite, err = GetGuildVanityURL(s, g.ID)
+func (g *Guild) VanityInvite(s *Session) (*Invite, error) {
+	invite, err := GetGuildVanityURL(s, g.ID)
 	if err != nil {
-		return
+		return invite, err
 	}
 
 	g.VanityURLCode = invite.Code
 
-	return
+	return invite, nil
 }
 
 // Webhooks returns all webhooks for a guild.
-func (g *Guild) Webhooks(s *Session) (webhooks []*Webhook, err error) {
+func (g *Guild) Webhooks(s *Session) ([]*Webhook, error) {
 	return GetGuildWebhooks(s, g.ID)
 }
 
@@ -365,7 +365,7 @@ type GuildMemberParams struct {
 // roles: List of roles to add to the guild member.
 // reason: Reason for adding the roles to the guild member.
 // atomic: When true, will send multiple AddGuildMemberRole requests instead of at once.
-func (gm *GuildMember) AddRoles(s *Session, roles []Snowflake, reason *string, atomic bool) (err error) {
+func (gm *GuildMember) AddRoles(s *Session, roles []Snowflake, reason *string, atomic bool) error {
 	guildMemberRoles := make(map[Snowflake]bool)
 
 	for _, guildMemberRole := range gm.Roles {
@@ -375,16 +375,16 @@ func (gm *GuildMember) AddRoles(s *Session, roles []Snowflake, reason *string, a
 	if atomic {
 		for _, roleID := range roles {
 			if _, ok := guildMemberRoles[roleID]; !ok {
-				err = AddGuildMemberRole(s, *gm.GuildID, gm.User.ID, roleID, reason)
+				err := AddGuildMemberRole(s, *gm.GuildID, gm.User.ID, roleID, reason)
 				if err != nil {
-					return
+					return err
 				}
 
 				gm.Roles = append(gm.Roles, roleID)
 			}
 		}
 
-		return
+		return nil
 	}
 
 	for _, addedRoleID := range roles {
@@ -402,45 +402,45 @@ func (gm *GuildMember) AddRoles(s *Session, roles []Snowflake, reason *string, a
 
 // Ban bans the guild member from the guild.
 // reason: Reason for banning the guild member.
-func (gm *GuildMember) Ban(s *Session, reason *string) (err error) {
+func (gm *GuildMember) Ban(s *Session, reason *string) error {
 	return CreateGuildBan(s, *gm.GuildID, gm.User.ID, reason)
 }
 
 // CreateDM creates a DMChannel with a user. This should not need to be called as Send() transparently does this.
 // If the user already has a DMChannel created, this will return a partial channel with just an ID set.
-func (gm *GuildMember) CreateDM(s *Session) (channel *Channel, err error) {
+func (gm *GuildMember) CreateDM(s *Session) (*Channel, error) {
 	return gm.User.CreateDM(s)
 }
 
 // Edit edits a guild member.
 // guildMemberArg: Parameters used to update a guild member.
 // reason: Reason for editing the guild member.
-func (gm *GuildMember) Edit(s *Session, guildMemberParams GuildMemberParams, reason *string) (err error) {
+func (gm *GuildMember) Edit(s *Session, guildMemberParams GuildMemberParams, reason *string) error {
 	newMember, err := ModifyGuildMember(s, *gm.GuildID, gm.User.ID, guildMemberParams, reason)
 	if err != nil {
-		return
+		return err
 	}
 
 	*gm = *newMember
 
-	return
+	return nil
 }
 
 // Kick kicks the guild member.
 // reason: Reason for kicking the guild member.
-func (gm *GuildMember) Kick(s *Session, reason *string) (err error) {
+func (gm *GuildMember) Kick(s *Session, reason *string) error {
 	return RemoveGuildMember(s, *gm.GuildID, gm.User.ID, reason)
 }
 
 // MoveTo moves the guild member to a different voice channel.
 // channelID: Channel to move the user to, if nil they are removed from voice.
 // reason: Reason for moving the guild member
-func (gm *GuildMember) MoveTo(s *Session, channelID *Snowflake, reason *string) (err error) {
+func (gm *GuildMember) MoveTo(s *Session, channelID *Snowflake, reason *string) error {
 	return gm.Edit(s, GuildMemberParams{ChannelID: channelID}, reason)
 }
 
 // RemoveRoles removes roles from a guild member.
-func (gm *GuildMember) RemoveRoles(s *Session, roles []Snowflake, reason *string, atomic bool) (err error) {
+func (gm *GuildMember) RemoveRoles(s *Session, roles []Snowflake, reason *string, atomic bool) error {
 	guildMemberRoles := make(map[Snowflake]bool)
 
 	for _, guildMemberRole := range gm.Roles {
@@ -450,9 +450,9 @@ func (gm *GuildMember) RemoveRoles(s *Session, roles []Snowflake, reason *string
 	if atomic {
 		for _, roleID := range roles {
 			if _, ok := guildMemberRoles[roleID]; ok {
-				err = RemoveGuildMemberRole(s, *gm.GuildID, gm.User.ID, roleID, reason)
+				err := RemoveGuildMemberRole(s, *gm.GuildID, gm.User.ID, roleID, reason)
 				if err != nil {
-					return
+					return err
 				}
 
 				delete(guildMemberRoles, roleID)
@@ -471,7 +471,7 @@ func (gm *GuildMember) RemoveRoles(s *Session, roles []Snowflake, reason *string
 			}
 		}
 
-		return
+		return nil
 	}
 
 	for _, removedRoleID := range roles {
@@ -489,7 +489,7 @@ func (gm *GuildMember) RemoveRoles(s *Session, roles []Snowflake, reason *string
 
 // Send sends a DM message to a user. This will create a DMChannel if one is not present.
 // params: The message parameters used to send the message.
-func (gm *GuildMember) Send(s *Session, params MessageParams) (message *Message, err error) {
+func (gm *GuildMember) Send(s *Session, params MessageParams) (*Message, error) {
 	return gm.User.Send(s, params)
 }
 

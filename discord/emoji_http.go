@@ -5,29 +5,33 @@ import (
 	"net/http"
 )
 
-func ListGuildEmojis(s *Session, guildID Snowflake) (emojis []*Emoji, err error) {
+func ListGuildEmojis(s *Session, guildID Snowflake) ([]*Emoji, error) {
 	endpoint := EndpointGuildEmojis(guildID.String())
 
-	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emojis)
+	var emojis []*Emoji
+
+	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emojis)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to list guild emojis: %v", err)
+		return nil, fmt.Errorf("failed to list guild emojis: %v", err)
 	}
 
-	return
+	return emojis, nil
 }
 
-func GetGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake) (emoji *Emoji, err error) {
+func GetGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake) (*Emoji, error) {
 	endpoint := EndpointGuildEmoji(guildID.String(), emojiID.String())
 
-	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emoji)
+	var emoji *Emoji
+
+	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emoji)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get get guild emoji: %v", err)
+		return nil, fmt.Errorf("failed to get get guild emoji: %v", err)
 	}
 
-	return
+	return emoji, nil
 }
 
-func CreateGuildEmoji(s *Session, guildID Snowflake, emojiParams EmojiParams, reason *string) (emoji *Emoji, err error) {
+func CreateGuildEmoji(s *Session, guildID Snowflake, emojiParams EmojiParams, reason *string) (*Emoji, error) {
 	endpoint := EndpointGuildEmojis(guildID.String())
 
 	headers := http.Header{}
@@ -36,15 +40,17 @@ func CreateGuildEmoji(s *Session, guildID Snowflake, emojiParams EmojiParams, re
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPost, endpoint, emojiParams, headers, &emoji)
+	var emoji *Emoji
+
+	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, emojiParams, headers, &emoji)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to create guild emoji: %v", err)
+		return nil, fmt.Errorf("failed to create guild emoji: %v", err)
 	}
 
-	return
+	return emoji, nil
 }
 
-func ModifyGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, emojiParams EmojiParams, reason *string) (emoji *Emoji, err error) {
+func ModifyGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, emojiParams EmojiParams, reason *string) (*Emoji, error) {
 	endpoint := EndpointGuildEmoji(guildID.String(), emojiID.String())
 
 	headers := http.Header{}
@@ -53,15 +59,17 @@ func ModifyGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, emojiPar
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodPatch, endpoint, emojiParams, headers, &emoji)
+	var emoji *Emoji
+
+	err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, emojiParams, headers, &emoji)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to modify guild emoji: %v", err)
+		return nil, fmt.Errorf("failed to modify guild emoji: %v", err)
 	}
 
-	return
+	return emoji, nil
 }
 
-func DeleteGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, reason *string) (err error) {
+func DeleteGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, reason *string) error {
 	endpoint := EndpointGuildEmoji(guildID.String(), emojiID.String())
 
 	headers := http.Header{}
@@ -70,10 +78,10 @@ func DeleteGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, reason *
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
-		return fmt.Errorf("Failed to delete guild emoji: %v", err)
+		return fmt.Errorf("failed to delete guild emoji: %v", err)
 	}
 
-	return
+	return nil
 }

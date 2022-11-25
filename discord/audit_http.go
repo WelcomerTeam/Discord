@@ -6,7 +6,7 @@ import (
 	"net/url"
 )
 
-func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) (entries []*AuditLogEntry, err error) {
+func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]*AuditLogEntry, error) {
 	endpoint := EndpointGuildAuditLogs(guildID.String())
 
 	values := url.Values{}
@@ -31,9 +31,11 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 		endpoint += "?" + values.Encode()
 	}
 
-	err = s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entries)
+	var entries []*AuditLogEntry
+
+	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entries)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get guild audit log: %v", err)
+		return nil, fmt.Errorf("failed to get guild audit log: %v", err)
 	}
 
 	return entries, nil

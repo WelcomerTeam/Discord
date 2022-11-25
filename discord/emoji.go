@@ -17,7 +17,7 @@ type Emoji struct {
 
 // Delete deletes the emoji.
 // reason: Reason for deleting the emoji.
-func (e *Emoji) Delete(s *Session, reason *string) (err error) {
+func (e *Emoji) Delete(s *Session, reason *string) error {
 	return DeleteGuildEmoji(s, *e.GuildID, e.ID, reason)
 }
 
@@ -25,7 +25,7 @@ func (e *Emoji) Delete(s *Session, reason *string) (err error) {
 // name: The name of the emoji
 // roles: Roles this emoji is limited to.
 // reason: Reason for editing the emoji.
-func (e *Emoji) Edit(s *Session, name string, roles []*Snowflake, reason *string) (err error) {
+func (e *Emoji) Edit(s *Session, name string, roles []*Snowflake, reason *string) error {
 	params := EmojiParams{
 		Name:  name,
 		Roles: roles,
@@ -33,12 +33,12 @@ func (e *Emoji) Edit(s *Session, name string, roles []*Snowflake, reason *string
 
 	newEmoji, err := ModifyGuildEmoji(s, *e.GuildID, e.ID, params, reason)
 	if err != nil {
-		return
+		return err
 	}
 
 	*e = *newEmoji
 
-	return
+	return nil
 }
 
 // EmojiParams represents the payload sent to discord.

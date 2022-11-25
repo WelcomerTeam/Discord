@@ -26,7 +26,7 @@ func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		i, err := strconv.ParseInt(gotils_strconv.B2S(b[1:len(b)-1]), decimalBase, bitSize)
 		if err != nil {
-			return fmt.Errorf("Failed to unmarshal json: %v", err)
+			return fmt.Errorf("failed to unmarshal json: %v", err)
 		}
 
 		*s = Snowflake(i)
@@ -62,7 +62,7 @@ func (in *Int64) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		i, err := strconv.ParseInt(gotils_strconv.B2S(b[1:len(b)-1]), decimalBase, bitSize)
 		if err != nil {
-			return fmt.Errorf("Failed to unmarshal json: %v", err)
+			return fmt.Errorf("failed to unmarshal json: %v", err)
 		}
 
 		*in = Int64(i)

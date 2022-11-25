@@ -14,7 +14,7 @@ import (
 
 var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
 
-func bytesToBase64Data(b []byte) (data string, err error) {
+func bytesToBase64Data(b []byte) (string, error) {
 	mime, err := getImageMimeType(b)
 	if err != nil {
 		return "", err
@@ -25,7 +25,7 @@ func bytesToBase64Data(b []byte) (data string, err error) {
 
 	_, err = w.Write(b)
 	if err != nil {
-		return "", fmt.Errorf("Failed to base64 bytes: %v", err)
+		return "", fmt.Errorf("failed to base64 bytes: %v", err)
 	}
 
 	defer w.Close()
@@ -33,7 +33,7 @@ func bytesToBase64Data(b []byte) (data string, err error) {
 	return "data:" + mime + ";base64," + out.String(), nil
 }
 
-func getImageMimeType(b []byte) (mimeType string, err error) {
+func getImageMimeType(b []byte) (string, error) {
 	switch {
 	case bytes.Equal(b[0:8], []byte{137, 80, 78, 71, 13, 10, 26, 10}):
 		return "image/png", nil
@@ -57,7 +57,7 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	payload, err := jsoniter.Marshal(data)
 	if err != nil {
-		return "", nil, fmt.Errorf("Failed to marshal payload: %v", err)
+		return "", nil, fmt.Errorf("failed to marshal payload: %v", err)
 	}
 
 	var part io.Writer
@@ -68,12 +68,12 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	part, err = writer.CreatePart(header)
 	if err != nil {
-		return "", nil, fmt.Errorf("Failed to create part: %v", err)
+		return "", nil, fmt.Errorf("failed to create part: %v", err)
 	}
 
 	_, err = part.Write(payload)
 	if err != nil {
-		return "", nil, fmt.Errorf("Failed to write payload: %v", err)
+		return "", nil, fmt.Errorf("failed to write payload: %v", err)
 	}
 
 	for i, file := range files {
@@ -95,18 +95,18 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 		part, err = writer.CreatePart(header)
 		if err != nil {
-			return "", nil, fmt.Errorf("Failed to create part: %v", err)
+			return "", nil, fmt.Errorf("failed to create part: %v", err)
 		}
 
 		_, err = io.Copy(part, file.Reader)
 		if err != nil {
-			return "", nil, fmt.Errorf("Failed to copy file: %v", err)
+			return "", nil, fmt.Errorf("failed to copy file: %v", err)
 		}
 	}
 
 	err = writer.Close()
 	if err != nil {
-		return "", nil, fmt.Errorf("Failed to close writer")
+		return "", nil, fmt.Errorf("failed to close writer")
 	}
 
 	return writer.FormDataContentType(), requestBody.Bytes(), nil

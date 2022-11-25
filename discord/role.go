@@ -31,22 +31,22 @@ type RoleParams struct {
 
 // Delete deletes a guild role.
 // reason: Reason for deleting a guild role.
-func (r *Role) Delete(s *Session, reason *string) (err error) {
+func (r *Role) Delete(s *Session, reason *string) error {
 	return DeleteGuildRole(s, *r.GuildID, r.ID, reason)
 }
 
 // Edit edits a guild role.
 // params: The role parameters to update the role with.
 // reason: Reason for editing a guild role.
-func (r *Role) Edit(s *Session, params Role, reason *string) (err error) {
+func (r *Role) Edit(s *Session, params Role, reason *string) error {
 	newRole, err := ModifyGuildRole(s, *r.GuildID, r.ID, params, reason)
 	if err != nil {
-		return
+		return err
 	}
 
 	*r = *newRole
 
-	return
+	return nil
 }
 
 // RoleTag represents extra information about a role.

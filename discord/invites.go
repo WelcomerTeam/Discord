@@ -55,7 +55,7 @@ type Invite struct {
 
 // Delete deletes an invite.
 // reason: Reason for deleting an invite.
-func (i *Invite) Delete(s *Session, reason *string) (err error) {
+func (i *Invite) Delete(s *Session, reason *string) error {
 	return DeleteInvite(s, i.Code, reason)
 }
 

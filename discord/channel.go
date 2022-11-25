@@ -89,42 +89,42 @@ type ChannelParams struct {
 // CreateInvite creates an invite to a channel.
 // inviteArg: Parameters passed for creating an invite.
 // reason: Reason for creating the invite.
-func (c *Channel) CreateInvite(s *Session, inviteParams InviteParams, reason *string) (invite *Invite, err error) {
+func (c *Channel) CreateInvite(s *Session, inviteParams InviteParams, reason *string) (*Invite, error) {
 	return CreateChannelInvite(s, c.ID, inviteParams, reason)
 }
 
 // CreateWebhook creates a webhook for a channel.
 // webhookArg: Parameters passed for creating a webhook.
 // reason: Reason for creating the webhook
-func (c *Channel) CreateWebhook(s *Session, webhookArg WebhookParam, reason *string) (webhook *Webhook, err error) {
+func (c *Channel) CreateWebhook(s *Session, webhookArg WebhookParam, reason *string) (*Webhook, error) {
 	return CreateWebhook(s, c.ID, webhookArg, reason)
 }
 
 // Delete deletes a webhook channel.
 // reason: Reason for deleting the channel.
-func (c *Channel) Delete(s *Session, reason *string) (err error) {
+func (c *Channel) Delete(s *Session, reason *string) error {
 	return DeleteChannel(s, c.ID, reason)
 }
 
 // DeleteMessages bulk deletes messages in a channel.
 // messageIDs: List of message IDs to remove.
 // reason: Reason for bulk delete.
-func (c *Channel) DeleteMessages(s *Session, messageIDs []Snowflake, reason *string) (err error) {
+func (c *Channel) DeleteMessages(s *Session, messageIDs []Snowflake, reason *string) error {
 	return BulkDeleteMessages(s, c.ID, messageIDs, reason)
 }
 
 // Edit edits a channel.
 // channelArg: Parameters passed for editing a channel.
 // reason: Reason for editing the channel.
-func (c *Channel) Edit(s *Session, channelParams ChannelParams, reason *string) (err error) {
+func (c *Channel) Edit(s *Session, channelParams ChannelParams, reason *string) error {
 	newChannel, err := ModifyChannel(s, c.ID, channelParams, reason)
 	if err != nil {
-		return
+		return err
 	}
 
 	*c = *newChannel
 
-	return
+	return nil
 }
 
 // History returns channel messages.
@@ -132,17 +132,17 @@ func (c *Channel) Edit(s *Session, channelParams ChannelParams, reason *string) 
 // before: Get messages before this message ID.
 // after: Get messages after this message ID.
 // limit: Maximum number of messages to return.
-func (c *Channel) History(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) (messages []*Message, err error) {
+func (c *Channel) History(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]*Message, error) {
 	return GetChannelMessages(s, c.ID, around, before, after, limit)
 }
 
 // Invites returns all invites for this channel.
-func (c *Channel) Invites(s *Session) (invites []*Invite, err error) {
+func (c *Channel) Invites(s *Session) ([]*Invite, error) {
 	return GetChannelInvites(s, c.ID)
 }
 
 // Pins returns all pinned messages in this channel.
-func (c *Channel) Pins(s *Session) (pinnedMessages []*Message, err error) {
+func (c *Channel) Pins(s *Session) ([]*Message, error) {
 	return GetPinnedMessages(s, c.ID)
 }
 
@@ -151,10 +151,10 @@ func (c *Channel) Pins(s *Session) (pinnedMessages []*Message, err error) {
 // before: Get messages before this message ID.
 // after: Get messages after this message ID.
 // limit: Maximum number of messages to return.
-func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32, reason *string) (messages []*Message, err error) {
-	messages, err = c.History(s, around, before, after, limit)
+func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32, reason *string) ([]*Message, error) {
+	messages, err := c.History(s, around, before, after, limit)
 	if err != nil {
-		return
+		return messages, err
 	}
 
 	messageIDs := make([]Snowflake, 0, len(messages))
@@ -164,12 +164,12 @@ func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after 
 
 	err = BulkDeleteMessages(s, c.ID, messageIDs, reason)
 
-	return
+	return messages, nil
 }
 
 // Sends a message in a channel.
 // messageArg: Parameters used to send a message.
-func (c *Channel) Send(s *Session, messageParams MessageParams) (message *Message, err error) {
+func (c *Channel) Send(s *Session, messageParams MessageParams) (*Message, error) {
 	return CreateMessage(s, c.ID, messageParams)
 }
 
@@ -177,17 +177,17 @@ func (c *Channel) Send(s *Session, messageParams MessageParams) (message *Messag
 // overwriteID: The role or user ID to overwrite permissions for.
 // overwriteArg: Parameters used to to overwrite permissions.
 // reason: Reason for setting permission overwrite.
-func (c *Channel) SetPermissions(s *Session, overwriteID Snowflake, overwriteArg ChannelOverwrite, reason *string) (err error) {
+func (c *Channel) SetPermissions(s *Session, overwriteID Snowflake, overwriteArg ChannelOverwrite, reason *string) error {
 	return EditChannelPermissions(s, c.ID, overwriteID, overwriteArg, reason)
 }
 
 // TriggerTyping will show a typing indicator in the channel.
-func (c *Channel) TriggerTyping(s *Session) (err error) {
+func (c *Channel) TriggerTyping(s *Session) error {
 	return TriggerTypingIndicator(s, c.ID)
 }
 
 // Webhooks returns all webhooks for a channel.
-func (c *Channel) Webhooks(s *Session) (webhooks []*Webhook, err error) {
+func (c *Channel) Webhooks(s *Session) ([]*Webhook, error) {
 	return GetChannelWebhooks(s, c.ID)
 }
 
