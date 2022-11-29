@@ -108,7 +108,7 @@ func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallba
 // EditOriginalResponse edits the original interaction response.
 // messageArg: arguments for editing message.
 func (i *Interaction) EditOriginalResponse(s *Session, messageParams WebhookMessageParams) (*Message, error) {
-	return EditOriginalInteractionResponse(s, i.ApplicationID, s.Token, messageParams)
+	return EditOriginalInteractionResponse(s, i.ApplicationID, i.Token, messageParams)
 }
 
 // DeleteOriginalResponse deletes the original interaction response.
