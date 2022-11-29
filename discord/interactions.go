@@ -95,13 +95,10 @@ type Interaction struct {
 // interactionType: The type of interaction callback.
 // messageArg: arguments for sending message.
 // choices: optional autocomplete choices.
-func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, messageParams WebhookMessageParams, choices []*ApplicationCommandOptionChoice) error {
+func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, interactionCallbackData *InteractionCallbackData) error {
 	return CreateInteractionResponse(s, i.ID, i.Token, InteractionResponse{
 		Type: interactionType,
-		Data: &InteractionCallbackData{
-			WebhookMessageParams: messageParams,
-			Choices:              choices,
-		},
+		Data: interactionCallbackData,
 	})
 }
 
