@@ -173,7 +173,12 @@ type InteractionData struct {
 // Not all message fields are supported, allowed fields are: tts, content
 // embeds, allowed_mentions, flags, components and attachments.
 type InteractionCallbackData struct {
-	WebhookMessageParams
+	Content         string                    `json:"content,omitempty"`
+	TTS             bool                      `json:"tts,omitempty"`
+	Embeds          []*Embed                  `json:"embeds,omitempty"`
+	AllowedMentions []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
+	Files           []*File                   `json:"-"`
+	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
 
 	Title      string                            `json:"title,omitempty"`
 	CustomID   string                            `json:"custom_id,omitempty"`
