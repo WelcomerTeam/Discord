@@ -51,9 +51,17 @@ const (
 type InteractionComponentType uint8
 
 const (
+	// InteractionComponentTypeActionRow is a non-interactive container for other components.
+	// You can have up to 5 action rows per message and cannot contain other action rows.
+	// No extra attributes are required, just type and components.
 	InteractionComponentTypeActionRow InteractionComponentType = 1 + iota
+	// InteractionComponentTypeButton is an interactive component that renders in messages.
+	// They can be clicked by users and must be in an action row. There is a limit of 5 buttons
+	// per action row and cannot be in an action row with any select menu component.
 	InteractionComponentTypeButton
+	// InteractionComponentTypeStringSelect allows for users to select from predefined text options.
 	InteractionComponentTypeStringSelect
+	// InteractionComponentTypeTextInput allows for users to freely input text.
 	InteractionComponentTypeTextInput
 	InteractionComponentTypeUserInput
 	InteractionComponentTypeRoleSelect
@@ -70,6 +78,13 @@ const (
 	InteractionComponentStyleSuccess
 	InteractionComponentStyleDanger
 	InteractionComponentStyleLink
+)
+
+const (
+	// InteractionComponentStyleShort allows for a single-line input on text inputs.
+	InteractionComponentStyleShort InteractionComponentStyle = 1 + iota
+	// InteractionComponentParagraph allows for a multi-line input on text inputs.
+	InteractionComponentStyleParagraph
 )
 
 // Interaction represents the structure of an interaction.
