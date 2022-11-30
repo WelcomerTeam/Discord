@@ -179,6 +179,8 @@ type InteractionData struct {
 	ComponentType *InteractionComponentType  `json:"component_type,omitempty"`
 	Values        []*ApplicationSelectOption `json:"values,omitempty"`
 	Components    []*InteractionComponent    `json:"components,omitempty"`
+	Value         jsoniter.RawMessage        `json:"value,omitempty"`
+	Focused       bool                       `json:"focused,omitempty"`
 }
 
 // InteractionData represents the structure of the interaction callback data.
@@ -225,7 +227,7 @@ type InteractionComponent struct {
 	Emoji    *Emoji                    `json:"emoji,omitempty"`
 	CustomID string                    `json:"custom_id,omitempty"`
 	URL      string                    `json:"url,omitempty"`
-	Disabled bool                      `json:"disabled"`
+	Disabled bool                      `json:"disabled,omitempty"`
 
 	Options      []*ApplicationSelectOption `json:"options,omitempty"`
 	ChannelTypes []*ChannelType             `json:"channel_types,omitempty"`
