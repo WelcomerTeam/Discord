@@ -44,6 +44,7 @@ type User struct {
 	ID            Snowflake        `json:"id"`
 	Username      string           `json:"username"`
 	Discriminator string           `json:"discriminator"`
+	GlobalName    string           `json:"global_name"`
 	Avatar        string           `json:"avatar"`
 	Bot           bool             `json:"bot"`
 	System        bool             `json:"system,omitempty"`
