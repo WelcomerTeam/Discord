@@ -16,12 +16,12 @@ func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionT
 
 		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, nil)
 		if err != nil {
-			return fmt.Errorf("failed to create interaction response: %v", err)
+			return fmt.Errorf("failed to create interaction response: %w", err)
 		}
 	} else {
 		err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, interactionResponse, nil, nil)
 		if err != nil {
-			return fmt.Errorf("failed to create interaction response: %v", err)
+			return fmt.Errorf("failed to create interaction response: %w", err)
 		}
 	}
 
@@ -35,7 +35,7 @@ func GetoriginalInteractionResponse(s *Session, applicationID Snowflake, interac
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get original interaction response: %v", err)
+		return nil, fmt.Errorf("failed to get original interaction response: %w", err)
 	}
 
 	return message, nil
@@ -54,12 +54,12 @@ func EditOriginalInteractionResponse(s *Session, applicationID Snowflake, intera
 
 		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
-			return nil, fmt.Errorf("failed to edit original interaction response: %v", err)
+			return nil, fmt.Errorf("failed to edit original interaction response: %w", err)
 		}
 	} else {
 		err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParam, nil, &message)
 		if err != nil {
-			return nil, fmt.Errorf("failed to edit original interaction response: %v", err)
+			return nil, fmt.Errorf("failed to edit original interaction response: %w", err)
 		}
 	}
 
@@ -71,7 +71,7 @@ func DeleteOriginalInteractionResponse(s *Session, applicationID Snowflake, inte
 
 	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return fmt.Errorf("failed to create interaction response: %v", err)
+		return fmt.Errorf("failed to create interaction response: %w", err)
 	}
 
 	return nil
@@ -90,12 +90,12 @@ func CreateFollowupMessage(s *Session, applicationID Snowflake, interactionToken
 
 		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
 		if err != nil {
-			return nil, fmt.Errorf("failed to create followup message: %v", err)
+			return nil, fmt.Errorf("failed to create followup message: %w", err)
 		}
 	} else {
 		err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
 		if err != nil {
-			return nil, fmt.Errorf("failed to create followup message: %v", err)
+			return nil, fmt.Errorf("failed to create followup message: %w", err)
 		}
 	}
 
@@ -109,7 +109,7 @@ func GetFollowupMessage(s *Session, applicationID Snowflake, interactionToken st
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get followup message: %v", err)
+		return nil, fmt.Errorf("failed to get followup message: %w", err)
 	}
 
 	return message, nil
@@ -128,12 +128,12 @@ func EditFollowupMessage(s *Session, applicationID Snowflake, interactionToken s
 
 		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
-			return nil, fmt.Errorf("failed to edit followup message: %v", err)
+			return nil, fmt.Errorf("failed to edit followup message: %w", err)
 		}
 	} else {
 		err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
 		if err != nil {
-			return nil, fmt.Errorf("failed to edit followup message: %v", err)
+			return nil, fmt.Errorf("failed to edit followup message: %w", err)
 		}
 	}
 
@@ -145,7 +145,7 @@ func DeleteFollowupMessage(s *Session, applicationID Snowflake, interactionToken
 
 	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return fmt.Errorf("failed to delete followup message: %v", err)
+		return fmt.Errorf("failed to delete followup message: %w", err)
 	}
 
 	return nil

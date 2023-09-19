@@ -35,7 +35,7 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entries)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get guild audit log: %v", err)
+		return nil, fmt.Errorf("failed to get guild audit log: %w", err)
 	}
 
 	return entries, nil

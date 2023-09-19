@@ -80,7 +80,7 @@ func NewInterface(httpClient *http.Client, endpoint string, version string, user
 func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error) {
 	req, err := http.NewRequestWithContext(session.Context, method, endpoint, bytes.NewBuffer(body))
 	if err != nil {
-		return nil, fmt.Errorf("failed to create new request: %v", err)
+		return nil, fmt.Errorf("failed to create new request: %w", err)
 	}
 
 	req.URL.Host = bi.URLHost
@@ -106,14 +106,14 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 
 	resp, err := bi.HTTP.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to do request: %v", err)
+		return nil, fmt.Errorf("failed to do request: %w", err)
 	}
 
 	defer resp.Body.Close()
 
 	response, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read body: %v", err)
+		return nil, fmt.Errorf("failed to read body: %w", err)
 	}
 
 	if bi.Debug {
@@ -142,7 +142,7 @@ func (bi *BaseInterface) FetchBJ(session *Session, method, endpoint, contentType
 	if response != nil {
 		err = jsoniter.Unmarshal(resp, response)
 		if err != nil {
-			return fmt.Errorf("failed to unmarshal response: %v", err)
+			return fmt.Errorf("failed to unmarshal response: %w", err)
 		}
 	}
 
@@ -156,7 +156,7 @@ func (bi *BaseInterface) FetchJJ(session *Session, method, endpoint string, payl
 	if payload != nil {
 		body, err = jsoniter.Marshal(payload)
 		if err != nil {
-			return fmt.Errorf("failed to marshal payload: %v", err)
+			return fmt.Errorf("failed to marshal payload: %w", err)
 		}
 	} else {
 		body = make([]byte, 0)
@@ -196,7 +196,7 @@ func NewTwilightProxy(url url.URL) RESTInterface {
 func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error) {
 	req, err := http.NewRequestWithContext(session.Context, method, endpoint, bytes.NewBuffer(body))
 	if err != nil {
-		return nil, fmt.Errorf("failed to create new request: %v", err)
+		return nil, fmt.Errorf("failed to create new request: %w", err)
 	}
 
 	req.URL.Host = tl.URLHost
@@ -222,14 +222,14 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 
 	resp, err := tl.HTTP.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to do request: %v", err)
+		return nil, fmt.Errorf("failed to do request: %w", err)
 	}
 
 	defer resp.Body.Close()
 
 	response, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read body: %v", err)
+		return nil, fmt.Errorf("failed to read body: %w", err)
 	}
 
 	if tl.Debug {
@@ -258,7 +258,7 @@ func (tl *TwilightProxy) FetchBJ(session *Session, method, endpoint, contentType
 	if response != nil {
 		err = jsoniter.Unmarshal(resp, response)
 		if err != nil {
-			return fmt.Errorf("failed to unmarshal response: %v", err)
+			return fmt.Errorf("failed to unmarshal response: %w", err)
 		}
 	}
 
@@ -272,7 +272,7 @@ func (tl *TwilightProxy) FetchJJ(session *Session, method, endpoint string, payl
 	if payload != nil {
 		body, err = jsoniter.Marshal(payload)
 		if err != nil {
-			return fmt.Errorf("failed to marshal payload: %v", err)
+			return fmt.Errorf("failed to marshal payload: %w", err)
 		}
 	} else {
 		body = make([]byte, 0)

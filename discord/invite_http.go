@@ -32,7 +32,7 @@ func GetInvite(s *Session, inviteCode string, withCounts *bool, withExpiration *
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &invite)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get invite: %v", err)
+		return nil, fmt.Errorf("failed to get invite: %w", err)
 	}
 
 	return invite, nil
@@ -49,7 +49,7 @@ func DeleteInvite(s *Session, inviteCode string, reason *string) error {
 
 	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
-		return fmt.Errorf("failed to delete invite: %v", err)
+		return fmt.Errorf("failed to delete invite: %w", err)
 	}
 
 	return nil

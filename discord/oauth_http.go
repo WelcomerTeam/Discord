@@ -12,7 +12,7 @@ func GetCurrentBotApplicationInformation(s *Session) (*Application, error) {
 
 	err := s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &application)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get current bot application information: %v", err)
+		return nil, fmt.Errorf("failed to get current bot application information: %w", err)
 	}
 
 	return application, nil
@@ -25,7 +25,7 @@ func GetCurrentAuthorizationInformation(s *Session) (*AuthorizationInformation, 
 
 	err := s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get current authorization information: %v", err)
+		return nil, fmt.Errorf("failed to get current authorization information: %w", err)
 	}
 
 	return authorizationInformation, nil

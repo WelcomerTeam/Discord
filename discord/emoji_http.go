@@ -12,7 +12,7 @@ func ListGuildEmojis(s *Session, guildID Snowflake) ([]*Emoji, error) {
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emojis)
 	if err != nil {
-		return nil, fmt.Errorf("failed to list guild emojis: %v", err)
+		return nil, fmt.Errorf("failed to list guild emojis: %w", err)
 	}
 
 	return emojis, nil
@@ -25,7 +25,7 @@ func GetGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake) (*Emoji, er
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emoji)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get get guild emoji: %v", err)
+		return nil, fmt.Errorf("failed to get get guild emoji: %w", err)
 	}
 
 	return emoji, nil
@@ -44,7 +44,7 @@ func CreateGuildEmoji(s *Session, guildID Snowflake, emojiParams EmojiParams, re
 
 	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, emojiParams, headers, &emoji)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create guild emoji: %v", err)
+		return nil, fmt.Errorf("failed to create guild emoji: %w", err)
 	}
 
 	return emoji, nil
@@ -63,7 +63,7 @@ func ModifyGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, emojiPar
 
 	err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, emojiParams, headers, &emoji)
 	if err != nil {
-		return nil, fmt.Errorf("failed to modify guild emoji: %v", err)
+		return nil, fmt.Errorf("failed to modify guild emoji: %w", err)
 	}
 
 	return emoji, nil
@@ -80,7 +80,7 @@ func DeleteGuildEmoji(s *Session, guildID Snowflake, emojiID Snowflake, reason *
 
 	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
-		return fmt.Errorf("failed to delete guild emoji: %v", err)
+		return fmt.Errorf("failed to delete guild emoji: %w", err)
 	}
 
 	return nil

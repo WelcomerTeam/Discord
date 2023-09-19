@@ -12,7 +12,7 @@ func GetCurrentUser(s *Session) (*User, error) {
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get current user: %v", err)
+		return nil, fmt.Errorf("failed to get current user: %w", err)
 	}
 
 	return user, nil
@@ -25,7 +25,7 @@ func GetUser(s *Session, userID Snowflake) (*User, error) {
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get user: %v", err)
+		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
 	return user, nil
@@ -38,7 +38,7 @@ func ModifyCurrentUser(s *Session, userParam UserParam) (*User, error) {
 
 	err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, userParam, nil, &user)
 	if err != nil {
-		return nil, fmt.Errorf("failed to modify current user: %v", err)
+		return nil, fmt.Errorf("failed to modify current user: %w", err)
 	}
 
 	return user, nil
@@ -51,7 +51,7 @@ func GetCurrentUserGuilds(s *Session) ([]*Guild, error) {
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guilds)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get current user guilds: %v", err)
+		return nil, fmt.Errorf("failed to get current user guilds: %w", err)
 	}
 
 	return guilds, nil
@@ -64,7 +64,7 @@ func GetCurrentUserGuildMember(s *Session, guildID Snowflake) (*GuildMember, err
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guildMember)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get current user guild member: %v", err)
+		return nil, fmt.Errorf("failed to get current user guild member: %w", err)
 	}
 
 	return guildMember, nil
@@ -75,7 +75,7 @@ func LeaveGuild(s *Session, guildID Snowflake) error {
 
 	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
-		return fmt.Errorf("failed to leave guild: %v", err)
+		return fmt.Errorf("failed to leave guild: %w", err)
 	}
 
 	return nil
@@ -92,7 +92,7 @@ func CreateDM(s *Session, recipientID Snowflake) (*Channel, error) {
 
 	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, createDMStruct, nil, &channel)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create dm: %v", err)
+		return nil, fmt.Errorf("failed to create dm: %w", err)
 	}
 
 	return channel, nil

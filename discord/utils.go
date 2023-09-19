@@ -25,7 +25,7 @@ func bytesToBase64Data(b []byte) (string, error) {
 
 	_, err = w.Write(b)
 	if err != nil {
-		return "", fmt.Errorf("failed to base64 bytes: %v", err)
+		return "", fmt.Errorf("failed to base64 bytes: %w", err)
 	}
 
 	defer w.Close()
@@ -57,7 +57,7 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	payload, err := jsoniter.Marshal(data)
 	if err != nil {
-		return "", nil, fmt.Errorf("failed to marshal payload: %v", err)
+		return "", nil, fmt.Errorf("failed to marshal payload: %w", err)
 	}
 
 	var part io.Writer
@@ -68,12 +68,12 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 	part, err = writer.CreatePart(header)
 	if err != nil {
-		return "", nil, fmt.Errorf("failed to create part: %v", err)
+		return "", nil, fmt.Errorf("failed to create part: %w", err)
 	}
 
 	_, err = part.Write(payload)
 	if err != nil {
-		return "", nil, fmt.Errorf("failed to write payload: %v", err)
+		return "", nil, fmt.Errorf("failed to write payload: %w", err)
 	}
 
 	for i, file := range files {
@@ -95,12 +95,12 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 
 		part, err = writer.CreatePart(header)
 		if err != nil {
-			return "", nil, fmt.Errorf("failed to create part: %v", err)
+			return "", nil, fmt.Errorf("failed to create part: %w", err)
 		}
 
 		_, err = io.Copy(part, file.Reader)
 		if err != nil {
-			return "", nil, fmt.Errorf("failed to copy file: %v", err)
+			return "", nil, fmt.Errorf("failed to copy file: %w", err)
 		}
 	}
 

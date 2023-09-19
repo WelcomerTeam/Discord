@@ -353,7 +353,7 @@ type GuildMember struct {
 
 // GuildMemberParams represents the arguments used to modify a guild member.
 type GuildMemberParams struct {
-	Nick                       *string     `json:"nick,omitempty,omitempty"`
+	Nick                       *string     `json:"nick,omitempty"`
 	Roles                      []Snowflake `json:"roles,omitempty"`
 	Deaf                       *bool       `json:"deaf,omitempty"`
 	Mute                       *bool       `json:"mute,omitempty"`

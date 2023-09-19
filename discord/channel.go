@@ -164,7 +164,7 @@ func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after 
 
 	err = BulkDeleteMessages(s, c.ID, messageIDs, reason)
 
-	return messages, nil
+	return messages, err
 }
 
 // Sends a message in a channel.
