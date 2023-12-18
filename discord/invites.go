@@ -1,5 +1,7 @@
 package discord
 
+import "time"
+
 // invites.go contains all structures for invites.
 
 // InviteTargetType represents the type of an invites target.
@@ -42,15 +44,15 @@ type Invite struct {
 	TargetApplication        *Application         `json:"target_application"`
 	ApproximatePresenceCount int32                `json:"approximate_presence_count,omitempty"`
 	ApproximateMemberCount   int32                `json:"approximate_member_count,omitempty"`
-	ExpiresAt                string               `json:"expires_at,omitempty"`
+	ExpiresAt                time.Time            `json:"expires_at,omitempty"`
 	StageInstance            *InviteStageInstance `json:"stage_instance,omitempty"`
 	ScheduledEvent           *ScheduledEvent      `json:"guild_scheduled_event,omitempty"`
 
-	Uses      int32  `json:"uses"`
-	MaxUses   int32  `json:"max_uses"`
-	MaxAge    int32  `json:"max_age"`
-	Temporary bool   `json:"temporary"`
-	CreatedAt string `json:"created_at"`
+	Uses      int32     `json:"uses"`
+	MaxUses   int32     `json:"max_uses"`
+	MaxAge    int32     `json:"max_age"`
+	Temporary bool      `json:"temporary"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // Delete deletes an invite.

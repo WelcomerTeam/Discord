@@ -107,10 +107,10 @@ type Guild struct {
 	SystemChannelFlags *SystemChannelFlags `json:"system_channel_flags,omitempty"`
 	RulesChannelID     *Snowflake          `json:"rules_channel_id,omitempty"`
 
-	JoinedAt    string `json:"joined_at"`
-	Large       bool   `json:"large"`
-	Unavailable bool   `json:"unavailable"`
-	MemberCount int32  `json:"member_count"`
+	JoinedAt    time.Time `json:"joined_at"`
+	Large       bool      `json:"large"`
+	Unavailable bool      `json:"unavailable"`
+	MemberCount int32     `json:"member_count"`
 
 	VoiceStates []*VoiceState  `json:"voice_states,omitempty"`
 	Members     []*GuildMember `json:"members,omitempty"`
@@ -342,7 +342,7 @@ type GuildMember struct {
 	Nick                       string      `json:"nick,omitempty"`
 	Avatar                     string      `json:"avatar,omitempty"`
 	Roles                      []Snowflake `json:"roles"`
-	JoinedAt                   string      `json:"joined_at"`
+	JoinedAt                   time.Time   `json:"joined_at"`
 	PremiumSince               string      `json:"premium_since,omitempty"`
 	Deaf                       bool        `json:"deaf"`
 	Mute                       bool        `json:"mute"`

@@ -1,6 +1,8 @@
 package discord
 
 import (
+	"time"
+
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -188,7 +190,7 @@ type Integration struct {
 	ExpireGracePeriod int32                      `json:"expire_grace_period,omitempty"`
 	User              *User                      `json:"user,omitempty"`
 	Account           IntegrationAccount         `json:"account"`
-	SyncedAt          string                     `json:"synced_at,omitempty"`
+	SyncedAt          time.Time                  `json:"synced_at,omitempty"`
 	SubscriberCount   int32                      `json:"subscriber_count,omitempty"`
 	Revoked           bool                       `json:"revoked"`
 	Application       *Application               `json:"application,omitempty"`
