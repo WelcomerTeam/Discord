@@ -26,11 +26,11 @@ var (
 	EndpointUser = func(userID string) string {
 		return EndpointUsers + userID
 	}
-	EndpointUserAvatar = func(userID string, avataroleID string) string {
-		return EndpointCDNAvatars + userID + "/" + avataroleID + ".png"
+	EndpointUserAvatar = func(userID string, avatarID string) string {
+		return EndpointCDNAvatars + userID + "/" + avatarID + ".png"
 	}
-	EndpointUserAvatarAnimated = func(userID string, avataroleID string) string {
-		return EndpointCDNAvatars + userID + "/" + avataroleID + ".gif"
+	EndpointUserAvatarAnimated = func(userID string, avatarID string) string {
+		return EndpointCDNAvatars + userID + "/" + avatarID + ".gif"
 	}
 	EndpointDefaultUserAvatar = func(index string) string {
 		return "/embed/avatars/" + index + ".png"
@@ -240,16 +240,6 @@ var (
 	}
 	EndpointFollowupMessageActions = func(applicationID string, interactionToken string, messageID string) string {
 		return EndpointWebhookMessage(applicationID, interactionToken, messageID)
-	}
-
-	EndpointRelationships = func() string {
-		return EndpointUsers + "@me" + "/relationships"
-	}
-	EndpointRelationship = func(roleID string) string {
-		return EndpointRelationships() + "/" + roleID
-	}
-	EndpointRelationshipsMutual = func(roleID string) string {
-		return EndpointUsers + roleID + "/relationships"
 	}
 
 	EndpointGuildCreate = "/guilds"
