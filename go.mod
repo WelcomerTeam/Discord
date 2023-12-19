@@ -4,14 +4,10 @@ go 1.18
 
 require (
 	github.com/json-iterator/go v1.1.12
-	github.com/rs/zerolog v1.28.0
-	github.com/savsgio/gotils v0.0.0-20220530130905-52f3993e8d6d
+	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee
 )
 
 require (
-	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	golang.org/x/sys v0.2.0 // indirect
 )

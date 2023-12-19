@@ -4,14 +4,13 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
 	jsoniter "github.com/json-iterator/go"
-	"github.com/rs/zerolog"
 )
 
 const (
@@ -35,15 +34,13 @@ type Session struct {
 	Token   string
 
 	Interface RESTInterface
-	Logger    zerolog.Logger
 }
 
-func NewSession(context context.Context, token string, httpInterface RESTInterface, logger zerolog.Logger) *Session {
+func NewSession(context context.Context, token string, httpInterface RESTInterface) *Session {
 	return &Session{
 		Context:   context,
 		Token:     token,
 		Interface: httpInterface,
-		Logger:    logger,
 	}
 }
 
@@ -111,7 +108,7 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 
 	defer resp.Body.Close()
 
-	response, err := ioutil.ReadAll(resp.Body)
+	response, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read body: %w", err)
 	}
@@ -227,7 +224,7 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 
 	defer resp.Body.Close()
 
-	response, err := ioutil.ReadAll(resp.Body)
+	response, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read body: %w", err)
 	}

@@ -1,9 +1,5 @@
 package discord
 
-import (
-	"strconv"
-)
-
 // Endpoints.
 var (
 	EndpointDiscord = "https://discord.com"
