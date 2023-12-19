@@ -32,9 +32,8 @@ var (
 	EndpointUserAvatarAnimated = func(userID string, avataroleID string) string {
 		return EndpointCDNAvatars + userID + "/" + avataroleID + ".gif"
 	}
-	EndpointDefaultUserAvatar = func(discriminator string) string {
-		discriminatorInt, _ := strconv.Atoi(discriminator)
-		return "/embed/avatars/" + strconv.Itoa(discriminatorInt%5) + ".png"
+	EndpointDefaultUserAvatar = func(index string) string {
+		return "/embed/avatars/" + index + ".png"
 	}
 	EndpointUserGuilds = func(userID string) string {
 		return EndpointUsers + userID + "/guilds"
