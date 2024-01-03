@@ -7,7 +7,7 @@ import (
 // webhook.go represents all structures to create a webhook and interact with it.
 
 // WebhookType is the type of webhook.
-type WebhookType uint8
+type WebhookType int8
 
 // Webhook type.
 const (

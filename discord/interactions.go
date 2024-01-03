@@ -7,7 +7,7 @@ import (
 // interactions.go represents the interaction objects.
 
 // InteractionType represents the type of interaction.
-type InteractionType uint8
+type InteractionType int8
 
 const (
 	InteractionTypePing InteractionType = 1 + iota
@@ -18,7 +18,7 @@ const (
 )
 
 // InteractionCallbackType represents the type of interaction callbacks.
-type InteractionCallbackType uint8
+type InteractionCallbackType int8
 
 const (
 	InteractionCallbackTypePong InteractionCallbackType = 1 + iota
@@ -48,7 +48,7 @@ const (
 )
 
 // InteractionComponentType represents the type of component.
-type InteractionComponentType uint8
+type InteractionComponentType int8
 
 const (
 	// InteractionComponentTypeActionRow is a non-interactive container for other components.
@@ -70,7 +70,7 @@ const (
 )
 
 // InteractionComponentStyle represents the style of a component.
-type InteractionComponentStyle uint8
+type InteractionComponentStyle int8
 
 const (
 	InteractionComponentStylePrimary InteractionComponentStyle = 1 + iota

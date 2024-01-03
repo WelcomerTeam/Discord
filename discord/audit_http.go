@@ -16,7 +16,7 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 	}
 
 	if actionType != nil {
-		values.Set("action_type", string(*actionType))
+		values.Set("action_type", fmt.Sprint(*actionType))
 	}
 
 	if before != nil {
@@ -24,7 +24,7 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 	}
 
 	if limit != nil {
-		values.Set("limit", string(*limit))
+		values.Set("limit", fmt.Sprint(*limit))
 	}
 
 	if len(values) > 0 {

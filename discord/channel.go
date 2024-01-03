@@ -7,7 +7,7 @@ import (
 // channel.go contains the information relating to channels
 
 // ChannelType represents a channel's type.
-type ChannelType uint8
+type ChannelType int8
 
 const (
 	ChannelTypeGuildText ChannelType = iota
@@ -27,7 +27,7 @@ const (
 )
 
 // VideoQualityMode represents the quality of the video.
-type VideoQualityMode uint8
+type VideoQualityMode int8
 
 const (
 	VideoQualityModeAuto VideoQualityMode = 1 + iota
@@ -35,7 +35,7 @@ const (
 )
 
 // StageChannelPrivacyLevel represents the privacy level of a stage channel.
-type StageChannelPrivacyLevel uint8
+type StageChannelPrivacyLevel int8
 
 const (
 	StageChannelPrivacyLevelPublic StageChannelPrivacyLevel = 1 + iota
@@ -200,7 +200,7 @@ type ChannelOverwrite struct {
 }
 
 // ChannelOverrideType represents the target of a channel override.
-type ChannelOverrideType uint8
+type ChannelOverrideType int8
 
 const (
 	ChannelOverrideTypeRole ChannelOverrideType = iota
