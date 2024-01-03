@@ -150,7 +150,7 @@ type ApplicationCommandOption struct {
 	Required     bool                              `json:"required,omitempty"`
 	Choices      []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 	Options      []*ApplicationCommandOption       `json:"options,omitempty"`
-	ChannelTypes []*ChannelType                    `json:"channel_types,omitempty"`
+	ChannelTypes []ChannelType                    `json:"channel_types,omitempty"`
 
 	MinValue  int32 `json:"min_value,omitempty"`
 	MaxValue  int32 `json:"max_value,omitempty"`

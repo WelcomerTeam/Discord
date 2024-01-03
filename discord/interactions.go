@@ -230,7 +230,7 @@ type InteractionComponent struct {
 	Disabled bool                      `json:"disabled,omitempty"`
 
 	Options      []*ApplicationSelectOption `json:"options,omitempty"`
-	ChannelTypes []*ChannelType             `json:"channel_types,omitempty"`
+	ChannelTypes []ChannelType             `json:"channel_types,omitempty"`
 	Placeholder  string                     `json:"placeholder,omitempty"`
 	MinValues    *int32                     `json:"min_values,omitempty"`
 	MaxValues    *int32                     `json:"max_values,omitempty"`
