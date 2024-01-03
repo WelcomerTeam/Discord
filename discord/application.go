@@ -152,12 +152,12 @@ type ApplicationCommandOption struct {
 	Options      []*ApplicationCommandOption       `json:"options,omitempty"`
 	ChannelTypes []ChannelType                    `json:"channel_types,omitempty"`
 
-	MinValue  int32 `json:"min_value,omitempty"`
-	MaxValue  int32 `json:"max_value,omitempty"`
-	MinLength int32 `json:"min_length,omitempty"`
-	MaxLength int32 `json:"max_length,omitempty"`
+	MinValue  *int32 `json:"min_value,omitempty"`
+	MaxValue  *int32 `json:"max_value,omitempty"`
+	MinLength *int32 `json:"min_length,omitempty"`
+	MaxLength *int32 `json:"max_length,omitempty"`
 
-	Autocomplete bool `json:"autocomplete,omitempty"`
+	Autocomplete *bool `json:"autocomplete,omitempty"`
 }
 
 // ApplicationCommandOptionChoice represents the different choices.
