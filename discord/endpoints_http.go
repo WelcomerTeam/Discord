@@ -260,6 +260,14 @@ var (
 		return EndpointApplications + "/" + applicationID
 	}
 
+	EndpointEntitlements = func(applicationID string) string {
+		return EndpointApplication(applicationID) + "/entitlements"
+	}
+
+	EndpointEntitlement = func(applicationID, entitlementID string) string {
+		return EndpointEntitlements(applicationID) + "/" + entitlementID
+	}
+
 	EndpointOAuth2             = "/oauth2"
 	EndpointOAuth2Me           = EndpointOAuth2 + "/@me"
 	EndpointOAuth2Applications = EndpointOAuth2 + "/applications"

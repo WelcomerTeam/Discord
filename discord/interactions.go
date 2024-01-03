@@ -45,6 +45,11 @@ const (
 
 	// InteractionCallbackTypeModal responds to an interaction with a popup modal.
 	InteractionCallbackTypeModal
+
+	// InteractionCallbackTypePremiumRequired creates an  ephemeral message shown to the
+	// user that ran the interaction, instructing them that whatever they tried to do requires
+	// the premium benefits of your app. It also contains an "Upgrade" button to subscribe.
+	InteractionCallbackTypePremiumRequired
 )
 
 // InteractionComponentType represents the type of component.
@@ -94,16 +99,17 @@ type Interaction struct {
 	Type          InteractionType  `json:"type"`
 	Data          *InteractionData `json:"data,omitempty"`
 
-	GuildID        *Snowflake   `json:"guild_id,omitempty"`
-	ChannelID      *Snowflake   `json:"channel_id,omitempty"`
-	Member         *GuildMember `json:"member,omitempty"`
-	User           *User        `json:"user,omitempty"`
-	Token          string       `json:"token"`
-	Version        int32        `json:"version"`
-	Message        *Message     `json:"message,omitempty"`
-	AppPermissions *Int64       `json:"app_permissions"`
-	Locale         string       `json:"locale,omitempty"`
-	GuildLocale    string       `json:"guild_locale,omitempty"`
+	GuildID        *Snowflake     `json:"guild_id,omitempty"`
+	ChannelID      *Snowflake     `json:"channel_id,omitempty"`
+	Member         *GuildMember   `json:"member,omitempty"`
+	User           *User          `json:"user,omitempty"`
+	Token          string         `json:"token"`
+	Version        int32          `json:"version"`
+	Message        *Message       `json:"message,omitempty"`
+	AppPermissions *Int64         `json:"app_permissions"`
+	Locale         string         `json:"locale,omitempty"`
+	GuildLocale    string         `json:"guild_locale,omitempty"`
+	Entitlements   []*Entitlement `json:"entitlements,omitempty"`
 }
 
 // SendResponse sends an interacion response.
@@ -230,7 +236,7 @@ type InteractionComponent struct {
 	Disabled bool                      `json:"disabled,omitempty"`
 
 	Options      []*ApplicationSelectOption `json:"options,omitempty"`
-	ChannelTypes []ChannelType             `json:"channel_types,omitempty"`
+	ChannelTypes []ChannelType              `json:"channel_types,omitempty"`
 	Placeholder  string                     `json:"placeholder,omitempty"`
 	MinValues    *int32                     `json:"min_values,omitempty"`
 	MaxValues    *int32                     `json:"max_values,omitempty"`

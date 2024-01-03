@@ -28,7 +28,7 @@ func CreateInteractionResponse(s *Session, interactionID Snowflake, interactionT
 	return nil
 }
 
-func GetoriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string) (*Message, error) {
+func GetOriginalInteractionResponse(s *Session, applicationID Snowflake, interactionToken string) (*Message, error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
 	var message *Message

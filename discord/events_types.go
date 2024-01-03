@@ -56,6 +56,10 @@ const (
 	DiscordEventWebhookUpdate              = "WEBHOOKS_UPDATE"
 	DiscordEventGuildJoinRequestDelete     = "GUILD_JOIN_REQUEST_DELETE"
 
+	DiscordEventEntitlementCreate = "ENTITLEMENT_CREATE"
+	DiscordEventEntitlementUpdate = "ENTITLEMENT_UPDATE"
+	DiscordEventEntitlementDelete = "ENTITLEMENT_DELETE"
+
 	DiscordEventGuildJoin        = "GUILD_JOIN"
 	DiscordEventGuildAvailable   = "GUILD_AVAILABLE"
 	DiscordEventGuildLeave       = "GUILD_LEAVE"
