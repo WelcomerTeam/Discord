@@ -47,7 +47,7 @@ const (
 	MessageFlagSourceMessageDeleted
 	MessageFlagUrgent
 	MessageFlagHasThread
-	MessageFlaEphemeral
+	MessageFlagEphemeral
 	MessageFlagLoading
 	MessageFlagFailedToMentionSomeRolesInThread
 )

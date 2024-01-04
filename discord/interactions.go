@@ -46,7 +46,7 @@ const (
 	// InteractionCallbackTypeModal responds to an interaction with a popup modal.
 	InteractionCallbackTypeModal
 
-	// InteractionCallbackTypePremiumRequired creates an  ephemeral message shown to the
+	// InteractionCallbackTypePremiumRequired creates an ephemeral message shown to the
 	// user that ran the interaction, instructing them that whatever they tried to do requires
 	// the premium benefits of your app. It also contains an "Upgrade" button to subscribe.
 	InteractionCallbackTypePremiumRequired
@@ -197,8 +197,12 @@ type InteractionCallbackData struct {
 	TTS             bool                      `json:"tts,omitempty"`
 	Embeds          []*Embed                  `json:"embeds,omitempty"`
 	AllowedMentions []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
-	Files           []*File                   `json:"-"`
 	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
+
+	Files []*File `json:"-"`
+
+	// Only supports MessageFlagSuppressEmbeds and MessageFlagSuppressEmbeds as a bitfield.
+	Flags uint32 `json:"flags,omitempty"`
 
 	Title      string                            `json:"title,omitempty"`
 	CustomID   string                            `json:"custom_id,omitempty"`
