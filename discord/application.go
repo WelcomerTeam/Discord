@@ -119,8 +119,8 @@ type ApplicationCommand struct {
 
 	Options                 []*ApplicationCommandOption `json:"options,omitempty"`
 	DefaultMemberPermission *Int64                      `json:"default_member_permissions"`
-	DMPermission            bool                        `json:"dm_permission,omitempty"`
-	DefaultPermission       bool                        `json:"default_permission,omitempty"`
+	DMPermission            *bool                       `json:"dm_permission,omitempty"`
+	DefaultPermission       *bool                       `json:"default_permission,omitempty"`
 	Version                 *Int64                      `json:"version,omitempty"`
 }
 
@@ -150,7 +150,7 @@ type ApplicationCommandOption struct {
 	Required     bool                              `json:"required,omitempty"`
 	Choices      []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
 	Options      []*ApplicationCommandOption       `json:"options,omitempty"`
-	ChannelTypes []ChannelType                    `json:"channel_types,omitempty"`
+	ChannelTypes []ChannelType                     `json:"channel_types,omitempty"`
 
 	MinValue  *int32 `json:"min_value,omitempty"`
 	MaxValue  *int32 `json:"max_value,omitempty"`
