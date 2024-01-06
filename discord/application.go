@@ -118,10 +118,10 @@ type ApplicationCommand struct {
 	DescriptionLocalizations map[string]string       `json:"description_localizations,omitempty"`
 
 	Options                 []*ApplicationCommandOption `json:"options,omitempty"`
-	DefaultMemberPermission *Int64                      `json:"default_member_permissions"`
+	DefaultMemberPermission Int64                       `json:"default_member_permissions"`
 	DMPermission            *bool                       `json:"dm_permission,omitempty"`
 	DefaultPermission       *bool                       `json:"default_permission,omitempty"`
-	Version                 *Int64                      `json:"version,omitempty"`
+	Version                 Int64                      `json:"version,omitempty"`
 }
 
 // GuildApplicationCommandPermissions represent a guilds application permissions.
