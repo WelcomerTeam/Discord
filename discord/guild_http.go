@@ -140,7 +140,7 @@ func GetGuildMember(s *Session, guildID Snowflake, userID Snowflake) (*GuildMemb
 func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowflake) ([]*GuildMember, error) {
 	endpoint := EndpointGuildMembers(guildID.String())
 
-	var values url.Values
+	values := url.Values{}
 
 	if limit != nil {
 		values.Set("limit", string(*limit))
@@ -167,7 +167,7 @@ func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowfl
 func SearchGuildMembers(s *Session, guildID Snowflake, query string, limit *int32) ([]*GuildMember, error) {
 	endpoint := EndpointGuildMembersSearch(guildID.String())
 
-	var values url.Values
+	values := url.Values{}
 
 	values.Set("query", query)
 
@@ -436,7 +436,7 @@ func GetGuildPruneCount(s *Session, guildID Snowflake, days *int32, includedRole
 		}
 	}
 
-	var values url.Values
+	values := url.Values{}
 
 	if days != nil {
 		values.Set("days", string(*days))

@@ -61,7 +61,7 @@ func DeleteChannel(s *Session, channelID Snowflake, reason *string) error {
 func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]*Message, error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
-	var values url.Values
+	values := url.Values{}
 
 	if around != nil {
 		values.Add("around", around.String())

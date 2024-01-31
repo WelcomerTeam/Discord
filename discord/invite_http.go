@@ -10,7 +10,7 @@ import (
 func GetInvite(s *Session, inviteCode string, withCounts *bool, withExpiration *bool, guildScheduledEventID *Snowflake) (*Invite, error) {
 	endpoint := EndpointInvite(inviteCode)
 
-	var values url.Values
+	values := url.Values{}
 
 	if withCounts != nil {
 		values.Set("with_counts", strconv.FormatBool(*withCounts))

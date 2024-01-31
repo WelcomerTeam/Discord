@@ -140,7 +140,7 @@ func DeleteWebhookWithToken(s *Session, webhookID Snowflake, webhookToken string
 func ExecuteWebhook(s *Session, webhookID Snowflake, webhookToken string, messageParams WebhookMessageParams, wait bool) (*WebhookMessage, error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
-	var values url.Values
+	values := url.Values{}
 
 	if wait {
 		values.Set("wait", "true")
