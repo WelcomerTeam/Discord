@@ -255,6 +255,10 @@ func DeleteMessage(s *Session, channelID Snowflake, messageID Snowflake, reason 
 	return nil
 }
 
+type bulkDeleteMessagesBody struct {
+	Messages []Snowflake `json:"messages"`
+}
+
 func BulkDeleteMessages(s *Session, channelID Snowflake, messageIDs []Snowflake, reason *string) error {
 	endpoint := EndpointChannelMessagesBulkDelete(channelID.String())
 
@@ -264,7 +268,7 @@ func BulkDeleteMessages(s *Session, channelID Snowflake, messageIDs []Snowflake,
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, bulkDeleteMessagesBody{messageIDs}, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to bulk delete messages: %w", err)
 	}
