@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 func CreateGuild(s *Session, guildArg Guild) (*Guild, error) {
@@ -143,7 +144,7 @@ func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowfl
 	values := url.Values{}
 
 	if limit != nil {
-		values.Set("limit", string(*limit))
+		values.Set("limit", strconv.Itoa(int(*limit)))
 	}
 
 	if after != nil {
@@ -172,7 +173,7 @@ func SearchGuildMembers(s *Session, guildID Snowflake, query string, limit *int3
 	values.Set("query", query)
 
 	if limit != nil {
-		values.Set("limit", string(*limit))
+		values.Set("limit", strconv.Itoa(int(*limit)))
 	}
 
 	endpoint += "?" + values.Encode()
@@ -439,7 +440,7 @@ func GetGuildPruneCount(s *Session, guildID Snowflake, days *int32, includedRole
 	values := url.Values{}
 
 	if days != nil {
-		values.Set("days", string(*days))
+		values.Set("days", strconv.Itoa(int(*days)))
 	}
 
 	if len(rolesString) > 0 {

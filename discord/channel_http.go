@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -76,7 +77,7 @@ func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, befo
 	}
 
 	if limit != nil {
-		values.Add("limit", string(*limit))
+		values.Add("limit", strconv.Itoa(int(*limit)))
 	}
 
 	if len(values) > 0 {
