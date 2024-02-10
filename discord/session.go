@@ -93,12 +93,12 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 		}
 	}
 
-	if body != nil && len(req.Header.Get("content-type")) == 0 {
-		req.Header.Set("content-type", contentType)
+	if body != nil && len(req.Header.Get("Content-Type")) == 0 {
+		req.Header.Set("Content-Type", contentType)
 	}
 
 	if session.Token != "" {
-		req.Header.Set("authorization", session.Token)
+		req.Header.Set("Authorization", session.Token)
 	}
 
 	req.Header.Set("Accept", "application/json")
@@ -211,13 +211,15 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 		}
 	}
 
-	if body != nil && len(req.Header.Get("content-type")) == 0 {
-		req.Header.Set("content-type", contentType)
+	if body != nil && len(req.Header.Get("Content-Type")) == 0 {
+		req.Header.Set("Content-Type", contentType)
 	}
 
 	if session.Token != "" {
-		req.Header.Set("authorization", session.Token)
+		req.Header.Set("Authorization", session.Token)
 	}
+
+	req.Header.Set("Accept", "application/json")
 
 	resp, err := tl.HTTP.Do(req)
 	if err != nil {
