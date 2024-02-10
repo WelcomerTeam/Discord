@@ -83,8 +83,13 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 	req.URL.Host = bi.URLHost
 	req.URL.Scheme = bi.URLScheme
 
+	if strings.Contains(endpoint, "?") {
+		req.URL.RawQuery = strings.SplitN(endpoint, "?", 2)[1]
+		endpoint = strings.SplitN(endpoint, "?", 2)[0]
+	}
+
 	if bi.APIVersion != "" && !strings.HasPrefix(req.URL.Path, "/api") {
-		req.URL.RawPath = "/api/" + bi.APIVersion + endpoint
+		req.URL.Path = "/api/" + bi.APIVersion + endpoint
 	}
 
 	for name, values := range headers {
@@ -201,8 +206,13 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 	req.URL.Host = tl.URLHost
 	req.URL.Scheme = tl.URLScheme
 
+	if strings.Contains(endpoint, "?") {
+		req.URL.RawQuery = strings.SplitN(endpoint, "?", 2)[1]
+		endpoint = strings.SplitN(endpoint, "?", 2)[0]
+	}
+
 	if tl.APIVersion != "" && !strings.HasPrefix(req.URL.Path, "/api") {
-		req.URL.RawPath = "/api/" + tl.APIVersion + endpoint
+		req.URL.Path = "/api/" + tl.APIVersion + endpoint
 	}
 
 	for name, values := range headers {
