@@ -101,6 +101,8 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 		req.Header.Set("authorization", session.Token)
 	}
 
+	req.Header.Set("Accept", "application/json")
+
 	resp, err := bi.HTTP.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to do request: %w", err)
