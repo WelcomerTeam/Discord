@@ -24,17 +24,17 @@ type EntitlementParams struct {
 }
 
 // EntitlementType represents the type of an entitlement.
-type EntitlementType int8
+type EntitlementType uint8
 
 const (
 	EntitlementTypeApplicationSubscription EntitlementType = 8
 )
 
 // GiftCodeFlags is undocumented, but present in the API.
-type GiftCodeFlags int8
+type GiftCodeFlags uint8
 
 // OwnerType represents who owns the entitlement.
-type OwnerType int8
+type OwnerType uint8
 
 const (
 	OwnerTypeGuild OwnerType = 1

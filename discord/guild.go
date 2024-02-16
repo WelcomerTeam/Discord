@@ -26,7 +26,7 @@ const (
 )
 
 // MFALevel represents a guild's MFA level.
-type MFALevel int8
+type MFALevel uint8
 
 // MFA levels.
 const (
@@ -35,7 +35,7 @@ const (
 )
 
 // VerificationLevel represents a guild's verification level.
-type VerificationLevel int8
+type VerificationLevel uint8
 
 const (
 	VerificationLevelNone VerificationLevel = iota
@@ -46,15 +46,21 @@ const (
 )
 
 // SystemChannelFlags represents the flags of a system channel.
-type SystemChannelFlags int8
+type SystemChannelFlags uint16
 
 const (
 	SystemChannelFlagsSuppressJoin SystemChannelFlags = 1 << iota
 	SystemChannelFlagsPremiumSubscriptions
+	SystemChannelFlagsSuppressSetupTips
+	SystemChannelFlagsHideMemberJoinStickerReplyButtons
+	SystemChannelFlagsSuppressSubscriptionNotifications
+	SystemChannelFlagsHideRoleSubscriptionReplyButtons
+	_
+	_
 )
 
 // PremiumTier represents the current boosting tier of a guild.
-type PremiumTier int8
+type PremiumTier uint8
 
 const (
 	PremiumTierNone PremiumTier = iota
@@ -64,7 +70,7 @@ const (
 )
 
 // GuildNSFWLevelType represents the level of the guild.
-type GuildNSFWLevelType int8
+type GuildNSFWLevelType uint8
 
 const (
 	GuildNSFWLevelTypDefault GuildNSFWLevelType = iota

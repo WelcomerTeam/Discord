@@ -22,7 +22,7 @@ const (
 )
 
 // ActivityFlag represents an activity's flags.
-type ActivityFlag int
+type ActivityFlag uint16
 
 // Activity flags.
 const (

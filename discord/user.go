@@ -3,7 +3,7 @@ package discord
 // user.go represents all structures for a discord user.
 
 // UserFlags represents the flags on a user's account.
-type UserFlags int
+type UserFlags uint32
 
 // User flags.
 const (
