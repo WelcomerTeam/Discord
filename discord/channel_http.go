@@ -51,7 +51,7 @@ func DeleteChannel(s *Session, channelID Snowflake, reason *string) error {
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete channel: %w", err)
 	}
@@ -334,7 +334,7 @@ func DeleteChannelPermission(s *Session, channelID Snowflake, overwriteID Snowfl
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete channel permission: %w", err)
 	}
