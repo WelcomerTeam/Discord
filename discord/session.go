@@ -30,10 +30,9 @@ type RESTInterface interface {
 
 // Session contains the context for the discord rest interface.
 type Session struct {
-	Context context.Context
-	Token   string
-
+	Context   context.Context
 	Interface RESTInterface
+	Token     string
 }
 
 func NewSession(context context.Context, token string, httpInterface RESTInterface) *Session {

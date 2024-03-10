@@ -17,16 +17,15 @@ var (
 type RestError struct {
 	Request      *http.Request
 	Response     *http.Response
+	Message      *ErrorMessage
 	ResponseBody []byte
-
-	Message *ErrorMessage
 }
 
 // ErrorMessage represents a basic error message.
 type ErrorMessage struct {
-	Code    int32               `json:"code"`
 	Message string              `json:"message"`
 	Errors  jsoniter.RawMessage `json:"errors"`
+	Code    int32               `json:"code"`
 }
 
 func NewRestError(req *http.Request, resp *http.Response, body []byte) *RestError {

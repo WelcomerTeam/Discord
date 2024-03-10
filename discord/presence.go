@@ -36,18 +36,18 @@ const (
 
 // Activity represents an activity as sent as part of other packets.
 type Activity struct {
-	Name          string        `json:"name"`
-	Type          ActivityType  `json:"type"`
-	URL           string        `json:"url"`
 	Timestamps    *Timestamps   `json:"timestamps,omitempty"`
 	ApplicationID *Snowflake    `json:"application_id"`
-	Details       string        `json:"details"`
-	State         string        `json:"state"`
 	Party         *Party        `json:"party,omitempty"`
 	Assets        *Assets       `json:"assets,omitempty"`
 	Secrets       *Secrets      `json:"secrets,omitempty"`
-	Instance      bool          `json:"instance"`
 	Flags         *ActivityFlag `json:"flags,omitempty"`
+	Name          string        `json:"name"`
+	URL           string        `json:"url"`
+	Details       string        `json:"details"`
+	State         string        `json:"state"`
+	Type          ActivityType  `json:"type"`
+	Instance      bool          `json:"instance"`
 }
 
 // Timestamps represents the starting and ending timestamp of an activity.

@@ -20,19 +20,19 @@ const (
 
 // Embed represents a message embed.
 type Embed struct {
-	Title       string          `json:"title,omitempty"`
-	Type        EmbedType       `json:"type,omitempty"`
-	Description string          `json:"description,omitempty"`
-	URL         string          `json:"url,omitempty"`
+	Video       *EmbedVideo     `json:"video,omitempty"`
 	Timestamp   *time.Time      `json:"timestamp,omitempty"`
-	Color       int32           `json:"color,omitempty"`
 	Footer      *EmbedFooter    `json:"footer,omitempty"`
 	Image       *EmbedImage     `json:"image,omitempty"`
 	Thumbnail   *EmbedThumbnail `json:"thumbnail,omitempty"`
-	Video       *EmbedVideo     `json:"video,omitempty"`
 	Provider    *EmbedProvider  `json:"provider,omitempty"`
 	Author      *EmbedAuthor    `json:"author,omitempty"`
+	Type        EmbedType       `json:"type,omitempty"`
+	Description string          `json:"description,omitempty"`
+	URL         string          `json:"url,omitempty"`
+	Title       string          `json:"title,omitempty"`
 	Fields      []*EmbedField   `json:"fields,omitempty"`
+	Color       int32           `json:"color,omitempty"`
 }
 
 func NewEmbed(embedType EmbedType) *Embed {

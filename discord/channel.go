@@ -44,45 +44,45 @@ const (
 
 // Channel represents a Discord channel.
 type Channel struct {
-	ID                         Snowflake           `json:"id"`
-	GuildID                    *Snowflake          `json:"guild_id,omitempty"`
-	Type                       ChannelType         `json:"type"`
-	Position                   int32               `json:"position,omitempty"`
-	PermissionOverwrites       []*ChannelOverwrite `json:"permission_overwrites,omitempty"`
-	Name                       string              `json:"name,omitempty"`
-	Topic                      string              `json:"topic,omitempty"`
-	NSFW                       bool                `json:"nsfw"`
-	LastMessageID              string              `json:"last_message_id,omitempty"`
-	Bitrate                    int32               `json:"bitrate,omitempty"`
-	UserLimit                  int32               `json:"user_limit,omitempty"`
-	RateLimitPerUser           int32               `json:"rate_limit_per_user,omitempty"`
-	Recipients                 []*User             `json:"recipients,omitempty"`
-	Icon                       string              `json:"icon,omitempty"`
 	OwnerID                    *Snowflake          `json:"owner_id,omitempty"`
-	ApplicationID              *Snowflake          `json:"application_id,omitempty"`
-	ParentID                   *Snowflake          `json:"parent_id,omitempty"`
-	LastPinTimestamp           *time.Time          `json:"last_pin_timestamp,omitempty"`
-	RTCRegion                  string              `json:"rtc_region,omitempty"`
+	GuildID                    *Snowflake          `json:"guild_id,omitempty"`
+	Permissions                *Int64              `json:"permissions,omitempty"`
+	ThreadMember               *ThreadMember       `json:"member,omitempty"`
+	ThreadMetadata             *ThreadMetadata     `json:"thread_metadata,omitempty"`
 	VideoQualityMode           *VideoQualityMode   `json:"video_quality_mode,omitempty"`
+	LastPinTimestamp           *time.Time          `json:"last_pin_timestamp,omitempty"`
+	ParentID                   *Snowflake          `json:"parent_id,omitempty"`
+	ApplicationID              *Snowflake          `json:"application_id,omitempty"`
+	RTCRegion                  string              `json:"rtc_region,omitempty"`
+	Topic                      string              `json:"topic,omitempty"`
+	Icon                       string              `json:"icon,omitempty"`
+	Name                       string              `json:"name,omitempty"`
+	LastMessageID              string              `json:"last_message_id,omitempty"`
+	PermissionOverwrites       []*ChannelOverwrite `json:"permission_overwrites,omitempty"`
+	Recipients                 []*User             `json:"recipients,omitempty"`
+	ID                         Snowflake           `json:"id"`
+	UserLimit                  int32               `json:"user_limit,omitempty"`
+	Bitrate                    int32               `json:"bitrate,omitempty"`
 	MessageCount               int32               `json:"message_count,omitempty"`
 	MemberCount                int32               `json:"member_count,omitempty"`
-	ThreadMetadata             *ThreadMetadata     `json:"thread_metadata,omitempty"`
-	ThreadMember               *ThreadMember       `json:"member,omitempty"`
+	RateLimitPerUser           int32               `json:"rate_limit_per_user,omitempty"`
+	Position                   int32               `json:"position,omitempty"`
 	DefaultAutoArchiveDuration int32               `json:"default_auto_archive_duration,omitempty"`
-	Permissions                *Int64              `json:"permissions,omitempty"`
+	NSFW                       bool                `json:"nsfw"`
+	Type                       ChannelType         `json:"type"`
 }
 
 // ChannelParams the data that is provided when creating a channel.
 type ChannelParams struct {
+	ParentID             *Snowflake          `json:"parent_id,omitempty"`
 	Name                 string              `json:"name"`
-	Type                 ChannelType         `json:"type"`
 	Topic                string              `json:"topic,omitempty"`
+	PermissionOverwrites []*ChannelOverwrite `json:"permission_overwrites,omitempty"`
 	Bitrate              int32               `json:"bitrate,omitempty"`
 	UserLimit            int32               `json:"user_limit,omitempty"`
 	RateLimitPerUser     int32               `json:"rate_limit_per_user,omitempty"`
 	Position             int32               `json:"position,omitempty"`
-	PermissionOverwrites []*ChannelOverwrite `json:"permission_overwrites,omitempty"`
-	ParentID             *Snowflake          `json:"parent_id,omitempty"`
+	Type                 ChannelType         `json:"type"`
 	NSFW                 bool                `json:"nsfw"`
 }
 
@@ -193,8 +193,8 @@ func (c *Channel) Webhooks(s *Session) ([]*Webhook, error) {
 
 // ChannelOverwrite represents a permission overwrite for a channel.
 type ChannelOverwrite struct {
-	ID    Snowflake            `json:"id"`
 	Type  *ChannelOverrideType `json:"type"`
+	ID    Snowflake            `json:"id"`
 	Allow Int64                `json:"allow"`
 	Deny  Int64                `json:"deny"`
 }
@@ -209,9 +209,9 @@ const (
 
 // ThreadMetadata contains thread-specific channel fields.
 type ThreadMetadata struct {
-	Archived            bool      `json:"archived"`
-	AutoArchiveDuration int32     `json:"auto_archive_duration"`
 	ArchiveTimestamp    time.Time `json:"archive_timestamp"`
+	AutoArchiveDuration int32     `json:"auto_archive_duration"`
+	Archived            bool      `json:"archived"`
 	Locked              bool      `json:"locked"`
 }
 
@@ -226,11 +226,11 @@ type ThreadMember struct {
 
 // StageInstance represents a stage channel instance.
 type StageInstance struct {
+	PrivacyLabel         *StageChannelPrivacyLevel `json:"privacy_level"`
+	Topic                string                    `json:"topic"`
 	ID                   Snowflake                 `json:"id"`
 	GuildID              Snowflake                 `json:"guild_id"`
 	ChannelID            Snowflake                 `json:"channel_id"`
-	Topic                string                    `json:"topic"`
-	PrivacyLabel         *StageChannelPrivacyLevel `json:"privacy_level"`
 	DiscoverableDisabled bool                      `json:"discoverable_disabled"`
 }
 

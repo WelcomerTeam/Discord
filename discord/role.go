@@ -4,18 +4,18 @@ package discord
 
 // Role represents a role on discord.
 type Role struct {
-	ID           Snowflake  `json:"id"`
 	GuildID      *Snowflake `json:"guild_id,omitempty"`
+	Tags         *RoleTag   `json:"tags,omitempty"`
 	Name         string     `json:"name"`
-	Color        int32      `json:"color"`
-	Hoist        bool       `json:"hoist"`
 	Icon         string     `json:"icon,omitempty"`
 	UnicodeEmoji string     `json:"unicode_emoji,omitempty"`
-	Position     int32      `json:"position"`
+	ID           Snowflake  `json:"id"`
 	Permissions  Int64      `json:"permissions"`
+	Color        int32      `json:"color"`
+	Position     int32      `json:"position"`
+	Hoist        bool       `json:"hoist"`
 	Managed      bool       `json:"managed"`
 	Mentionable  bool       `json:"mentionable"`
-	Tags         *RoleTag   `json:"tags,omitempty"`
 }
 
 // RoleParams represents the structure used to create a role.
@@ -51,13 +51,13 @@ func (r *Role) Edit(s *Session, params Role, reason *string) error {
 
 // RoleTag represents extra information about a role.
 type RoleTag struct {
-	PremiumSubscriber bool       `json:"premium_subscriber"`
 	BotID             *Snowflake `json:"bot_id,omitempty"`
 	IntegrationID     *Snowflake `json:"integration_id,omitempty"`
+	PremiumSubscriber bool       `json:"premium_subscriber"`
 }
 
 // ModifyGuildRolePosition represents the argument for modifying guild role positions.
 type ModifyGuildRolePosition struct {
-	ID       Snowflake `json:"id"`
 	Position *int32    `json:"position,omitempty"`
+	ID       Snowflake `json:"id"`
 }

@@ -152,12 +152,12 @@ type GuildAuditLog struct {
 
 type AuditLogEntry struct {
 	TargetID   *Snowflake         `json:"target_id,omitempty"`
-	Changes    []*AuditLogChanges `json:"changes,omitempty"`
 	UserID     *Snowflake         `json:"user_id,omitempty"`
-	ID         Snowflake          `json:"id"`
-	ActionType AuditLogActionType `json:"action_type"`
 	Options    *AuditLogOptions   `json:"options,omitempty"`
 	Reason     string             `json:"reason,omitempty"`
+	Changes    []*AuditLogChanges `json:"changes,omitempty"`
+	ID         Snowflake          `json:"id"`
+	ActionType AuditLogActionType `json:"action_type"`
 }
 
 type AuditLogChanges struct {
@@ -168,11 +168,11 @@ type AuditLogChanges struct {
 
 type AuditLogOptions struct {
 	ChannelID        *Snowflake           `json:"channel_id,omitempty"`
+	ID               *Snowflake           `json:"id,omitempty"`
+	MessageID        *Snowflake           `json:"message_id,omitempty"`
+	Type             *ChannelOverrideType `json:"type,omitempty"`
+	RoleName         string               `json:"role_name,omitempty"`
 	Count            int32                `json:"count,omitempty"`
 	DeleteMemberDays int32                `json:"delete_member_days,omitempty"`
-	ID               *Snowflake           `json:"id,omitempty"`
 	MembersRemoved   int32                `json:"members_removed,omitempty"`
-	MessageID        *Snowflake           `json:"message_id,omitempty"`
-	RoleName         string               `json:"role_name,omitempty"`
-	Type             *ChannelOverrideType `json:"type,omitempty"`
 }

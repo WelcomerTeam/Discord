@@ -73,39 +73,34 @@ const (
 
 // Message represents a message on discord.
 type Message struct {
-	ID        Snowflake    `json:"id"`
-	ChannelID Snowflake    `json:"channel_id"`
-	GuildID   *Snowflake   `json:"guild_id,omitempty"`
-	Author    *User        `json:"author"`
-	Member    *GuildMember `json:"member,omitempty"`
-
-	Content         string    `json:"content"`
-	Timestamp       time.Time `json:"timestamp"`
-	EditedTimestamp time.Time `json:"edited_timestamp"`
-	TTS             bool      `json:"tts"`
-
-	MentionEveryone bool                     `json:"mention_everyone"`
-	Mentions        []*User                  `json:"mentions"`
-	MentionRoles    []*Snowflake             `json:"mention_roles"`
-	MentionChannels []*MessageChannelMention `json:"mention_channels,omitempty"`
-
-	Attachments []*MessageAttachment `json:"attachments"`
-	Embeds      []*Embed             `json:"embeds"`
-	Reactions   []*MessageReaction   `json:"reactions"`
-
-	// Nonce          string                  `json:"nonce,omitempty"`
-	Pinned            bool                    `json:"pinned"`
-	WebhookID         *Snowflake              `json:"webhook_id,omitempty"`
-	Type              MessageType             `json:"type"`
-	Activity          *MessageActivity        `json:"activity,omitempty"`
-	Application       *Application            `json:"application,omitempty"`
-	MessageReference  []*MessageReference     `json:"message_referenced,omitempty"`
-	Flags             *MessageFlags           `json:"flags,omitempty"`
-	ReferencedMessage *Message                `json:"referenced_message,omitempty"`
-	Interaction       *MessageInteraction     `json:"interaction,omitempty"`
-	Thread            *Channel                `json:"thread,omitempty"`
-	Components        []*InteractionComponent `json:"components,omitempty"`
-	StickerItems      []*MessageSticker       `json:"sticker_items,omitempty"`
+	Timestamp         time.Time                `json:"timestamp"`
+	EditedTimestamp   time.Time                `json:"edited_timestamp"`
+	Author            *User                    `json:"author"`
+	WebhookID         *Snowflake               `json:"webhook_id,omitempty"`
+	Member            *GuildMember             `json:"member,omitempty"`
+	GuildID           *Snowflake               `json:"guild_id,omitempty"`
+	Thread            *Channel                 `json:"thread,omitempty"`
+	Interaction       *MessageInteraction      `json:"interaction,omitempty"`
+	ReferencedMessage *Message                 `json:"referenced_message,omitempty"`
+	Flags             *MessageFlags            `json:"flags,omitempty"`
+	Application       *Application             `json:"application,omitempty"`
+	Activity          *MessageActivity         `json:"activity,omitempty"`
+	Content           string                   `json:"content"`
+	Embeds            []*Embed                 `json:"embeds"`
+	MentionRoles      []*Snowflake             `json:"mention_roles"`
+	Reactions         []*MessageReaction       `json:"reactions"`
+	StickerItems      []*MessageSticker        `json:"sticker_items,omitempty"`
+	Attachments       []*MessageAttachment     `json:"attachments"`
+	Components        []*InteractionComponent  `json:"components,omitempty"`
+	MentionChannels   []*MessageChannelMention `json:"mention_channels,omitempty"`
+	Mentions          []*User                  `json:"mentions"`
+	MessageReference  []*MessageReference      `json:"message_referenced,omitempty"`
+	ID                Snowflake                `json:"id"`
+	ChannelID         Snowflake                `json:"channel_id"`
+	MentionEveryone   bool                     `json:"mention_everyone"`
+	TTS               bool                     `json:"tts"`
+	Type              MessageType              `json:"type"`
+	Pinned            bool                     `json:"pinned"`
 }
 
 // AddReaction adds a reaction to a message
@@ -179,17 +174,17 @@ func (m *Message) Unpin(s *Session, reason *string) error {
 
 // MessageParams represents the structure for sending a message on discord.
 type MessageParams struct {
+	MessageReference *MessageReference         `json:"message_reference,omitempty"`
+	PayloadJSON      *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Content          string                    `json:"content"`
-	TTS              bool                      `json:"tts"`
 	Embeds           []*Embed                  `json:"embeds,omitempty"`
 	AllowedMentions  []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
-	MessageReference *MessageReference         `json:"message_reference,omitempty"`
 	Components       []*InteractionComponent   `json:"components,omitempty"`
 	StickerIDs       []*Snowflake              `json:"sticker_ids,omitempty"`
 	Files            []*File                   `json:"-"`
-	PayloadJSON      *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments      []*MessageAttachment      `json:"attachments,omitempty"`
 	Flags            MessageFlags              `json:"flags,omitempty"`
+	TTS              bool                      `json:"tts"`
 }
 
 func NewMessage(content string) *MessageParams {
@@ -230,18 +225,18 @@ func (m *MessageParams) AddFile(file File) *MessageParams {
 
 // MessageInteraction represents an executed interaction.
 type MessageInteraction struct {
-	ID   Snowflake        `json:"id"`
+	User User             `json:"user"`
 	Type *InteractionType `json:"type"`
 	Name string           `json:"name"`
-	User User             `json:"user"`
+	ID   Snowflake        `json:"id"`
 }
 
 // MessageChannelMention represents a mentioned channel.
 type MessageChannelMention struct {
+	Name    string      `json:"name"`
 	ID      Snowflake   `json:"id"`
 	GuildID Snowflake   `json:"guild_id"`
 	Type    ChannelType `json:"type"`
-	Name    string      `json:"name"`
 }
 
 // MessageReference represents crossposted messages or replys.
@@ -254,9 +249,20 @@ type MessageReference struct {
 
 // MessageReaction represents a reaction to a message on discord.
 type MessageReaction struct {
-	Count int32  `json:"count"`
-	Me    bool   `json:"me"`
-	Emoji string `json:"emoji"`
+	Emoji        Emoji                       `json:"emoji"`
+	BurstColors  []string                    `json:"burst_colors"`
+	CountDetails MessageReactionCountDetails `json:"count_details"`
+	Count        int32                       `json:"count"`
+	BurstCount   int32                       `json:"burst_count"`
+	MeBurst      bool                        `json:"me_burst"`
+	BurstMe      bool                        `json:"burst_me"`
+	Me           bool                        `json:"me"`
+}
+
+// MessageReactionCountDetails represents the count details of a message reaction.
+type MessageReactionCountDetails struct {
+	Burst  int32 `json:"burst"`
+	Normal int32 `json:"normal"`
 }
 
 // MessageAllowedMentions is the structure of the allowed mentions entry.
@@ -269,11 +275,11 @@ type MessageAllowedMentions struct {
 
 // MessageAttachment represents a message attachment on discord.
 type MessageAttachment struct {
-	ID        Snowflake `json:"id"`
 	Filename  string    `json:"filename"`
-	Size      int32     `json:"size"`
 	URL       string    `json:"url"`
 	ProxyURL  string    `json:"proxy_url"`
+	ID        Snowflake `json:"id"`
+	Size      int32     `json:"size"`
 	Height    int32     `json:"height"`
 	Width     int32     `json:"width"`
 	Ephemeral bool      `json:"ephemeral"`
@@ -281,6 +287,6 @@ type MessageAttachment struct {
 
 // MessageActivity represents a message activity on discord.
 type MessageActivity struct {
-	Type    MessageActivityType `json:"type"`
 	PartyID string              `json:"party_id,omitempty"`
+	Type    MessageActivityType `json:"type"`
 }

@@ -17,16 +17,15 @@ const (
 
 // Webhook represents a webhook on discord.
 type Webhook struct {
-	ID   Snowflake   `json:"id"`
-	Type WebhookType `json:"type"`
-
-	GuildID       *Snowflake `json:"guild_id,omitempty"`
-	ChannelID     *Snowflake `json:"channel_id,omitempty"`
-	User          *User      `json:"user,omitempty"`
-	Name          string     `json:"name"`
-	Avatar        string     `json:"avatar"`
-	Token         string     `json:"token"`
-	ApplicationID *Snowflake `json:"application_id,omitempty"`
+	GuildID       *Snowflake  `json:"guild_id,omitempty"`
+	ChannelID     *Snowflake  `json:"channel_id,omitempty"`
+	User          *User       `json:"user,omitempty"`
+	ApplicationID *Snowflake  `json:"application_id,omitempty"`
+	Name          string      `json:"name"`
+	Avatar        string      `json:"avatar"`
+	Token         string      `json:"token"`
+	ID            Snowflake   `json:"id"`
+	Type          WebhookType `json:"type"`
 }
 
 // Delete deletes this webhook.
@@ -108,16 +107,16 @@ func (wm *WebhookMessage) Delete(s *Session, token string) error {
 
 // WebhookMessage represents the structure for sending a webhook message.
 type WebhookMessageParams struct {
+	PayloadJSON     *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Content         string                    `json:"content,omitempty"`
 	Username        string                    `json:"username,omitempty"`
 	AvatarURL       string                    `json:"avatar_url,omitempty"`
-	TTS             bool                      `json:"tts,omitempty"`
 	Embeds          []*Embed                  `json:"embeds,omitempty"`
 	AllowedMentions []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
 	Components      []*InteractionComponent   `json:"components,omitempty"`
 	Files           []*File                   `json:"-"`
-	PayloadJSON     *jsoniter.RawMessage      `json:"payload_json,omitempty"`
 	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
+	TTS             bool                      `json:"tts,omitempty"`
 }
 
 // WebhookParam represents the data sent to discord to create a webhook.

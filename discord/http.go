@@ -8,9 +8,9 @@ import (
 
 // File stores information about a file sent in a message.
 type File struct {
+	Reader      io.Reader
 	Name        string
 	ContentType string
-	Reader      io.Reader
 }
 
 // Gateway represents a GET /gateway response.

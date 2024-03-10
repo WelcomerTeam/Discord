@@ -33,26 +33,24 @@ const (
 
 // Invite represents the structure of Invite data.
 type Invite struct {
-	Code    string     `json:"code"`
-	Guild   *Guild     `json:"guild,omitempty"`
-	GuildID *Snowflake `json:"guild_id,omitempty"`
-	Channel *Channel   `json:"channel,omitempty"`
-
+	ExpiresAt                time.Time            `json:"expires_at,omitempty"`
+	CreatedAt                time.Time            `json:"created_at"`
+	ScheduledEvent           *ScheduledEvent      `json:"guild_scheduled_event,omitempty"`
+	StageInstance            *InviteStageInstance `json:"stage_instance,omitempty"`
 	Inviter                  *User                `json:"inviter,omitempty"`
 	TargetType               *InviteTargetType    `json:"target_type,omitempty"`
 	TargetUser               *User                `json:"target_user,omitempty"`
 	TargetApplication        *Application         `json:"target_application"`
-	ApproximatePresenceCount int32                `json:"approximate_presence_count,omitempty"`
+	Guild                    *Guild               `json:"guild,omitempty"`
+	Channel                  *Channel             `json:"channel,omitempty"`
+	GuildID                  *Snowflake           `json:"guild_id,omitempty"`
+	Code                     string               `json:"code"`
 	ApproximateMemberCount   int32                `json:"approximate_member_count,omitempty"`
-	ExpiresAt                time.Time            `json:"expires_at,omitempty"`
-	StageInstance            *InviteStageInstance `json:"stage_instance,omitempty"`
-	ScheduledEvent           *ScheduledEvent      `json:"guild_scheduled_event,omitempty"`
-
-	Uses      int32     `json:"uses"`
-	MaxUses   int32     `json:"max_uses"`
-	MaxAge    int32     `json:"max_age"`
-	Temporary bool      `json:"temporary"`
-	CreatedAt time.Time `json:"created_at"`
+	Uses                     int32                `json:"uses"`
+	MaxUses                  int32                `json:"max_uses"`
+	MaxAge                   int32                `json:"max_age"`
+	ApproximatePresenceCount int32                `json:"approximate_presence_count,omitempty"`
+	Temporary                bool                 `json:"temporary"`
 }
 
 // Delete deletes an invite.
@@ -63,28 +61,28 @@ func (i *Invite) Delete(s *Session, reason *string) error {
 
 // InviteStageInstance represents the structure of an invite stage instance.
 type InviteStageInstance struct {
+	Topic            string         `json:"topic"`
 	Members          []*GuildMember `json:"members"`
 	ParticipantCount int32          `json:"participant_count"`
 	SpeakerCount     int32          `json:"speaker_count"`
-	Topic            string         `json:"topic"`
 }
 
 // ScheduledEvent represents an scheduled event.
 type ScheduledEvent struct {
-	ID                 Snowflake                 `json:"id"`
-	GuildID            Snowflake                 `json:"guild_id"`
-	ChannelID          *Snowflake                `json:"channel_id,omitempty"`
-	CreatorID          *Snowflake                `json:"creator_id,omitempty"`
-	Name               string                    `json:"name"`
-	Description        string                    `json:"description,omitempty"`
-	ScheduledStartTime string                    `json:"scheduled_start_time"`
-	ScheduledEndTime   string                    `json:"scheduled_end_time"`
-	PrivacyLevel       *StageChannelPrivacyLevel `json:"privacy_level"`
 	Status             *EventStatus              `json:"status"`
 	EntityType         *ScheduledEntityType      `json:"entity_type"`
-	EntityID           *Snowflake                `json:"entity_id,omitempty"`
-	EntityMetadata     *EventMetadata            `json:"entity_metadata,omitempty"`
+	ChannelID          *Snowflake                `json:"channel_id,omitempty"`
+	CreatorID          *Snowflake                `json:"creator_id,omitempty"`
 	Creator            *User                     `json:"creator,omitempty"`
+	EntityMetadata     *EventMetadata            `json:"entity_metadata,omitempty"`
+	EntityID           *Snowflake                `json:"entity_id,omitempty"`
+	PrivacyLevel       *StageChannelPrivacyLevel `json:"privacy_level"`
+	ScheduledStartTime string                    `json:"scheduled_start_time"`
+	ScheduledEndTime   string                    `json:"scheduled_end_time"`
+	Description        string                    `json:"description,omitempty"`
+	Name               string                    `json:"name"`
+	ID                 Snowflake                 `json:"id"`
+	GuildID            Snowflake                 `json:"guild_id"`
 	UserCount          int32                     `json:"user_count,omitempty"`
 }
 
@@ -95,9 +93,9 @@ type EventMetadata struct {
 
 // ScheduledEventUser represents a user subscribed to an event.
 type ScheduledEventUser struct {
-	EventID Snowflake    `json:"guild_scheduled_event_id"`
 	User    User         `json:"user"`
 	Member  *GuildMember `json:"member,omitempty"`
+	EventID Snowflake    `json:"guild_scheduled_event_id"`
 }
 
 // InviteParams represents the params to create an invite.

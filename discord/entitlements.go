@@ -3,17 +3,17 @@ package discord
 import "time"
 
 type Entitlement struct {
-	ID             Snowflake       `json:"id"`
-	SkuID          Snowflake       `json:"sku_id"`
-	ApplicationID  Snowflake       `json:"application_id"`
 	UserID         *Snowflake      `json:"user_id,omitempty"`
-	Type           EntitlementType `json:"type"`
-	Deleted        bool            `json:"deleted"`
 	GiftCodeFlags  *GiftCodeFlags  `json:"gift_code_flags,omitempty"`
 	StartsAt       *time.Time      `json:"starts_at,omitempty"`
 	EndsAt         *time.Time      `json:"ends_at,omitempty"`
 	GuildID        *Snowflake      `json:"guild_id,omitempty"`
 	SubscriptionID *Snowflake      `json:"subscription_id,omitempty"`
+	ID             Snowflake       `json:"id"`
+	SkuID          Snowflake       `json:"sku_id"`
+	ApplicationID  Snowflake       `json:"application_id"`
+	Type           EntitlementType `json:"type"`
+	Deleted        bool            `json:"deleted"`
 }
 
 // EntitlementParams represents the payload sent to discord.
