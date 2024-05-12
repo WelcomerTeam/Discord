@@ -5,16 +5,10 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-
-	gotils_strconv "github.com/savsgio/gotils/strconv"
 )
 
 const (
-	discordCreation = 1420070400000
-
-	bitSize            = 64
-	decimalBase        = 10
-	maxInt64JsonLength = 22
+	DiscordCreation = 1420070400000
 )
 
 var null = []byte("null")
@@ -24,33 +18,30 @@ type Snowflake int64
 
 func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
-		i, err := strconv.ParseInt(gotils_strconv.B2S(b[1:len(b)-1]), decimalBase, bitSize)
+		i, err := strconv.ParseInt(string(b[1:len(b)-1]), 10, 64)
 		if err != nil {
-			return fmt.Errorf("failed to unmarshal json: %w", err)
+			return fmt.Errorf("failed to unmarshal json: %v", err)
 		}
 
 		*s = Snowflake(i)
+	} else {
+		*s = 0
 	}
 
 	return nil
 }
 
 func (s Snowflake) MarshalJSON() ([]byte, error) {
-	buff := make([]byte, 0, maxInt64JsonLength)
-	buff = append(buff, '"')
-	buff = strconv.AppendInt(buff, int64(s), decimalBase)
-	buff = append(buff, '"')
-
-	return buff, nil
+	return int64ToStringBytes(int64(s)), nil
 }
 
 func (s Snowflake) String() string {
-	return strconv.FormatInt(int64(s), decimalBase)
+	return strconv.FormatInt(int64(s), 10)
 }
 
 // Time returns the creation time of the Snowflake.
 func (s Snowflake) Time() time.Time {
-	nsec := (int64(s) >> 22) + discordCreation
+	nsec := (int64(s) >> 22) + DiscordCreation
 
 	return time.Unix(0, nsec*1000000)
 }
@@ -60,9 +51,9 @@ type Int64 int64
 
 func (in *Int64) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
-		i, err := strconv.ParseInt(gotils_strconv.B2S(b[1:len(b)-1]), decimalBase, bitSize)
+		i, err := strconv.ParseInt(string(b[1:len(b)-1]), 10, 64)
 		if err != nil {
-			return fmt.Errorf("failed to unmarshal json: %w", err)
+			return fmt.Errorf("failed to unmarshal json: %v", err)
 		}
 
 		*in = Int64(i)
@@ -72,14 +63,19 @@ func (in *Int64) UnmarshalJSON(b []byte) error {
 }
 
 func (in Int64) MarshalJSON() ([]byte, error) {
-	buff := make([]byte, 0, maxInt64JsonLength)
-	buff = append(buff, '"')
-	buff = strconv.AppendInt(buff, int64(in), decimalBase)
-	buff = append(buff, '"')
-
-	return buff, nil
+	return int64ToStringBytes(int64(in)), nil
 }
 
 func (in Int64) String() string {
-	return strconv.FormatInt(int64(in), decimalBase)
+	return strconv.FormatInt(int64(in), 10)
+}
+
+func int64ToStringBytes(s int64) []byte {
+	buf := make([]byte, 0, 24) // maxInt64JsonLength + 2
+
+	buf = append(buf, '"')
+	buf = strconv.AppendInt(buf, s, 10)
+	buf = append(buf, '"')
+
+	return buf
 }

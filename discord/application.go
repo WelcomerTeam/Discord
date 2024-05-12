@@ -1,9 +1,8 @@
 package discord
 
 import (
+	"encoding/json"
 	"time"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 // application.go represents the application object and integrations.
@@ -158,9 +157,9 @@ type ApplicationCommandOption struct {
 
 // ApplicationCommandOptionChoice represents the different choices.
 type ApplicationCommandOptionChoice struct {
-	Name              string              `json:"name"`
-	NameLocalizations map[string]string   `json:"name_localizations,omitempty"`
-	Value             jsoniter.RawMessage `json:"value"`
+	Name              string            `json:"name"`
+	NameLocalizations map[string]string `json:"name_localizations,omitempty"`
+	Value             json.RawMessage   `json:"value"`
 }
 
 // ApplicationSelectOption represents the structure of select options.

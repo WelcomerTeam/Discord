@@ -1,11 +1,10 @@
 package discord
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 var (
@@ -23,15 +22,15 @@ type RestError struct {
 
 // ErrorMessage represents a basic error message.
 type ErrorMessage struct {
-	Message string              `json:"message"`
-	Errors  jsoniter.RawMessage `json:"errors"`
-	Code    int32               `json:"code"`
+	Message string          `json:"message"`
+	Errors  json.RawMessage `json:"errors"`
+	Code    int32           `json:"code"`
 }
 
 func NewRestError(req *http.Request, resp *http.Response, body []byte) *RestError {
 	var errorMessage ErrorMessage
 
-	_ = jsoniter.Unmarshal(body, errorMessage)
+	_ = json.Unmarshal(body, &errorMessage)
 
 	return &RestError{
 		Request:      req,

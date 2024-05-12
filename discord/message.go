@@ -1,9 +1,8 @@
 package discord
 
 import (
+	"encoding/json"
 	"time"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 // message.go contains the structure that represents a discord message.
@@ -175,7 +174,7 @@ func (m *Message) Unpin(s *Session, reason *string) error {
 // MessageParams represents the structure for sending a message on discord.
 type MessageParams struct {
 	MessageReference *MessageReference         `json:"message_reference,omitempty"`
-	PayloadJSON      *jsoniter.RawMessage      `json:"payload_json,omitempty"`
+	PayloadJSON      *json.RawMessage          `json:"payload_json,omitempty"`
 	Content          string                    `json:"content"`
 	Embeds           []*Embed                  `json:"embeds,omitempty"`
 	AllowedMentions  []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`

@@ -3,13 +3,12 @@ package discord
 import (
 	"bytes"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/textproto"
 	"strings"
-
-	jsoniter "github.com/json-iterator/go"
 )
 
 var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
@@ -55,7 +54,7 @@ func multipartBodyWithJSON(data interface{}, files []*File) (contentType string,
 	requestBody := &bytes.Buffer{}
 	writer := multipart.NewWriter(requestBody)
 
-	payload, err := jsoniter.Marshal(data)
+	payload, err := json.Marshal(data)
 	if err != nil {
 		return "", nil, fmt.Errorf("failed to marshal payload: %w", err)
 	}
