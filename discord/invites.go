@@ -5,7 +5,7 @@ import "time"
 // invites.go contains all structures for invites.
 
 // InviteTargetType represents the type of an invites target.
-type InviteTargetType uint8
+type InviteTargetType uint16
 
 const (
 	InviteTargetTypeStream InviteTargetType = 1 + iota
@@ -13,7 +13,7 @@ const (
 )
 
 // EventStatus represents the status of an event.
-type EventStatus uint8
+type EventStatus uint16
 
 const (
 	EventStatusScheduled EventStatus = 1 + iota
@@ -23,7 +23,7 @@ const (
 )
 
 // ScheduledEntityType represents the type of event.
-type ScheduledEntityType uint8
+type ScheduledEntityType uint16
 
 const (
 	ScheduledEntityTypeStage ScheduledEntityType = 1 + iota

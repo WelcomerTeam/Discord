@@ -8,7 +8,7 @@ import (
 // message.go contains the structure that represents a discord message.
 
 // MessageType represents the type of message that has been sent.
-type MessageType uint8
+type MessageType uint16
 
 const (
 	MessageTypeDefault MessageType = iota
@@ -61,7 +61,7 @@ const (
 )
 
 // MessageActivityType represents the type of message activity.
-type MessageActivityType uint8
+type MessageActivityType uint16
 
 const (
 	MessageActivityTypeJoin MessageActivityType = 1 + iota

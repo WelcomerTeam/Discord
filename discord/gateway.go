@@ -6,7 +6,7 @@ import "encoding/json"
 // all events and structures we send to
 
 // GatewayOp represents the operation codes of a gateway message.
-type GatewayOp uint8
+type GatewayOp uint16
 
 const (
 	GatewayOpDispatch GatewayOp = iota

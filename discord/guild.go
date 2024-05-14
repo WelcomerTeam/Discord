@@ -26,7 +26,7 @@ const (
 )
 
 // MFALevel represents a guild's MFA level.
-type MFALevel uint8
+type MFALevel uint16
 
 // MFA levels.
 const (
@@ -35,7 +35,7 @@ const (
 )
 
 // VerificationLevel represents a guild's verification level.
-type VerificationLevel uint8
+type VerificationLevel uint16
 
 const (
 	VerificationLevelNone VerificationLevel = iota
@@ -60,7 +60,7 @@ const (
 )
 
 // PremiumTier represents the current boosting tier of a guild.
-type PremiumTier uint8
+type PremiumTier uint16
 
 const (
 	PremiumTierNone PremiumTier = iota
@@ -70,7 +70,7 @@ const (
 )
 
 // GuildNSFWLevelType represents the level of the guild.
-type GuildNSFWLevelType uint8
+type GuildNSFWLevelType uint16
 
 const (
 	GuildNSFWLevelTypDefault GuildNSFWLevelType = iota

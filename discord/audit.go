@@ -2,7 +2,7 @@ package discord
 
 const AuditLogReasonHeader = "X-Audit-Log-Reason"
 
-type AuditLogActionType uint8
+type AuditLogActionType uint16
 
 const (
 	AuditLogActionGuildUpdate AuditLogActionType = 1

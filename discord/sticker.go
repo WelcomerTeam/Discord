@@ -3,7 +3,7 @@ package discord
 // sticker represents all structures for a sticker.
 
 // StickerType represents the type of sticker.
-type StickerType uint8
+type StickerType uint16
 
 const (
 	StickerTypeStandard StickerType = 1 + iota
@@ -11,7 +11,7 @@ const (
 )
 
 // StickerFormatType represents the sticker format.
-type StickerFormatType uint8
+type StickerFormatType uint16
 
 const (
 	StickerFormatTypePNG StickerFormatType = 1 + iota

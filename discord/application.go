@@ -8,7 +8,7 @@ import (
 // application.go represents the application object and integrations.
 
 // ApplicationTeamMemberState represents the state of a member in a team.
-type ApplicationTeamMemberState uint8
+type ApplicationTeamMemberState uint16
 
 const (
 	ApplicationTeamMemberStateInvited ApplicationTeamMemberState = 1 + iota
@@ -16,7 +16,7 @@ const (
 )
 
 // ApplicationCommandType represents the different types of application command.
-type ApplicationCommandType uint8
+type ApplicationCommandType uint16
 
 const (
 	ApplicationCommandTypeChatInput ApplicationCommandType = 1 + iota
@@ -25,7 +25,7 @@ const (
 )
 
 // ApplicationCommandOptionType represents the different types of options.
-type ApplicationCommandOptionType uint8
+type ApplicationCommandOptionType uint16
 
 const (
 	ApplicationCommandOptionTypeSubCommand ApplicationCommandOptionType = 1 + iota
@@ -42,7 +42,7 @@ const (
 )
 
 // ApplicationCommandPermissionType represents the target for a command permission.
-type ApplicationCommandPermissionType uint8
+type ApplicationCommandPermissionType uint16
 
 const (
 	ApplicationCommandPermissionTypeRole ApplicationCommandPermissionType = 1 + iota
@@ -59,7 +59,7 @@ const (
 )
 
 // IntegrationExpireBehavior represents the integration expiration.
-type IntegrationExpireBehavior uint8
+type IntegrationExpireBehavior uint16
 
 const (
 	IntegrationExpireBehaviorRemoveRole IntegrationExpireBehavior = iota
