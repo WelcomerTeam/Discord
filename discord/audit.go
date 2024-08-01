@@ -172,7 +172,7 @@ type AuditLogOptions struct {
 	MessageID        *Snowflake           `json:"message_id,omitempty"`
 	Type             *ChannelOverrideType `json:"type,omitempty"`
 	RoleName         string               `json:"role_name,omitempty"`
-	Count            int32                `json:"count,omitempty"`
+	Count            Int64                `json:"count,omitempty"`
 	DeleteMemberDays int32                `json:"delete_member_days,omitempty"`
 	MembersRemoved   int32                `json:"members_removed,omitempty"`
 }

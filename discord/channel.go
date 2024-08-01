@@ -200,7 +200,7 @@ type ChannelOverwrite struct {
 }
 
 // ChannelOverrideType represents the target of a channel override.
-type ChannelOverrideType Snowflake
+type ChannelOverrideType Int64
 
 const (
 	ChannelOverrideTypeRole ChannelOverrideType = iota
