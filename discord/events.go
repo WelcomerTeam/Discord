@@ -89,6 +89,12 @@ type ThreadMembersUpdate struct {
 	MemberCount      int32           `json:"member_count"`
 }
 
+// GuildAuditLogEntryCreate represents when a guild audit log entry is created.
+type GuildAuditLogEntryCreate struct {
+	GuildID Snowflake `json:"guild_id"`
+	AuditLogEntry
+}
+
 // GuildCreate represents a guild create event.
 type GuildCreate *Guild
 
