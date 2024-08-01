@@ -1,6 +1,9 @@
 package discord
 
 import (
+	"bytes"
+	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -200,7 +203,28 @@ type ChannelOverwrite struct {
 }
 
 // ChannelOverrideType represents the target of a channel override.
-type ChannelOverrideType Int64
+type ChannelOverrideType int64
+
+func (in *ChannelOverrideType) UnmarshalJSON(b []byte) error {
+	if !bytes.Equal(b, null) {
+		i, err := strconv.ParseInt(string(b[1:len(b)-1]), 10, 64)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshal json: %v", err)
+		}
+
+		*in = ChannelOverrideType(i)
+	}
+
+	return nil
+}
+
+func (in ChannelOverrideType) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(in)), nil
+}
+
+func (in ChannelOverrideType) String() string {
+	return strconv.FormatInt(int64(in), 10)
+}
 
 const (
 	ChannelOverrideTypeRole ChannelOverrideType = iota
