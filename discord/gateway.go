@@ -82,13 +82,13 @@ type SentPayload struct {
 
 // Identify represents the initial handshake with the gateway.
 type Identify struct {
-	Properties     *IdentifyProperties `json:"properties"`
-	Presence       *UpdateStatus       `json:"presence,omitempty"`
-	Token          string              `json:"token"`
-	Shard          [2]int32            `json:"shard,omitempty"`
-	LargeThreshold int32               `json:"large_threshold"`
-	Intents        int32               `json:"intents"`
-	Compress       bool                `json:"compress"`
+	Properties     IdentifyProperties `json:"properties"`
+	Presence       *UpdateStatus      `json:"presence,omitempty"`
+	Token          string             `json:"token"`
+	Shard          [2]int32           `json:"shard,omitempty"`
+	LargeThreshold int32              `json:"large_threshold"`
+	Intents        int32              `json:"intents"`
+	Compress       bool               `json:"compress"`
 }
 
 // IdentifyProperties are the extra properties sent in the identify packet.
@@ -120,8 +120,8 @@ type RequestGuildMembers struct {
 
 // Update Presence updates a client's presence.
 type UpdateStatus struct {
-	Status     string      `json:"status"`
-	Activities []*Activity `json:"activities,omitempty"`
-	Since      int32       `json:"since,omitempty"`
-	AFK        bool        `json:"afk"`
+	Status     string     `json:"status"`
+	Activities []Activity `json:"activities,omitempty"`
+	Since      int32      `json:"since,omitempty"`
+	AFK        bool       `json:"afk"`
 }

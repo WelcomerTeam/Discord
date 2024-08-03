@@ -50,7 +50,7 @@ func getImageMimeType(b []byte) (string, error) {
 	}
 }
 
-func multipartBodyWithJSON(data interface{}, files []*File) (contentType string, body []byte, err error) {
+func multipartBodyWithJSON(data interface{}, files []File) (contentType string, body []byte, err error) {
 	requestBody := &bytes.Buffer{}
 	writer := multipart.NewWriter(requestBody)
 

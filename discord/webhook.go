@@ -105,16 +105,16 @@ func (wm *WebhookMessage) Delete(s *Session, token string) error {
 
 // WebhookMessage represents the structure for sending a webhook message.
 type WebhookMessageParams struct {
-	PayloadJSON     *json.RawMessage          `json:"payload_json,omitempty"`
-	Content         string                    `json:"content,omitempty"`
-	Username        string                    `json:"username,omitempty"`
-	AvatarURL       string                    `json:"avatar_url,omitempty"`
-	Embeds          []*Embed                  `json:"embeds,omitempty"`
-	AllowedMentions []*MessageAllowedMentions `json:"allowed_mentions,omitempty"`
-	Components      []*InteractionComponent   `json:"components,omitempty"`
-	Files           []*File                   `json:"-"`
-	Attachments     []*MessageAttachment      `json:"attachments,omitempty"`
-	TTS             bool                      `json:"tts,omitempty"`
+	PayloadJSON     *json.RawMessage         `json:"payload_json,omitempty"`
+	Content         string                   `json:"content,omitempty"`
+	Username        string                   `json:"username,omitempty"`
+	AvatarURL       string                   `json:"avatar_url,omitempty"`
+	Embeds          []Embed                  `json:"embeds,omitempty"`
+	AllowedMentions []MessageAllowedMentions `json:"allowed_mentions,omitempty"`
+	Components      []InteractionComponent   `json:"components,omitempty"`
+	Files           []File                   `json:"-"`
+	Attachments     []MessageAttachment      `json:"attachments,omitempty"`
+	TTS             bool                     `json:"tts,omitempty"`
 }
 
 // WebhookParam represents the data sent to discord to create a webhook.

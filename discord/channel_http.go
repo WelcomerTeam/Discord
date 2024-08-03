@@ -59,7 +59,7 @@ func DeleteChannel(s *Session, channelID Snowflake, reason *string) error {
 	return nil
 }
 
-func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]*Message, error) {
+func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]Message, error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
 	values := url.Values{}
@@ -84,7 +84,7 @@ func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, befo
 		endpoint += "?" + values.Encode()
 	}
 
-	var messages []*Message
+	var messages []Message
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &messages)
 	if err != nil {
@@ -178,10 +178,10 @@ func DeleteUserReaction(s *Session, channelID Snowflake, messageID Snowflake, em
 	return nil
 }
 
-func GetReactions(s *Session, channelID Snowflake, messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]*User, error) {
+func GetReactions(s *Session, channelID Snowflake, messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]User, error) {
 	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji))
 
-	var users []*User
+	var users []User
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &users)
 	if err != nil {
@@ -293,10 +293,10 @@ func EditChannelPermissions(s *Session, channelID Snowflake, overwriteID Snowfla
 	return nil
 }
 
-func GetChannelInvites(s *Session, channelID Snowflake) ([]*Invite, error) {
+func GetChannelInvites(s *Session, channelID Snowflake) ([]Invite, error) {
 	endpoint := EndpointChannelInvites(channelID.String())
 
-	var invites []*Invite
+	var invites []Invite
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, nil)
 	if err != nil {
@@ -366,10 +366,10 @@ func TriggerTypingIndicator(s *Session, channelID Snowflake) error {
 	return nil
 }
 
-func GetPinnedMessages(s *Session, channelID Snowflake) ([]*Message, error) {
+func GetPinnedMessages(s *Session, channelID Snowflake) ([]Message, error) {
 	endpoint := EndpointChannelMessagesPins(channelID.String())
 
-	var pinnedMessages []*Message
+	var pinnedMessages []Message
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &pinnedMessages)
 	if err != nil {

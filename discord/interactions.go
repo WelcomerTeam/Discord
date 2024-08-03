@@ -102,7 +102,7 @@ type Interaction struct {
 	Token          string           `json:"token"`
 	Locale         string           `json:"locale,omitempty"`
 	GuildLocale    string           `json:"guild_locale,omitempty"`
-	Entitlements   []*Entitlement   `json:"entitlements,omitempty"`
+	Entitlements   []Entitlement    `json:"entitlements,omitempty"`
 	ID             Snowflake        `json:"id"`
 	ApplicationID  Snowflake        `json:"application_id"`
 	Version        int32            `json:"version"`
@@ -170,72 +170,72 @@ type InteractionResponse struct {
 
 // InteractionData represents the structure of interaction data.
 type InteractionData struct {
-	TargetID      *Snowflake                 `json:"target_id,omitempty"`
-	Resolved      *InteractionResolvedData   `json:"resolved,omitempty"`
-	GuildID       *Snowflake                 `json:"guild_id,omitempty"`
-	ComponentType *InteractionComponentType  `json:"component_type,omitempty"`
-	Name          string                     `json:"name"`
-	CustomID      string                     `json:"custom_id,omitempty"`
-	Options       []*InteractionDataOption   `json:"options,omitempty"`
-	Values        []*ApplicationSelectOption `json:"values,omitempty"`
-	Components    []*InteractionComponent    `json:"components,omitempty"`
-	Value         json.RawMessage            `json:"value,omitempty"`
-	ID            Snowflake                  `json:"id"`
-	Type          ApplicationCommandType     `json:"type"`
-	Focused       bool                       `json:"focused,omitempty"`
+	TargetID      *Snowflake                `json:"target_id,omitempty"`
+	Resolved      *InteractionResolvedData  `json:"resolved,omitempty"`
+	GuildID       *Snowflake                `json:"guild_id,omitempty"`
+	ComponentType *InteractionComponentType `json:"component_type,omitempty"`
+	Name          string                    `json:"name"`
+	CustomID      string                    `json:"custom_id,omitempty"`
+	Options       []InteractionDataOption   `json:"options,omitempty"`
+	Values        []ApplicationSelectOption `json:"values,omitempty"`
+	Components    []InteractionComponent    `json:"components,omitempty"`
+	Value         json.RawMessage           `json:"value,omitempty"`
+	ID            Snowflake                 `json:"id"`
+	Type          ApplicationCommandType    `json:"type"`
+	Focused       bool                      `json:"focused,omitempty"`
 }
 
 // InteractionData represents the structure of the interaction callback data.
 // Not all message fields are supported, allowed fields are: tts, content
 // embeds, allowed_mentions, flags, components and attachments.
 type InteractionCallbackData struct {
-	Content         string                            `json:"content,omitempty"`
-	Title           string                            `json:"title,omitempty"`
-	CustomID        string                            `json:"custom_id,omitempty"`
-	Embeds          []*Embed                          `json:"embeds,omitempty"`
-	AllowedMentions []*MessageAllowedMentions         `json:"allowed_mentions,omitempty"`
-	Attachments     []*MessageAttachment              `json:"attachments,omitempty"`
-	Files           []*File                           `json:"-"`
-	Components      []*InteractionComponent           `json:"components,omitempty"`
-	Choices         []*ApplicationCommandOptionChoice `json:"choices,omitempty"`
-	Flags           uint32                            `json:"flags,omitempty"`
-	TTS             bool                              `json:"tts,omitempty"`
+	Content         string                           `json:"content,omitempty"`
+	Title           string                           `json:"title,omitempty"`
+	CustomID        string                           `json:"custom_id,omitempty"`
+	Embeds          []Embed                          `json:"embeds,omitempty"`
+	AllowedMentions []MessageAllowedMentions         `json:"allowed_mentions,omitempty"`
+	Attachments     []MessageAttachment              `json:"attachments,omitempty"`
+	Files           []File                           `json:"-"`
+	Components      []InteractionComponent           `json:"components,omitempty"`
+	Choices         []ApplicationCommandOptionChoice `json:"choices,omitempty"`
+	Flags           uint32                           `json:"flags,omitempty"`
+	TTS             bool                             `json:"tts,omitempty"`
 }
 
 // InteractionDataOption represents the structure of an interaction option.
 type InteractionDataOption struct {
 	Name    string                       `json:"name"`
 	Value   json.RawMessage              `json:"value,omitempty"`
-	Options []*InteractionDataOption     `json:"options,omitempty"`
+	Options []InteractionDataOption      `json:"options,omitempty"`
 	Type    ApplicationCommandOptionType `json:"type"`
 	Focused bool                         `json:"focused,omitempty"`
 }
 
 // InteractionResolvedData represents any extra payload data for an interaction.
 type InteractionResolvedData struct {
-	Users       map[Snowflake]*User              `json:"users,omitempty"`
-	Members     map[Snowflake]*GuildMember       `json:"members,omitempty"`
-	Roles       map[Snowflake]*Role              `json:"roles,omitempty"`
-	Channels    map[Snowflake]*Channel           `json:"channels,omitempty"`
-	Messages    map[Snowflake]*Message           `json:"messages,omitempty"`
-	Attachments map[Snowflake]*MessageAttachment `json:"attachments,omitempty"`
+	Users       map[Snowflake]User              `json:"users,omitempty"`
+	Members     map[Snowflake]GuildMember       `json:"members,omitempty"`
+	Roles       map[Snowflake]Role              `json:"roles,omitempty"`
+	Channels    map[Snowflake]Channel           `json:"channels,omitempty"`
+	Messages    map[Snowflake]Message           `json:"messages,omitempty"`
+	Attachments map[Snowflake]MessageAttachment `json:"attachments,omitempty"`
 }
 
 // InteractionComponent represents the structure of a component.
 type InteractionComponent struct {
-	Emoji        *Emoji                     `json:"emoji,omitempty"`
-	MaxValues    *int32                     `json:"max_values,omitempty"`
-	MinValues    *int32                     `json:"min_values,omitempty"`
-	Placeholder  string                     `json:"placeholder,omitempty"`
-	CustomID     string                     `json:"custom_id,omitempty"`
-	URL          string                     `json:"url,omitempty"`
-	Label        string                     `json:"label,omitempty"`
-	Options      []*ApplicationSelectOption `json:"options,omitempty"`
-	ChannelTypes []ChannelType              `json:"channel_types,omitempty"`
-	Components   []*InteractionComponent    `json:"components,omitempty"`
-	Disabled     bool                       `json:"disabled,omitempty"`
-	Type         InteractionComponentType   `json:"type"`
-	Style        InteractionComponentStyle  `json:"style,omitempty"`
+	Emoji        *Emoji                    `json:"emoji,omitempty"`
+	MaxValues    *int32                    `json:"max_values,omitempty"`
+	MinValues    *int32                    `json:"min_values,omitempty"`
+	Placeholder  string                    `json:"placeholder,omitempty"`
+	CustomID     string                    `json:"custom_id,omitempty"`
+	URL          string                    `json:"url,omitempty"`
+	Label        string                    `json:"label,omitempty"`
+	Options      []ApplicationSelectOption `json:"options,omitempty"`
+	ChannelTypes []ChannelType             `json:"channel_types,omitempty"`
+	Components   []InteractionComponent    `json:"components,omitempty"`
+	Disabled     bool                      `json:"disabled,omitempty"`
+	Type         InteractionComponentType  `json:"type"`
+	Style        InteractionComponentStyle `json:"style,omitempty"`
 }
 
 func NewInteractionComponent(componentType InteractionComponentType) *InteractionComponent {
@@ -280,7 +280,7 @@ func (ic *InteractionComponent) SetURL(url string) *InteractionComponent {
 	return ic
 }
 
-func (ic *InteractionComponent) AddOption(option *ApplicationSelectOption) *InteractionComponent {
+func (ic *InteractionComponent) AddOption(option ApplicationSelectOption) *InteractionComponent {
 	ic.Options = append(ic.Options, option)
 
 	return ic
@@ -299,7 +299,7 @@ func (ic *InteractionComponent) SetMinMaxValues(minValue *int32, maxValue *int32
 	return ic
 }
 
-func (ic *InteractionComponent) AddComponent(component *InteractionComponent) *InteractionComponent {
+func (ic *InteractionComponent) AddComponent(component InteractionComponent) *InteractionComponent {
 	ic.Components = append(ic.Components, component)
 
 	return ic

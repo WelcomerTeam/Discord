@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func ListGuildEmojis(s *Session, guildID Snowflake) ([]*Emoji, error) {
+func ListGuildEmojis(s *Session, guildID Snowflake) ([]Emoji, error) {
 	endpoint := EndpointGuildEmojis(guildID.String())
 
-	var emojis []*Emoji
+	var emojis []Emoji
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &emojis)
 	if err != nil {

@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func ListEntitlements(s *Session, applicationID Snowflake) ([]*Entitlement, error) {
+func ListEntitlements(s *Session, applicationID Snowflake) ([]Entitlement, error) {
 	endpoint := EndpointEntitlements(applicationID.String())
 
-	var entitlements []*Entitlement
+	var entitlements []Entitlement
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entitlements)
 	if err != nil {

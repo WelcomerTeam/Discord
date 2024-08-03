@@ -44,10 +44,10 @@ func ModifyCurrentUser(s *Session, userParam UserParam) (*User, error) {
 	return user, nil
 }
 
-func GetCurrentUserGuilds(s *Session) ([]*Guild, error) {
+func GetCurrentUserGuilds(s *Session) ([]Guild, error) {
 	endpoint := EndpointUserGuilds("@me")
 
-	var guilds []*Guild
+	var guilds []Guild
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guilds)
 	if err != nil {

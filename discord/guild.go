@@ -83,7 +83,7 @@ const (
 type Guild struct {
 	JoinedAt                    time.Time                  `json:"joined_at"`
 	WidgetChannelID             *Snowflake                 `json:"widget_channel_id,omitempty"`
-	NSFWLevel                   *GuildNSFWLevelType        `json:"nsfw_level"`
+	NSFWLevel                   GuildNSFWLevelType         `json:"nsfw_level"`
 	PublicUpdatesChannelID      *Snowflake                 `json:"public_updates_channel_id,omitempty"`
 	PremiumTier                 *PremiumTier               `json:"premium_tier,omitempty"`
 	RulesChannelID              *Snowflake                 `json:"rules_channel_id,omitempty"`
@@ -103,16 +103,16 @@ type Guild struct {
 	Splash                      string                     `json:"splash"`
 	DiscoverySplash             string                     `json:"discovery_splash"`
 	Region                      string                     `json:"region"`
-	Presences                   []*Activity                `json:"presences,omitempty"`
-	GuildScheduledEvents        []*ScheduledEvent          `json:"guild_scheduled_events"`
-	Stickers                    []*Sticker                 `json:"stickers"`
+	Presences                   []Activity                 `json:"presences,omitempty"`
+	GuildScheduledEvents        []ScheduledEvent           `json:"guild_scheduled_events"`
+	Stickers                    []Sticker                  `json:"stickers"`
 	Features                    []string                   `json:"features"`
-	StageInstances              []*StageInstance           `json:"stage_instances,omitempty"`
-	Roles                       []*Role                    `json:"roles"`
-	Emojis                      []*Emoji                   `json:"emojis"`
-	VoiceStates                 []*VoiceState              `json:"voice_states,omitempty"`
-	Members                     []*GuildMember             `json:"members,omitempty"`
-	Channels                    []*Channel                 `json:"channels,omitempty"`
+	StageInstances              []StageInstance            `json:"stage_instances,omitempty"`
+	Roles                       []Role                     `json:"roles"`
+	Emojis                      []Emoji                    `json:"emojis"`
+	VoiceStates                 []VoiceState               `json:"voice_states,omitempty"`
+	Members                     []GuildMember              `json:"members,omitempty"`
+	Channels                    []Channel                  `json:"channels,omitempty"`
 	ID                          Snowflake                  `json:"id"`
 	ExplicitContentFilter       ExplicitContentFilterLevel `json:"explicit_content_filter"`
 	DefaultMessageNotifications MessageNotificationLevel   `json:"default_message_notifications"`
@@ -162,7 +162,7 @@ type GuildParam struct {
 // actionType: The action type to filter audit logs by.
 // before: Only show audit logs before a certain snowflake.
 // limit: Maximum number of audit log entries to return.
-func (g *Guild) AuditLogs(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]*AuditLogEntry, error) {
+func (g *Guild) AuditLogs(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]AuditLogEntry, error) {
 	return GetGuildAuditLog(s, g.ID, userID, actionType, before, limit)
 }
 
@@ -174,7 +174,7 @@ func (g *Guild) Ban(s *Session, userID Snowflake, reason *string) error {
 }
 
 // Bans returns a list of guild bans.
-func (g *Guild) Bans(s *Session) ([]*GuildBan, error) {
+func (g *Guild) Bans(s *Session) ([]GuildBan, error) {
 	return GetGuildBans(s, g.ID)
 }
 
@@ -207,7 +207,7 @@ func (g *Guild) CreateChannel(s *Session, channelParams ChannelParams, reason *s
 // image: Bytes representing the image file to upload.
 // roles: Roles that this emoji is limited to.
 // reason: Reason for creating the emoji.
-func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles []*Snowflake, reason *string) (*Emoji, error) {
+func (g *Guild) CreateCustomEmoji(s *Session, name string, image []byte, roles []Snowflake, reason *string) (*Emoji, error) {
 	params := EmojiParams{
 		Name:  name,
 		Roles: roles,
@@ -251,7 +251,7 @@ func (g *Guild) Edit(s *Session, guildArg GuildParam, reason *string) error {
 
 // EditRolePositions edits role positions in a guild.
 // guildRolePositionArgs: List of roles and their new role position.
-func (g *Guild) EditRolePositions(s *Session, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]*Role, error) {
+func (g *Guild) EditRolePositions(s *Session, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]Role, error) {
 	return ModifyGuildRolePositions(s, g.ID, guildRolePositionArgs, reason)
 }
 
@@ -263,12 +263,12 @@ func (g *Guild) EstimatePrunedMembers(s *Session, days *int32, includedRoles []S
 }
 
 // Integrations returns all guild integrations.
-func (g *Guild) Integrations(s *Session) ([]*Integration, error) {
+func (g *Guild) Integrations(s *Session) ([]Integration, error) {
 	return GetGuildIntegrations(s, g.ID)
 }
 
 // Invites returns all guild invites.
-func (g *Guild) Invites(s *Session) ([]*Invite, error) {
+func (g *Guild) Invites(s *Session) ([]Invite, error) {
 	return GetGuildInvites(s, g.ID)
 }
 
@@ -296,7 +296,7 @@ func (g *Guild) PruneMembers(s *Session, guildID Snowflake, days *int32, include
 // QueryMembers returns guild members whose username or nickname matches query.
 // query: Query string to match usernames and nicknames against.
 // limit: Maximum number of members to return.
-func (g *Guild) QueryMembers(s *Session, query string, limit *int32) ([]*GuildMember, error) {
+func (g *Guild) QueryMembers(s *Session, query string, limit *int32) ([]GuildMember, error) {
 	return SearchGuildMembers(s, g.ID, query, limit)
 }
 
@@ -320,7 +320,7 @@ func (g *Guild) VanityInvite(s *Session) (*Invite, error) {
 }
 
 // Webhooks returns all webhooks for a guild.
-func (g *Guild) Webhooks(s *Session) ([]*Webhook, error) {
+func (g *Guild) Webhooks(s *Session) ([]Webhook, error) {
 	return GetGuildWebhooks(s, g.ID)
 }
 
@@ -508,13 +508,13 @@ type VoiceState struct {
 // GuildBan represents a ban entry.
 type GuildBan struct {
 	GuildID *Snowflake `json:"guild_id,omitempty"`
-	User    *User      `json:"user"`
+	User    User       `json:"user"`
 	Reason  string
 }
 
 // GuildPruneParam represents the arguments for a guild prune.
 type GuildPruneParam struct {
-	Days              *int32       `json:"days,omitempty"`
-	IncludeRoles      []*Snowflake `json:"include_roles"`
-	ComputePruneCount bool         `json:"compute_prune_count"`
+	Days              *int32      `json:"days,omitempty"`
+	IncludeRoles      []Snowflake `json:"include_roles"`
+	ComputePruneCount bool        `json:"compute_prune_count"`
 }

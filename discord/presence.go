@@ -37,7 +37,7 @@ const (
 // Activity represents an activity as sent as part of other packets.
 type Activity struct {
 	Timestamps    *Timestamps   `json:"timestamps,omitempty"`
-	ApplicationID *Snowflake    `json:"application_id"`
+	ApplicationID Snowflake     `json:"application_id"`
 	Party         *Party        `json:"party,omitempty"`
 	Assets        *Assets       `json:"assets,omitempty"`
 	Secrets       *Secrets      `json:"secrets,omitempty"`

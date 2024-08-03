@@ -76,10 +76,10 @@ func DeleteGuild(s *Session, guildID Snowflake) error {
 	return nil
 }
 
-func GetGuildChannels(s *Session, guildID Snowflake) ([]*Channel, error) {
+func GetGuildChannels(s *Session, guildID Snowflake) ([]Channel, error) {
 	endpoint := EndpointGuildChannels(guildID.String())
 
-	var channels []*Channel
+	var channels []Channel
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &channels)
 	if err != nil {
@@ -138,7 +138,7 @@ func GetGuildMember(s *Session, guildID Snowflake, userID Snowflake) (*GuildMemb
 	return guildMember, nil
 }
 
-func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowflake) ([]*GuildMember, error) {
+func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowflake) ([]GuildMember, error) {
 	endpoint := EndpointGuildMembers(guildID.String())
 
 	values := url.Values{}
@@ -155,7 +155,7 @@ func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowfl
 		endpoint += "?" + values.Encode()
 	}
 
-	var guildMembers []*GuildMember
+	var guildMembers []GuildMember
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guildMembers)
 	if err != nil {
@@ -165,7 +165,7 @@ func ListGuildMembers(s *Session, guildID Snowflake, limit *int32, after *Snowfl
 	return guildMembers, nil
 }
 
-func SearchGuildMembers(s *Session, guildID Snowflake, query string, limit *int32) ([]*GuildMember, error) {
+func SearchGuildMembers(s *Session, guildID Snowflake, query string, limit *int32) ([]GuildMember, error) {
 	endpoint := EndpointGuildMembersSearch(guildID.String())
 
 	values := url.Values{}
@@ -178,7 +178,7 @@ func SearchGuildMembers(s *Session, guildID Snowflake, query string, limit *int3
 
 	endpoint += "?" + values.Encode()
 
-	var guildMembers []*GuildMember
+	var guildMembers []GuildMember
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &guildMembers)
 	if err != nil {
@@ -277,10 +277,10 @@ func RemoveGuildMember(s *Session, guildID Snowflake, userID Snowflake, reason *
 	return nil
 }
 
-func GetGuildBans(s *Session, guildID Snowflake) ([]*GuildBan, error) {
+func GetGuildBans(s *Session, guildID Snowflake) ([]GuildBan, error) {
 	endpoint := EndpointGuildBans(guildID.String())
 
-	var bans []*GuildBan
+	var bans []GuildBan
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &bans)
 	if err != nil {
@@ -337,10 +337,10 @@ func RemoveGuildBan(s *Session, guildID Snowflake, userID Snowflake, reason *str
 	return nil
 }
 
-func GetGuildRoles(s *Session, guildID Snowflake) ([]*Role, error) {
+func GetGuildRoles(s *Session, guildID Snowflake) ([]Role, error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
-	var roles []*Role
+	var roles []Role
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &roles)
 	if err != nil {
@@ -369,7 +369,7 @@ func CreateGuildRole(s *Session, guildID Snowflake, roleParams RoleParams, reaso
 	return role, nil
 }
 
-func ModifyGuildRolePositions(s *Session, guildID Snowflake, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]*Role, error) {
+func ModifyGuildRolePositions(s *Session, guildID Snowflake, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]Role, error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
 	headers := http.Header{}
@@ -378,7 +378,7 @@ func ModifyGuildRolePositions(s *Session, guildID Snowflake, guildRolePositionAr
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	var roles []*Role
+	var roles []Role
 
 	err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, guildRolePositionArgs, headers, &roles)
 	if err != nil {
@@ -476,7 +476,7 @@ func BeginGuildPrune(s *Session, guildID Snowflake, days *int32, includedRoles [
 
 	for _, includedRole := range includedRoles {
 		role := includedRole
-		pruneArg.IncludeRoles = append(pruneArg.IncludeRoles, &role)
+		pruneArg.IncludeRoles = append(pruneArg.IncludeRoles, role)
 	}
 
 	headers := http.Header{}
@@ -497,10 +497,10 @@ func BeginGuildPrune(s *Session, guildID Snowflake, days *int32, includedRoles [
 	return &prunedStruct.Pruned, nil
 }
 
-func GetGuildInvites(s *Session, guildID Snowflake) ([]*Invite, error) {
+func GetGuildInvites(s *Session, guildID Snowflake) ([]Invite, error) {
 	endpoint := EndpointGuildInvites(guildID.String())
 
-	var invites []*Invite
+	var invites []Invite
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &invites)
 	if err != nil {
@@ -510,10 +510,10 @@ func GetGuildInvites(s *Session, guildID Snowflake) ([]*Invite, error) {
 	return invites, nil
 }
 
-func GetGuildIntegrations(s *Session, guildID Snowflake) ([]*Integration, error) {
+func GetGuildIntegrations(s *Session, guildID Snowflake) ([]Integration, error) {
 	endpoint := EndpointGuildIntegrations(guildID.String())
 
-	var integrations []*Integration
+	var integrations []Integration
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &integrations)
 	if err != nil {

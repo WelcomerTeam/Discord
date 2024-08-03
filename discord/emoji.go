@@ -25,7 +25,7 @@ func (e *Emoji) Delete(s *Session, reason *string) error {
 // name: The name of the emoji
 // roles: Roles this emoji is limited to.
 // reason: Reason for editing the emoji.
-func (e *Emoji) Edit(s *Session, name string, roles []*Snowflake, reason *string) error {
+func (e *Emoji) Edit(s *Session, name string, roles []Snowflake, reason *string) error {
 	params := EmojiParams{
 		Name:  name,
 		Roles: roles,
@@ -43,7 +43,7 @@ func (e *Emoji) Edit(s *Session, name string, roles []*Snowflake, reason *string
 
 // EmojiParams represents the payload sent to discord.
 type EmojiParams struct {
-	Name  string       `json:"name"`
-	Image string       `json:"image,omitempty"`
-	Roles []*Snowflake `json:"roles"`
+	Name  string      `json:"name"`
+	Image string      `json:"image,omitempty"`
+	Roles []Snowflake `json:"roles"`
 }

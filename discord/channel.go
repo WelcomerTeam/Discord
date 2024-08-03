@@ -47,46 +47,46 @@ const (
 
 // Channel represents a Discord channel.
 type Channel struct {
-	OwnerID                    *Snowflake          `json:"owner_id,omitempty"`
-	GuildID                    *Snowflake          `json:"guild_id,omitempty"`
-	Permissions                *Int64              `json:"permissions,omitempty"`
-	ThreadMember               *ThreadMember       `json:"member,omitempty"`
-	ThreadMetadata             *ThreadMetadata     `json:"thread_metadata,omitempty"`
-	VideoQualityMode           *VideoQualityMode   `json:"video_quality_mode,omitempty"`
-	LastPinTimestamp           *time.Time          `json:"last_pin_timestamp,omitempty"`
-	ParentID                   *Snowflake          `json:"parent_id,omitempty"`
-	ApplicationID              *Snowflake          `json:"application_id,omitempty"`
-	RTCRegion                  string              `json:"rtc_region,omitempty"`
-	Topic                      string              `json:"topic,omitempty"`
-	Icon                       string              `json:"icon,omitempty"`
-	Name                       string              `json:"name,omitempty"`
-	LastMessageID              string              `json:"last_message_id,omitempty"`
-	PermissionOverwrites       []*ChannelOverwrite `json:"permission_overwrites,omitempty"`
-	Recipients                 []*User             `json:"recipients,omitempty"`
-	ID                         Snowflake           `json:"id"`
-	UserLimit                  int32               `json:"user_limit,omitempty"`
-	Bitrate                    int32               `json:"bitrate,omitempty"`
-	MessageCount               int32               `json:"message_count,omitempty"`
-	MemberCount                int32               `json:"member_count,omitempty"`
-	RateLimitPerUser           int32               `json:"rate_limit_per_user,omitempty"`
-	Position                   int32               `json:"position,omitempty"`
-	DefaultAutoArchiveDuration int32               `json:"default_auto_archive_duration,omitempty"`
-	NSFW                       bool                `json:"nsfw"`
-	Type                       ChannelType         `json:"type"`
+	OwnerID                    *Snowflake         `json:"owner_id,omitempty"`
+	GuildID                    *Snowflake         `json:"guild_id,omitempty"`
+	Permissions                *Int64             `json:"permissions,omitempty"`
+	ThreadMember               *ThreadMember      `json:"member,omitempty"`
+	ThreadMetadata             *ThreadMetadata    `json:"thread_metadata,omitempty"`
+	VideoQualityMode           *VideoQualityMode  `json:"video_quality_mode,omitempty"`
+	LastPinTimestamp           *time.Time         `json:"last_pin_timestamp,omitempty"`
+	ParentID                   *Snowflake         `json:"parent_id,omitempty"`
+	ApplicationID              *Snowflake         `json:"application_id,omitempty"`
+	RTCRegion                  string             `json:"rtc_region,omitempty"`
+	Topic                      string             `json:"topic,omitempty"`
+	Icon                       string             `json:"icon,omitempty"`
+	Name                       string             `json:"name,omitempty"`
+	LastMessageID              string             `json:"last_message_id,omitempty"`
+	PermissionOverwrites       []ChannelOverwrite `json:"permission_overwrites,omitempty"`
+	Recipients                 []User             `json:"recipients,omitempty"`
+	ID                         Snowflake          `json:"id"`
+	UserLimit                  int32              `json:"user_limit,omitempty"`
+	Bitrate                    int32              `json:"bitrate,omitempty"`
+	MessageCount               int32              `json:"message_count,omitempty"`
+	MemberCount                int32              `json:"member_count,omitempty"`
+	RateLimitPerUser           int32              `json:"rate_limit_per_user,omitempty"`
+	Position                   int32              `json:"position,omitempty"`
+	DefaultAutoArchiveDuration int32              `json:"default_auto_archive_duration,omitempty"`
+	NSFW                       bool               `json:"nsfw"`
+	Type                       ChannelType        `json:"type"`
 }
 
 // ChannelParams the data that is provided when creating a channel.
 type ChannelParams struct {
-	ParentID             *Snowflake          `json:"parent_id,omitempty"`
-	Name                 string              `json:"name"`
-	Topic                string              `json:"topic,omitempty"`
-	PermissionOverwrites []*ChannelOverwrite `json:"permission_overwrites,omitempty"`
-	Bitrate              int32               `json:"bitrate,omitempty"`
-	UserLimit            int32               `json:"user_limit,omitempty"`
-	RateLimitPerUser     int32               `json:"rate_limit_per_user,omitempty"`
-	Position             int32               `json:"position,omitempty"`
-	Type                 ChannelType         `json:"type"`
-	NSFW                 bool                `json:"nsfw"`
+	ParentID             *Snowflake         `json:"parent_id,omitempty"`
+	Name                 string             `json:"name"`
+	Topic                string             `json:"topic,omitempty"`
+	PermissionOverwrites []ChannelOverwrite `json:"permission_overwrites,omitempty"`
+	Bitrate              int32              `json:"bitrate,omitempty"`
+	UserLimit            int32              `json:"user_limit,omitempty"`
+	RateLimitPerUser     int32              `json:"rate_limit_per_user,omitempty"`
+	Position             int32              `json:"position,omitempty"`
+	Type                 ChannelType        `json:"type"`
+	NSFW                 bool               `json:"nsfw"`
 }
 
 // CreateInvite creates an invite to a channel.
@@ -135,17 +135,17 @@ func (c *Channel) Edit(s *Session, channelParams ChannelParams, reason *string) 
 // before: Get messages before this message ID.
 // after: Get messages after this message ID.
 // limit: Maximum number of messages to return.
-func (c *Channel) History(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]*Message, error) {
+func (c *Channel) History(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]Message, error) {
 	return GetChannelMessages(s, c.ID, around, before, after, limit)
 }
 
 // Invites returns all invites for this channel.
-func (c *Channel) Invites(s *Session) ([]*Invite, error) {
+func (c *Channel) Invites(s *Session) ([]Invite, error) {
 	return GetChannelInvites(s, c.ID)
 }
 
 // Pins returns all pinned messages in this channel.
-func (c *Channel) Pins(s *Session) ([]*Message, error) {
+func (c *Channel) Pins(s *Session) ([]Message, error) {
 	return GetPinnedMessages(s, c.ID)
 }
 
@@ -154,7 +154,7 @@ func (c *Channel) Pins(s *Session) ([]*Message, error) {
 // before: Get messages before this message ID.
 // after: Get messages after this message ID.
 // limit: Maximum number of messages to return.
-func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32, reason *string) ([]*Message, error) {
+func (c *Channel) Purge(s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32, reason *string) ([]Message, error) {
 	messages, err := c.History(s, around, before, after, limit)
 	if err != nil {
 		return messages, err
@@ -190,16 +190,16 @@ func (c *Channel) TriggerTyping(s *Session) error {
 }
 
 // Webhooks returns all webhooks for a channel.
-func (c *Channel) Webhooks(s *Session) ([]*Webhook, error) {
+func (c *Channel) Webhooks(s *Session) ([]Webhook, error) {
 	return GetChannelWebhooks(s, c.ID)
 }
 
 // ChannelOverwrite represents a permission overwrite for a channel.
 type ChannelOverwrite struct {
-	Type  *ChannelOverrideType `json:"type"`
-	ID    Snowflake            `json:"id"`
-	Allow Int64                `json:"allow"`
-	Deny  Int64                `json:"deny"`
+	Type  ChannelOverrideType `json:"type"`
+	ID    Snowflake           `json:"id"`
+	Allow Int64               `json:"allow"`
+	Deny  Int64               `json:"deny"`
 }
 
 // ChannelOverrideType represents the target of a channel override.
@@ -260,12 +260,12 @@ type ThreadMember struct {
 
 // StageInstance represents a stage channel instance.
 type StageInstance struct {
-	PrivacyLabel         *StageChannelPrivacyLevel `json:"privacy_level"`
-	Topic                string                    `json:"topic"`
-	ID                   Snowflake                 `json:"id"`
-	GuildID              Snowflake                 `json:"guild_id"`
-	ChannelID            Snowflake                 `json:"channel_id"`
-	DiscoverableDisabled bool                      `json:"discoverable_disabled"`
+	PrivacyLabel         StageChannelPrivacyLevel `json:"privacy_level"`
+	Topic                string                   `json:"topic"`
+	ID                   Snowflake                `json:"id"`
+	GuildID              Snowflake                `json:"guild_id"`
+	ChannelID            Snowflake                `json:"channel_id"`
+	DiscoverableDisabled bool                     `json:"discoverable_disabled"`
 }
 
 // FollowedChannel represents a followed channel.

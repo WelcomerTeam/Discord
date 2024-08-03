@@ -142,12 +142,12 @@ const (
 )
 
 type GuildAuditLog struct {
-	AuditLogEntries []*AuditLogEntry  `json:"audit_log_entries"`
-	ScheduledEvents []*ScheduledEvent `json:"guild_scheduled_events"`
-	Integrations    []*Integration    `json:"integrations"`
-	Threads         []*Channel        `json:"threads"`
-	Users           []*User           `json:"users"`
-	Webhooks        []*Webhook        `json:"webhooks"`
+	AuditLogEntries []AuditLogEntry  `json:"audit_log_entries"`
+	ScheduledEvents []ScheduledEvent `json:"guild_scheduled_events"`
+	Integrations    []Integration    `json:"integrations"`
+	Threads         []Channel        `json:"threads"`
+	Users           []User           `json:"users"`
+	Webhooks        []Webhook        `json:"webhooks"`
 }
 
 type AuditLogEntry struct {
@@ -155,7 +155,7 @@ type AuditLogEntry struct {
 	UserID     *Snowflake         `json:"user_id,omitempty"`
 	Options    *AuditLogOptions   `json:"options,omitempty"`
 	Reason     string             `json:"reason,omitempty"`
-	Changes    []*AuditLogChanges `json:"changes,omitempty"`
+	Changes    []AuditLogChanges  `json:"changes,omitempty"`
 	ID         Snowflake          `json:"id"`
 	ActionType AuditLogActionType `json:"action_type"`
 }

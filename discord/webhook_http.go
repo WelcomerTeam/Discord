@@ -25,10 +25,10 @@ func CreateWebhook(s *Session, channelID Snowflake, webhookParam WebhookParam, r
 	return webhook, nil
 }
 
-func GetChannelWebhooks(s *Session, channelID Snowflake) ([]*Webhook, error) {
+func GetChannelWebhooks(s *Session, channelID Snowflake) ([]Webhook, error) {
 	endpoint := EndpointChannelWebhooks(channelID.String())
 
-	var webhooks []*Webhook
+	var webhooks []Webhook
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &webhooks)
 	if err != nil {
@@ -38,10 +38,10 @@ func GetChannelWebhooks(s *Session, channelID Snowflake) ([]*Webhook, error) {
 	return webhooks, nil
 }
 
-func GetGuildWebhooks(s *Session, guildID Snowflake) ([]*Webhook, error) {
+func GetGuildWebhooks(s *Session, guildID Snowflake) ([]Webhook, error) {
 	endpoint := EndpointGuildWebhooks(guildID.String())
 
-	var webhooks []*Webhook
+	var webhooks []Webhook
 
 	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &webhooks)
 	if err != nil {
