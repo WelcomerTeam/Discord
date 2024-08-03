@@ -137,9 +137,7 @@ type GuildMemberRemove struct {
 }
 
 // GuildMemberUpdate represents a guild member update event.
-type GuildMemberUpdate struct {
-	*GuildMember
-}
+type GuildMemberUpdate GuildMember
 
 // GuildMembersChunk represents a guild members chunk event.
 type GuildMembersChunk struct {
