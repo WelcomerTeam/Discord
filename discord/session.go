@@ -61,7 +61,10 @@ func NewBaseInterface() RESTInterface {
 }
 
 func NewInterface(httpClient *http.Client, endpoint string, version string, useragent string) RESTInterface {
-	url, _ := url.Parse(endpoint)
+	url, err := url.Parse(endpoint)
+	if err != nil {
+		panic(fmt.Sprintf("failed to parse: %v", err))
+	}
 
 	return &BaseInterface{
 		HTTP:       httpClient,
