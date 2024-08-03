@@ -36,22 +36,22 @@ type InvalidSession struct {
 }
 
 // ApplicationCommandCreate represents the application command create event.
-type ApplicationCommandCreate *ApplicationCommand
+type ApplicationCommandCreate ApplicationCommand
 
 // ApplicationCommandUpdate represents the application command update event.
-type ApplicationCommandUpdate *ApplicationCommand
+type ApplicationCommandUpdate ApplicationCommand
 
 // ApplicationCommandDelete represents the application command delete event.
-type ApplicationCommandDelete *ApplicationCommand
+type ApplicationCommandDelete ApplicationCommand
 
 // ChannelCreate represents a channel create event.
-type ChannelCreate *Channel
+type ChannelCreate Channel
 
 // ChannelUpdate represents a channel update event.
-type ChannelUpdate *Channel
+type ChannelUpdate Channel
 
 // ChannelDelete represents a channel delete event.
-type ChannelDelete *Channel
+type ChannelDelete Channel
 
 // ChannelPinsUpdate represents a channel pins update event.
 type ChannelPinsUpdate struct {
@@ -61,13 +61,13 @@ type ChannelPinsUpdate struct {
 }
 
 // ThreadCreate represents a thread create event.
-type ThreadCreate *Channel
+type ThreadCreate Channel
 
 // ThreadUpdate represents a thread update event.
-type ThreadUpdate *Channel
+type ThreadUpdate Channel
 
 // ThreadDelete represents a thread delete event.
-type ThreadDelete *Channel
+type ThreadDelete Channel
 
 // ThreadListSync represents a thread list sync event.
 type ThreadListSync struct {
@@ -78,7 +78,7 @@ type ThreadListSync struct {
 }
 
 // ThreadMemberUpdate represents a thread member update event.
-type ThreadMemberUpdate *ThreadMember
+type ThreadMemberUpdate ThreadMember
 
 // ThreadMembersUpdate represents a thread members update event.
 type ThreadMembersUpdate struct {
@@ -96,19 +96,19 @@ type GuildAuditLogEntryCreate struct {
 }
 
 // GuildCreate represents a guild create event.
-type GuildCreate *Guild
+type GuildCreate Guild
 
 // GuildUpdate represents a guild update event.
-type GuildUpdate *Guild
+type GuildUpdate Guild
 
 // GuildDelete represents a guild delete event.
-type GuildDelete *UnavailableGuild
+type GuildDelete UnavailableGuild
 
 // GuildBanAdd represents a guild ban add event.
-type GuildBanAdd *GuildBan
+type GuildBanAdd GuildBan
 
 // GuildBanRemove represents a guild ban remove event.
-type GuildBanRemove *GuildBan
+type GuildBanRemove GuildBan
 
 // GuildEmojisUpdate represents a guild emojis update event.
 type GuildEmojisUpdate struct {
@@ -128,7 +128,7 @@ type GuildIntegrationsUpdate struct {
 }
 
 // GuildMemberAdd represents a guild member add event.
-type GuildMemberAdd *GuildMember
+type GuildMemberAdd GuildMember
 
 // GuildMemberRemove represents a guild member remove event.
 type GuildMemberRemove struct {
@@ -153,10 +153,10 @@ type GuildMembersChunk struct {
 }
 
 // GuildRoleCreate represents a guild role create event.
-type GuildRoleCreate *Role
+type GuildRoleCreate Role
 
 // GuildRoleUpdate represents a guild role update event.
-type GuildRoleUpdate *Role
+type GuildRoleUpdate Role
 
 // GuildRoleDelete represents a guild role delete event.
 type GuildRoleDelete struct {
@@ -165,10 +165,10 @@ type GuildRoleDelete struct {
 }
 
 // IntegrationCreate represents the integration create event.
-type IntegrationCreate *Integration
+type IntegrationCreate Integration
 
 // IntegrationUpdate represents the integration update event.
-type IntegrationUpdate *Integration
+type IntegrationUpdate Integration
 
 // IntegrationDelete represents the integration delete event.
 type IntegrationDelete struct {
@@ -178,19 +178,19 @@ type IntegrationDelete struct {
 }
 
 // InteractionCreate represents the interaction create event.
-type InteractionCreate *Interaction
+type InteractionCreate Interaction
 
 // InviteCreate represents the invite create event.
-type InviteCreate *Invite
+type InviteCreate Invite
 
 // InviteDelete represents the invite delete event.
-type InviteDelete *Invite
+type InviteDelete Invite
 
 // MessageCreate represents the message create event.
-type MessageCreate *Message
+type MessageCreate Message
 
 // MessageUpdate represents the message update event.
-type MessageUpdate *Message
+type MessageUpdate Message
 
 // MessageCreate represents the message delete event.
 type MessageDelete struct {
@@ -250,13 +250,13 @@ type PresenceUpdate struct {
 }
 
 // StageInstanceCreate represents a stage instance create event.
-type StageInstanceCreate *StageInstance
+type StageInstanceCreate StageInstance
 
 // StageInstanceUpdate represents a stage instance update event.
-type StageInstanceUpdate *StageInstance
+type StageInstanceUpdate StageInstance
 
 // StageInstanceDelete represents a stage instance delete event.
-type StageInstanceDelete *StageInstance
+type StageInstanceDelete StageInstance
 
 // TypingStart represents a typing start event.
 type TypingStart struct {
@@ -268,10 +268,10 @@ type TypingStart struct {
 }
 
 // UserUpdate represents a user update event.
-type UserUpdate *User
+type UserUpdate User
 
 // VoiceStateUpdate represents the voice state update event.
-type VoiceStateUpdate *VoiceState
+type VoiceStateUpdate VoiceState
 
 // VoiceServerUpdate represents a voice server update event.
 type VoiceServerUpdate struct {
