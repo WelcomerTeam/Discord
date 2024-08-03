@@ -205,7 +205,11 @@ type ChannelOverwrite struct {
 // ChannelOverrideType represents the target of a channel override.
 type ChannelOverrideType Int64
 
-func (in *ChannelOverrideType) UnmarshalJSON(b []byte) error {
+func (o *ChannelOverrideType) IsNil() bool {
+	return *o == 0
+}
+
+func (o *ChannelOverrideType) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		// Discord will pass ChannelOverrideType as a string if it is in an audit log.
 		if b[0] == '"' {
@@ -214,26 +218,26 @@ func (in *ChannelOverrideType) UnmarshalJSON(b []byte) error {
 				return fmt.Errorf("failed to unmarshal json: %v", err)
 			}
 
-			*in = ChannelOverrideType(i)
+			*o = ChannelOverrideType(i)
 		} else {
 			i, err := strconv.ParseInt(string(b), 10, 64)
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal json: %v", err)
 			}
 
-			*in = ChannelOverrideType(i)
+			*o = ChannelOverrideType(i)
 		}
 	}
 
 	return nil
 }
 
-func (in ChannelOverrideType) MarshalJSON() ([]byte, error) {
-	return int64ToStringBytes(int64(in)), nil
+func (o ChannelOverrideType) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(o)), nil
 }
 
-func (in ChannelOverrideType) String() string {
-	return strconv.FormatInt(int64(in), 10)
+func (o ChannelOverrideType) String() string {
+	return strconv.FormatInt(int64(o), 10)
 }
 
 const (

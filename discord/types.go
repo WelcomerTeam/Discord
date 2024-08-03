@@ -16,6 +16,10 @@ var null = []byte("null")
 // Placeholder type for easy identification.
 type Snowflake int64
 
+func (s *Snowflake) IsNil() bool {
+	return *s == 0
+}
+
 func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		i, err := strconv.ParseInt(string(b[1:len(b)-1]), 10, 64)
