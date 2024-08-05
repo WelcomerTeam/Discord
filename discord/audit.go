@@ -173,6 +173,6 @@ type AuditLogOptions struct {
 	Type             *ChannelOverrideType `json:"type,omitempty"`
 	RoleName         string               `json:"role_name,omitempty"`
 	Count            Int64                `json:"count,omitempty"`
-	DeleteMemberDays int32                `json:"delete_member_days,omitempty"`
-	MembersRemoved   int32                `json:"members_removed,omitempty"`
+	DeleteMemberDays Int64                `json:"delete_member_days,omitempty"`
+	MembersRemoved   Int64                `json:"members_removed,omitempty"`
 }
