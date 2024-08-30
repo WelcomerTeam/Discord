@@ -154,7 +154,10 @@ type GuildMembersChunk struct {
 type GuildRoleCreate Role
 
 // GuildRoleUpdate represents a guild role update event.
-type GuildRoleUpdate Role
+type GuildRoleUpdate struct {
+	GuildID Snowflake `json:"guild_id"`
+	Role    Role      `json:"role"`
+}
 
 // GuildRoleDelete represents a guild role delete event.
 type GuildRoleDelete struct {
