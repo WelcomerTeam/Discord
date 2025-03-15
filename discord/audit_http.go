@@ -1,12 +1,14 @@
 package discord
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
-func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]AuditLogEntry, error) {
+func GetGuildAuditLog(ctx context.Context, s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]AuditLogEntry, error) {
 	endpoint := EndpointGuildAuditLogs(guildID.String())
 
 	values := url.Values{}
@@ -24,7 +26,7 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 	}
 
 	if limit != nil {
-		values.Set("limit", fmt.Sprint(*limit))
+		values.Set("limit", strconv.Itoa(int(*limit)))
 	}
 
 	if len(values) > 0 {
@@ -33,7 +35,7 @@ func GetGuildAuditLog(s *Session, guildID Snowflake, userID *Snowflake, actionTy
 
 	var entries []AuditLogEntry
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &entries)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &entries)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild audit log: %w", err)
 	}

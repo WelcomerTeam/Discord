@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"context"
 	"encoding/json"
 	"time"
 )
@@ -104,55 +105,55 @@ type Message struct {
 
 // AddReaction adds a reaction to a message
 // emoji: unicode representation or emoji id.
-func (m *Message) AddReaction(s *Session, emoji string) error {
-	return CreateReaction(s, m.ChannelID, m.ID, emoji)
+func (m *Message) AddReaction(ctx context.Context, s *Session, emoji string) error {
+	return CreateReaction(ctx, s, m.ChannelID, m.ID, emoji)
 }
 
 // ClearReaction clears a specific reaction from a message.
 // emoji: unicode representation or emoji id.
-func (m *Message) ClearReaction(s *Session, emoji string) error {
-	return DeleteAllReactionsEmoji(s, m.ChannelID, m.ID, emoji)
+func (m *Message) ClearReaction(ctx context.Context, s *Session, emoji string) error {
+	return DeleteAllReactionsEmoji(ctx, s, m.ChannelID, m.ID, emoji)
 }
 
 // ClearReactions clears all reactions from a message.
-func (m *Message) ClearReactions(s *Session) error {
-	return DeleteAllReactions(s, m.ChannelID, m.ID)
+func (m *Message) ClearReactions(ctx context.Context, s *Session) error {
+	return DeleteAllReactions(ctx, s, m.ChannelID, m.ID)
 }
 
 // Delete deletes a message.
 // reason: reason for deleting the message.
-func (m *Message) Delete(s *Session, reason *string) error {
-	return DeleteMessage(s, m.ChannelID, m.ID, reason)
+func (m *Message) Delete(ctx context.Context, s *Session, reason *string) error {
+	return DeleteMessage(ctx, s, m.ChannelID, m.ID, reason)
 }
 
 // Edit edits a message.
 // messageArg: arguments for editing the message.
-func (m *Message) Edit(s *Session, messageParams MessageParams) (*Message, error) {
-	return EditMessage(s, m.ChannelID, m.ID, messageParams)
+func (m *Message) Edit(ctx context.Context, s *Session, messageParams MessageParams) (*Message, error) {
+	return EditMessage(ctx, s, m.ChannelID, m.ID, messageParams)
 }
 
 // Pin pins a message in a channel.
 // reason: reason for pinning a message.
-func (m *Message) Pin(s *Session, reason *string) error {
-	return PinMessage(s, m.ChannelID, m.ID, reason)
+func (m *Message) Pin(ctx context.Context, s *Session, reason *string) error {
+	return PinMessage(ctx, s, m.ChannelID, m.ID, reason)
 }
 
 // Publish publishes a message. This must be in an announcement channel.
-func (m *Message) Publish(s *Session) (*Message, error) {
-	return CrosspostMessage(s, m.ChannelID, m.ID)
+func (m *Message) Publish(ctx context.Context, s *Session) (*Message, error) {
+	return CrosspostMessage(ctx, s, m.ChannelID, m.ID)
 }
 
 // RemoveReaction removes a specific reaction from a specific user.
 // emoji: unicode representation or emoji id.
 // user: The user to remove the reaction from.
-func (m *Message) RemoveReaction(s *Session, emoji string, user User) error {
-	return DeleteUserReaction(s, m.ChannelID, m.ID, emoji, user.ID)
+func (m *Message) RemoveReaction(ctx context.Context, s *Session, emoji string, user User) error {
+	return DeleteUserReaction(ctx, s, m.ChannelID, m.ID, emoji, user.ID)
 }
 
 // Reply will send a new message in the same channel as the target message and references the target.
 // This is the same as using Send() and setting the message as the MessageReference.
 // messageArg: arguments for sending a message.
-func (m *Message) Reply(s *Session, messageParams MessageParams) (*Message, error) {
+func (m *Message) Reply(ctx context.Context, s *Session, messageParams MessageParams) (*Message, error) {
 	messageParams.MessageReference = &MessageReference{
 		ID:              &m.ID,
 		ChannelID:       &m.ChannelID,
@@ -162,13 +163,13 @@ func (m *Message) Reply(s *Session, messageParams MessageParams) (*Message, erro
 
 	channel := &Channel{ID: m.ChannelID}
 
-	return channel.Send(s, messageParams)
+	return channel.Send(ctx, s, messageParams)
 }
 
 // Unpin unpins a message.
 // reason: Reason for unpinning.
-func (m *Message) Unpin(s *Session, reason *string) error {
-	return UnpinMessage(s, m.ChannelID, m.ID, reason)
+func (m *Message) Unpin(ctx context.Context, s *Session, reason *string) error {
+	return UnpinMessage(ctx, s, m.ChannelID, m.ID, reason)
 }
 
 // MessageParams represents the structure for sending a message on discord.

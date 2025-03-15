@@ -1,6 +1,9 @@
 package discord
 
-import "time"
+import (
+	"context"
+	"time"
+)
 
 // invites.go contains all structures for invites.
 
@@ -55,8 +58,8 @@ type Invite struct {
 
 // Delete deletes an invite.
 // reason: Reason for deleting an invite.
-func (i *Invite) Delete(s *Session, reason *string) error {
-	return DeleteInvite(s, i.Code, reason)
+func (i *Invite) Delete(ctx context.Context, s *Session, reason *string) error {
+	return DeleteInvite(ctx, s, i.Code, reason)
 }
 
 // InviteStageInstance represents the structure of an invite stage instance.

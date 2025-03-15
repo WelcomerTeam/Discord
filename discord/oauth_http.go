@@ -1,16 +1,17 @@
 package discord
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
 
-func GetCurrentBotApplicationInformation(s *Session) (*Application, error) {
+func GetCurrentBotApplicationInformation(ctx context.Context, s *Session) (*Application, error) {
 	endpoint := EndpointOAuth2Application("@me")
 
 	var application *Application
 
-	err := s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &application)
+	err := s.Interface.FetchBJ(ctx, s, http.MethodGet, endpoint, "", nil, nil, &application)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get current bot application information: %w", err)
 	}
@@ -18,12 +19,12 @@ func GetCurrentBotApplicationInformation(s *Session) (*Application, error) {
 	return application, nil
 }
 
-func GetCurrentAuthorizationInformation(s *Session) (*AuthorizationInformation, error) {
+func GetCurrentAuthorizationInformation(ctx context.Context, s *Session) (*AuthorizationInformation, error) {
 	endpoint := EndpointOAuth2Me
 
 	var authorizationInformation *AuthorizationInformation
 
-	err := s.Interface.FetchBJ(s, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
+	err := s.Interface.FetchBJ(ctx, s, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get current authorization information: %w", err)
 	}

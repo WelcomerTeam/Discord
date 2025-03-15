@@ -20,23 +20,21 @@ const (
 type RESTInterface interface {
 	// Fetch constructs a request. It will return a response body along with any errors.
 	// Errors can include ErrInvalidToken, ErrRateLimited,
-	Fetch(s *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error)
-	FetchBJ(s *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error
-	FetchJJ(s *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error
+	Fetch(ctx context.Context, s *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error)
+	FetchBJ(ctx context.Context, s *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error
+	FetchJJ(ctx context.Context, s *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error
 
 	SetDebug(value bool)
 }
 
 // Session contains the context for the discord rest interface.
 type Session struct {
-	Context   context.Context
 	Interface RESTInterface
 	Token     string
 }
 
-func NewSession(context context.Context, token string, httpInterface RESTInterface) *Session {
+func NewSession(token string, httpInterface RESTInterface) *Session {
 	return &Session{
-		Context:   context,
 		Token:     token,
 		Interface: httpInterface,
 	}
@@ -72,11 +70,12 @@ func NewInterface(httpClient *http.Client, endpoint string, version string, user
 		URLHost:    url.Host,
 		URLScheme:  url.Scheme,
 		UserAgent:  useragent,
+		Debug:      false,
 	}
 }
 
-func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error) {
-	req, err := http.NewRequestWithContext(session.Context, method, endpoint, bytes.NewBuffer(body))
+func (bi *BaseInterface) Fetch(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error) {
+	req, err := http.NewRequestWithContext(ctx, method, endpoint, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new request: %w", err)
 	}
@@ -138,8 +137,8 @@ func (bi *BaseInterface) Fetch(session *Session, method, endpoint, contentType s
 	return response, nil
 }
 
-func (bi *BaseInterface) FetchBJ(session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error {
-	resp, err := bi.Fetch(session, method, endpoint, contentType, body, headers)
+func (bi *BaseInterface) FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error {
+	resp, err := bi.Fetch(ctx, session, method, endpoint, contentType, body, headers)
 	if err != nil {
 		return err
 	}
@@ -154,8 +153,9 @@ func (bi *BaseInterface) FetchBJ(session *Session, method, endpoint, contentType
 	return nil
 }
 
-func (bi *BaseInterface) FetchJJ(session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
+func (bi *BaseInterface) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
 	var body []byte
+
 	var err error
 
 	if payload != nil {
@@ -167,7 +167,7 @@ func (bi *BaseInterface) FetchJJ(session *Session, method, endpoint string, payl
 		body = make([]byte, 0)
 	}
 
-	return bi.FetchBJ(session, method, endpoint, "application/json", body, headers, response)
+	return bi.FetchBJ(ctx, session, method, endpoint, "application/json", body, headers, response)
 }
 
 func (bi *BaseInterface) SetDebug(value bool) {
@@ -195,11 +195,12 @@ func NewTwilightProxy(url url.URL) RESTInterface {
 		URLHost:    url.Host,
 		URLScheme:  url.Scheme,
 		UserAgent:  "Sandwich (github.com/WelcomerTeam/Discord)",
+		Debug:      false,
 	}
 }
 
-func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error) {
-	req, err := http.NewRequestWithContext(session.Context, method, endpoint, bytes.NewBuffer(body))
+func (tl *TwilightProxy) Fetch(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error) {
+	req, err := http.NewRequestWithContext(ctx, method, endpoint, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new request: %w", err)
 	}
@@ -261,8 +262,8 @@ func (tl *TwilightProxy) Fetch(session *Session, method, endpoint, contentType s
 	return response, nil
 }
 
-func (tl *TwilightProxy) FetchBJ(session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error {
-	resp, err := tl.Fetch(session, method, endpoint, contentType, body, headers)
+func (tl *TwilightProxy) FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error {
+	resp, err := tl.Fetch(ctx, session, method, endpoint, contentType, body, headers)
 	if err != nil {
 		return err
 	}
@@ -277,7 +278,7 @@ func (tl *TwilightProxy) FetchBJ(session *Session, method, endpoint, contentType
 	return nil
 }
 
-func (tl *TwilightProxy) FetchJJ(session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
+func (tl *TwilightProxy) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
 	var body []byte
 	var err error
 
@@ -290,7 +291,7 @@ func (tl *TwilightProxy) FetchJJ(session *Session, method, endpoint string, payl
 		body = make([]byte, 0)
 	}
 
-	return tl.FetchBJ(session, method, endpoint, "application/json", body, headers, response)
+	return tl.FetchBJ(ctx, session, method, endpoint, "application/json", body, headers, response)
 }
 
 func (tl *TwilightProxy) SetDebug(value bool) {

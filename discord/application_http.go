@@ -1,12 +1,13 @@
 package discord
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
 )
 
-func GetGlobalApplicationCommands(s *Session, applicationID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
+func GetGlobalApplicationCommands(ctx context.Context, s *Session, applicationID Snowflake, withLocalizations bool) ([]ApplicationCommand, error) {
 	endpoint := EndpointApplicationGlobalCommands(applicationID.String())
 
 	values := url.Values{}
@@ -21,7 +22,7 @@ func GetGlobalApplicationCommands(s *Session, applicationID Snowflake, withLocal
 
 	var commands []ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &commands)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &commands)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get global application commands: %w", err)
 	}
@@ -29,12 +30,12 @@ func GetGlobalApplicationCommands(s *Session, applicationID Snowflake, withLocal
 	return commands, nil
 }
 
-func CreateGlobalApplicationCommand(s *Session, applicationID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
+func CreateGlobalApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
 	endpoint := EndpointApplicationGlobalCommands(applicationID.String())
 
 	var command *ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, commandArg, nil, &command)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, commandArg, nil, &command)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create global application command: %w", err)
 	}
@@ -42,7 +43,7 @@ func CreateGlobalApplicationCommand(s *Session, applicationID Snowflake, command
 	return command, nil
 }
 
-func GetGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID Snowflake, withLocalizations bool) (*ApplicationCommand, error) {
+func GetGlobalApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, commandID Snowflake, withLocalizations bool) (*ApplicationCommand, error) {
 	endpoint := EndpointApplicationGlobalCommand(applicationID.String(), commandID.String())
 
 	values := url.Values{}
@@ -57,7 +58,7 @@ func GetGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID 
 
 	var command *ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &command)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &command)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get global application command: %w", err)
 	}
@@ -65,12 +66,12 @@ func GetGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID 
 	return command, nil
 }
 
-func EditGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
+func EditGlobalApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, commandID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
 	endpoint := EndpointApplicationGlobalCommand(applicationID.String(), commandID.String())
 
 	var command *ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, commandArg, nil, &command)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, commandArg, nil, &command)
 	if err != nil {
 		return nil, fmt.Errorf("failed to edit global application command: %w", err)
 	}
@@ -78,10 +79,10 @@ func EditGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID
 	return command, nil
 }
 
-func DeleteGlobalApplicationCommand(s *Session, applicationID Snowflake, commandID Snowflake) error {
+func DeleteGlobalApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, commandID Snowflake) error {
 	endpoint := EndpointApplicationGlobalCommand(applicationID.String(), commandID.String())
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete global application command: %w", err)
 	}
@@ -89,12 +90,12 @@ func DeleteGlobalApplicationCommand(s *Session, applicationID Snowflake, command
 	return nil
 }
 
-func BulkOverwriteGlobalApplicationCommands(s *Session, applicationID Snowflake, commandArgs []ApplicationCommand) ([]ApplicationCommand, error) {
+func BulkOverwriteGlobalApplicationCommands(ctx context.Context, s *Session, applicationID Snowflake, commandArgs []ApplicationCommand) ([]ApplicationCommand, error) {
 	endpoint := EndpointApplicationGlobalCommands(applicationID.String())
 
 	var commands []ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, commandArgs, nil, &commands)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, commandArgs, nil, &commands)
 	if err != nil {
 		return nil, fmt.Errorf("failed to bulk overwrite global application commands: %w", err)
 	}
@@ -102,12 +103,12 @@ func BulkOverwriteGlobalApplicationCommands(s *Session, applicationID Snowflake,
 	return commands, nil
 }
 
-func GetGuildApplicationCommands(s *Session, applicationID Snowflake, guildID Snowflake) ([]ApplicationCommand, error) {
+func GetGuildApplicationCommands(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake) ([]ApplicationCommand, error) {
 	endpoint := EndpointApplicationGuildCommands(applicationID.String(), guildID.String())
 
 	var commands []ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &commands)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &commands)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild application commands: %w", err)
 	}
@@ -115,12 +116,12 @@ func GetGuildApplicationCommands(s *Session, applicationID Snowflake, guildID Sn
 	return commands, nil
 }
 
-func CreateGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
+func CreateGuildApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
 	endpoint := EndpointApplicationGuildCommands(applicationID.String(), guildID.String())
 
 	var command *ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, commandArg, nil, &command)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, commandArg, nil, &command)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create guild application command: %w", err)
 	}
@@ -128,12 +129,12 @@ func CreateGuildApplicationCommand(s *Session, applicationID Snowflake, guildID 
 	return command, nil
 }
 
-func GetGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake) (*ApplicationCommand, error) {
+func GetGuildApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake) (*ApplicationCommand, error) {
 	endpoint := EndpointApplicationGuildCommand(applicationID.String(), guildID.String(), commandID.String())
 
 	var command *ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &command)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &command)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild application command: %w", err)
 	}
@@ -141,12 +142,12 @@ func GetGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Sno
 	return command, nil
 }
 
-func EditGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
+func EditGuildApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake, commandArg ApplicationCommand) (*ApplicationCommand, error) {
 	endpoint := EndpointApplicationGuildCommand(applicationID.String(), guildID.String(), commandID.String())
 
 	var command *ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, commandArg, nil, &command)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, commandArg, nil, &command)
 	if err != nil {
 		return nil, fmt.Errorf("failed to edit guild application command: %w", err)
 	}
@@ -154,10 +155,10 @@ func EditGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Sn
 	return command, nil
 }
 
-func DeleteGuildApplicationCommand(s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake) error {
+func DeleteGuildApplicationCommand(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake) error {
 	endpoint := EndpointApplicationGuildCommand(applicationID.String(), guildID.String(), commandID.String())
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete guild application command: %w", err)
 	}
@@ -165,12 +166,12 @@ func DeleteGuildApplicationCommand(s *Session, applicationID Snowflake, guildID 
 	return nil
 }
 
-func BulkOverwriteGuildApplicationCommands(s *Session, applicationID Snowflake, guildID Snowflake, commandArgs []ApplicationCommand) ([]ApplicationCommand, error) {
+func BulkOverwriteGuildApplicationCommands(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandArgs []ApplicationCommand) ([]ApplicationCommand, error) {
 	endpoint := EndpointApplicationGuildCommands(applicationID.String(), guildID.String())
 
 	var commands []ApplicationCommand
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, commandArgs, nil, &commands)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, commandArgs, nil, &commands)
 	if err != nil {
 		return nil, fmt.Errorf("failed to bulk overwrite guild application commands: %w", err)
 	}
@@ -178,12 +179,12 @@ func BulkOverwriteGuildApplicationCommands(s *Session, applicationID Snowflake, 
 	return commands, nil
 }
 
-func GetGuildApplicationCommandPermissions(s *Session, applicationID Snowflake, guildID Snowflake) ([]GuildApplicationCommandPermissions, error) {
+func GetGuildApplicationCommandPermissions(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake) ([]GuildApplicationCommandPermissions, error) {
 	endpoint := EndpointApplicationGuildCommandsPermissions(applicationID.String(), guildID.String())
 
 	var permissions []GuildApplicationCommandPermissions
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &permissions)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &permissions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild application command permissions: %w", err)
 	}
@@ -191,12 +192,12 @@ func GetGuildApplicationCommandPermissions(s *Session, applicationID Snowflake, 
 	return permissions, nil
 }
 
-func GetApplicationCommandPermissions(s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake) ([]GuildApplicationCommandPermissions, error) {
+func GetApplicationCommandPermissions(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake) ([]GuildApplicationCommandPermissions, error) {
 	endpoint := EndpointApplicationGuildCommandPermissions(applicationID.String(), guildID.String(), commandID.String())
 
 	var permissions []GuildApplicationCommandPermissions
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &permissions)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &permissions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get application command permissions: %w", err)
 	}
@@ -204,12 +205,12 @@ func GetApplicationCommandPermissions(s *Session, applicationID Snowflake, guild
 	return permissions, nil
 }
 
-func EditApplicationCommandPermissions(s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake, permissionsArg []GuildApplicationCommandPermissions) ([]GuildApplicationCommandPermissions, error) {
+func EditApplicationCommandPermissions(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, commandID Snowflake, permissionsArg []GuildApplicationCommandPermissions) ([]GuildApplicationCommandPermissions, error) {
 	endpoint := EndpointApplicationGuildCommandPermissions(applicationID.String(), guildID.String(), commandID.String())
 
 	var permissions []GuildApplicationCommandPermissions
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, permissionsArg, nil, &permissions)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, permissionsArg, nil, &permissions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to edit application command permissions: %w", err)
 	}
@@ -217,12 +218,12 @@ func EditApplicationCommandPermissions(s *Session, applicationID Snowflake, guil
 	return permissions, nil
 }
 
-func BatchEditApplicationCommandPermissions(s *Session, applicationID Snowflake, guildID Snowflake, permissionsArg []GuildApplicationCommandPermissions) ([]GuildApplicationCommandPermissions, error) {
+func BatchEditApplicationCommandPermissions(ctx context.Context, s *Session, applicationID Snowflake, guildID Snowflake, permissionsArg []GuildApplicationCommandPermissions) ([]GuildApplicationCommandPermissions, error) {
 	endpoint := EndpointApplicationGuildCommandsPermissions(applicationID.String(), guildID.String())
 
 	var permissions []GuildApplicationCommandPermissions
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, permissionsArg, nil, &permissions)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, permissionsArg, nil, &permissions)
 	if err != nil {
 		return nil, fmt.Errorf("failed to batch edit application command permissions: %w", err)
 	}

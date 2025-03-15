@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -10,12 +11,12 @@ import (
 
 var emojiEscaper = strings.NewReplacer("#", "%23")
 
-func GetChannel(s *Session, channelID Snowflake) (*Channel, error) {
+func GetChannel(ctx context.Context, s *Session, channelID Snowflake) (*Channel, error) {
 	endpoint := EndpointChannel(channelID.String())
 
 	var channel *Channel
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &channel)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &channel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get channel: %w", err)
 	}
@@ -23,7 +24,7 @@ func GetChannel(s *Session, channelID Snowflake) (*Channel, error) {
 	return channel, nil
 }
 
-func ModifyChannel(s *Session, channelID Snowflake, channelParams ChannelParams, reason *string) (*Channel, error) {
+func ModifyChannel(ctx context.Context, s *Session, channelID Snowflake, channelParams ChannelParams, reason *string) (*Channel, error) {
 	endpoint := EndpointChannel(channelID.String())
 
 	headers := http.Header{}
@@ -34,7 +35,7 @@ func ModifyChannel(s *Session, channelID Snowflake, channelParams ChannelParams,
 
 	var channel *Channel
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, channelParams, headers, &channel)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, channelParams, headers, &channel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify channel: %w", err)
 	}
@@ -42,7 +43,7 @@ func ModifyChannel(s *Session, channelID Snowflake, channelParams ChannelParams,
 	return channel, nil
 }
 
-func DeleteChannel(s *Session, channelID Snowflake, reason *string) error {
+func DeleteChannel(ctx context.Context, s *Session, channelID Snowflake, reason *string) error {
 	endpoint := EndpointChannel(channelID.String())
 
 	headers := http.Header{}
@@ -51,7 +52,7 @@ func DeleteChannel(s *Session, channelID Snowflake, reason *string) error {
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete channel: %w", err)
 	}
@@ -59,7 +60,7 @@ func DeleteChannel(s *Session, channelID Snowflake, reason *string) error {
 	return nil
 }
 
-func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]Message, error) {
+func GetChannelMessages(ctx context.Context, s *Session, channelID Snowflake, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]Message, error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
 	values := url.Values{}
@@ -86,7 +87,7 @@ func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, befo
 
 	var messages []Message
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &messages)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &messages)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get channel messages: %w", err)
 	}
@@ -94,12 +95,12 @@ func GetChannelMessages(s *Session, channelID Snowflake, around *Snowflake, befo
 	return messages, nil
 }
 
-func GetChannelMessage(s *Session, channelID Snowflake, messageID Snowflake) (*Message, error) {
+func GetChannelMessage(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake) (*Message, error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
 	var message *Message
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &message)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get channel message: %w", err)
 	}
@@ -107,7 +108,7 @@ func GetChannelMessage(s *Session, channelID Snowflake, messageID Snowflake) (*M
 	return message, nil
 }
 
-func CreateMessage(s *Session, channelID Snowflake, messageParams MessageParams) (*Message, error) {
+func CreateMessage(ctx context.Context, s *Session, channelID Snowflake, messageParams MessageParams) (*Message, error) {
 	endpoint := EndpointChannelMessages(channelID.String())
 
 	var message *Message
@@ -118,12 +119,12 @@ func CreateMessage(s *Session, channelID Snowflake, messageParams MessageParams)
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		err = s.Interface.FetchBJ(ctx, s, http.MethodPost, endpoint, contentType, body, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create message: %w", err)
 		}
 	} else {
-		err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, messageParams, nil, &message)
+		err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, messageParams, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create message: %w", err)
 		}
@@ -132,12 +133,12 @@ func CreateMessage(s *Session, channelID Snowflake, messageParams MessageParams)
 	return message, nil
 }
 
-func CrosspostMessage(s *Session, channelID Snowflake, messageID Snowflake) (*Message, error) {
+func CrosspostMessage(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake) (*Message, error) {
 	endpoint := EndpointChannelMessageCrosspost(channelID.String(), messageID.String())
 
 	var message *Message
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, &message)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to crosspost message: %w", err)
 	}
@@ -145,10 +146,10 @@ func CrosspostMessage(s *Session, channelID Snowflake, messageID Snowflake) (*Me
 	return message, nil
 }
 
-func CreateReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji string) error {
+func CreateReaction(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, emoji string) error {
 	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji), "@me")
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create reaction: %w", err)
 	}
@@ -156,10 +157,10 @@ func CreateReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji 
 	return nil
 }
 
-func DeleteOwnReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji string) error {
+func DeleteOwnReaction(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, emoji string) error {
 	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji), "@me")
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete own reaction: %w", err)
 	}
@@ -167,10 +168,10 @@ func DeleteOwnReaction(s *Session, channelID Snowflake, messageID Snowflake, emo
 	return nil
 }
 
-func DeleteUserReaction(s *Session, channelID Snowflake, messageID Snowflake, emoji string, userID Snowflake) error {
+func DeleteUserReaction(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, emoji string, userID Snowflake) error {
 	endpoint := EndpointMessageReaction(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji), userID.String())
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete user reaction: %w", err)
 	}
@@ -178,12 +179,26 @@ func DeleteUserReaction(s *Session, channelID Snowflake, messageID Snowflake, em
 	return nil
 }
 
-func GetReactions(s *Session, channelID Snowflake, messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]User, error) {
+func GetReactions(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, emoji string, after *Snowflake, limit *int) ([]User, error) {
 	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji))
+
+	values := url.Values{}
+
+	if after != nil {
+		values.Add("after", after.String())
+	}
+
+	if limit != nil {
+		values.Add("limit", strconv.Itoa(int(*limit)))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
 
 	var users []User
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &users)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &users)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get reactions: %w", err)
 	}
@@ -191,10 +206,10 @@ func GetReactions(s *Session, channelID Snowflake, messageID Snowflake, emoji st
 	return users, nil
 }
 
-func DeleteAllReactions(s *Session, channelID Snowflake, messageID Snowflake) error {
+func DeleteAllReactions(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake) error {
 	endpoint := EndpointMessageReactionsAll(channelID.String(), messageID.String())
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete all reactions: %w", err)
 	}
@@ -202,10 +217,10 @@ func DeleteAllReactions(s *Session, channelID Snowflake, messageID Snowflake) er
 	return nil
 }
 
-func DeleteAllReactionsEmoji(s *Session, channelID Snowflake, messageID Snowflake, emoji string) error {
+func DeleteAllReactionsEmoji(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, emoji string) error {
 	endpoint := EndpointMessageReactions(channelID.String(), messageID.String(), emojiEscaper.Replace(emoji))
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete all reactions emoji: %w", err)
 	}
@@ -213,7 +228,7 @@ func DeleteAllReactionsEmoji(s *Session, channelID Snowflake, messageID Snowflak
 	return nil
 }
 
-func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messageParams MessageParams) (*Message, error) {
+func EditMessage(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, messageParams MessageParams) (*Message, error) {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
 	var message *Message
@@ -224,12 +239,12 @@ func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messagePa
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		err = s.Interface.FetchBJ(ctx, s, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit message: %w", err)
 		}
 	} else {
-		err := s.Interface.FetchJJ(s, http.MethodPatch, endpoint, messageParams, nil, &message)
+		err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, messageParams, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit message: %w", err)
 		}
@@ -238,7 +253,7 @@ func EditMessage(s *Session, channelID Snowflake, messageID Snowflake, messagePa
 	return message, nil
 }
 
-func DeleteMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *string) error {
+func DeleteMessage(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, reason *string) error {
 	endpoint := EndpointChannelMessage(channelID.String(), messageID.String())
 
 	headers := http.Header{}
@@ -247,7 +262,7 @@ func DeleteMessage(s *Session, channelID Snowflake, messageID Snowflake, reason 
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delet emessage: %w", err)
 	}
@@ -259,7 +274,7 @@ type bulkDeleteMessagesBody struct {
 	Messages []Snowflake `json:"messages"`
 }
 
-func BulkDeleteMessages(s *Session, channelID Snowflake, messageIDs []Snowflake, reason *string) error {
+func BulkDeleteMessages(ctx context.Context, s *Session, channelID Snowflake, messageIDs []Snowflake, reason *string) error {
 	endpoint := EndpointChannelMessagesBulkDelete(channelID.String())
 
 	headers := http.Header{}
@@ -268,7 +283,7 @@ func BulkDeleteMessages(s *Session, channelID Snowflake, messageIDs []Snowflake,
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, bulkDeleteMessagesBody{messageIDs}, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, bulkDeleteMessagesBody{messageIDs}, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to bulk delete messages: %w", err)
 	}
@@ -276,7 +291,7 @@ func BulkDeleteMessages(s *Session, channelID Snowflake, messageIDs []Snowflake,
 	return nil
 }
 
-func EditChannelPermissions(s *Session, channelID Snowflake, overwriteID Snowflake, overwriteArg ChannelOverwrite, reason *string) error {
+func EditChannelPermissions(ctx context.Context, s *Session, channelID Snowflake, overwriteID Snowflake, overwriteArg ChannelOverwrite, reason *string) error {
 	endpoint := EndpointChannelPermission(channelID.String(), overwriteID.String())
 
 	headers := http.Header{}
@@ -285,7 +300,7 @@ func EditChannelPermissions(s *Session, channelID Snowflake, overwriteID Snowfla
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, overwriteArg, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, overwriteArg, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to edit channel permissions: %w", err)
 	}
@@ -293,12 +308,12 @@ func EditChannelPermissions(s *Session, channelID Snowflake, overwriteID Snowfla
 	return nil
 }
 
-func GetChannelInvites(s *Session, channelID Snowflake) ([]Invite, error) {
+func GetChannelInvites(ctx context.Context, s *Session, channelID Snowflake) ([]Invite, error) {
 	endpoint := EndpointChannelInvites(channelID.String())
 
 	var invites []Invite
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get channel invites: %w", err)
 	}
@@ -306,7 +321,7 @@ func GetChannelInvites(s *Session, channelID Snowflake) ([]Invite, error) {
 	return invites, nil
 }
 
-func CreateChannelInvite(s *Session, channelID Snowflake, inviteParams InviteParams, reason *string) (*Invite, error) {
+func CreateChannelInvite(ctx context.Context, s *Session, channelID Snowflake, inviteParams InviteParams, reason *string) (*Invite, error) {
 	endpoint := EndpointChannelInvites(channelID.String())
 
 	headers := http.Header{}
@@ -317,7 +332,7 @@ func CreateChannelInvite(s *Session, channelID Snowflake, inviteParams InvitePar
 
 	var invite *Invite
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, inviteParams, headers, &invite)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, inviteParams, headers, &invite)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create channel invite: %w", err)
 	}
@@ -325,7 +340,7 @@ func CreateChannelInvite(s *Session, channelID Snowflake, inviteParams InvitePar
 	return invite, nil
 }
 
-func DeleteChannelPermission(s *Session, channelID Snowflake, overwriteID Snowflake, reason *string) error {
+func DeleteChannelPermission(ctx context.Context, s *Session, channelID Snowflake, overwriteID Snowflake, reason *string) error {
 	endpoint := EndpointChannelPermission(channelID.String(), overwriteID.String())
 
 	headers := http.Header{}
@@ -334,7 +349,7 @@ func DeleteChannelPermission(s *Session, channelID Snowflake, overwriteID Snowfl
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete channel permission: %w", err)
 	}
@@ -342,23 +357,27 @@ func DeleteChannelPermission(s *Session, channelID Snowflake, overwriteID Snowfl
 	return nil
 }
 
-func FollowNewsChannel(s *Session, channelID Snowflake, webhookChannelID Snowflake) (*FollowedChannel, error) {
+type FollowAnnouncementChannelBody struct {
+	WebhookChannelID Snowflake `json:"webhook_channel_id"`
+}
+
+func FollowAnnouncementChannel(ctx context.Context, s *Session, channelID Snowflake, webhookChannelID Snowflake) (*FollowedChannel, error) {
 	endpoint := EndpointChannelFollow(channelID.String())
 
 	var followedChannel *FollowedChannel
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, &followedChannel)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, FollowAnnouncementChannelBody{webhookChannelID}, nil, &followedChannel)
 	if err != nil {
-		return nil, fmt.Errorf("failed to follow news channel: %w", err)
+		return nil, fmt.Errorf("failed to follow announcement channel: %w", err)
 	}
 
 	return followedChannel, nil
 }
 
-func TriggerTypingIndicator(s *Session, channelID Snowflake) error {
+func TriggerTypingIndicator(ctx context.Context, s *Session, channelID Snowflake) error {
 	endpoint := EndpointChannelTyping(channelID.String())
 
-	err := s.Interface.FetchJJ(s, http.MethodPost, endpoint, nil, nil, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to trigger typing indicator: %w", err)
 	}
@@ -366,12 +385,12 @@ func TriggerTypingIndicator(s *Session, channelID Snowflake) error {
 	return nil
 }
 
-func GetPinnedMessages(s *Session, channelID Snowflake) ([]Message, error) {
+func GetPinnedMessages(ctx context.Context, s *Session, channelID Snowflake) ([]Message, error) {
 	endpoint := EndpointChannelMessagesPins(channelID.String())
 
 	var pinnedMessages []Message
 
-	err := s.Interface.FetchJJ(s, http.MethodGet, endpoint, nil, nil, &pinnedMessages)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &pinnedMessages)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get pinned messages: %w", err)
 	}
@@ -379,7 +398,7 @@ func GetPinnedMessages(s *Session, channelID Snowflake) ([]Message, error) {
 	return pinnedMessages, nil
 }
 
-func PinMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *string) error {
+func PinMessage(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, reason *string) error {
 	endpoint := EndpointChannelMessagePin(channelID.String(), messageID.String())
 
 	headers := http.Header{}
@@ -388,7 +407,7 @@ func PinMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *st
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodPut, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to pin message: %w", err)
 	}
@@ -396,7 +415,7 @@ func PinMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *st
 	return nil
 }
 
-func UnpinMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *string) error {
+func UnpinMessage(ctx context.Context, s *Session, channelID Snowflake, messageID Snowflake, reason *string) error {
 	endpoint := EndpointChannelMessagePin(channelID.String(), messageID.String())
 
 	headers := http.Header{}
@@ -405,7 +424,7 @@ func UnpinMessage(s *Session, channelID Snowflake, messageID Snowflake, reason *
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to unpin message: %w", err)
 	}

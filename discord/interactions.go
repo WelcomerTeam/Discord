@@ -1,6 +1,9 @@
 package discord
 
-import "encoding/json"
+import (
+	"context"
+	"encoding/json"
+)
 
 // interactions.go represents the interaction objects.
 
@@ -113,8 +116,8 @@ type Interaction struct {
 // interactionType: The type of interaction callback.
 // messageArg: arguments for sending message.
 // choices: optional autocomplete choices.
-func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallbackType, interactionCallbackData *InteractionCallbackData) error {
-	return CreateInteractionResponse(s, i.ID, i.Token, InteractionResponse{
+func (i *Interaction) SendResponse(ctx context.Context, s *Session, interactionType InteractionCallbackType, interactionCallbackData *InteractionCallbackData) error {
+	return CreateInteractionResponse(ctx, s, i.ID, i.Token, InteractionResponse{
 		Type: interactionType,
 		Data: interactionCallbackData,
 	})
@@ -122,19 +125,19 @@ func (i *Interaction) SendResponse(s *Session, interactionType InteractionCallba
 
 // EditOriginalResponse edits the original interaction response.
 // messageArg: arguments for editing message.
-func (i *Interaction) EditOriginalResponse(s *Session, messageParams WebhookMessageParams) (*Message, error) {
-	return EditOriginalInteractionResponse(s, i.ApplicationID, i.Token, messageParams)
+func (i *Interaction) EditOriginalResponse(ctx context.Context, s *Session, messageParams WebhookMessageParams) (*Message, error) {
+	return EditOriginalInteractionResponse(ctx, s, i.ApplicationID, i.Token, messageParams)
 }
 
 // DeleteOriginalResponse deletes the original interaction response.
-func (i *Interaction) DeleteOriginalResponse(s *Session) error {
-	return DeleteOriginalInteractionResponse(s, i.ApplicationID, i.Token)
+func (i *Interaction) DeleteOriginalResponse(ctx context.Context, s *Session) error {
+	return DeleteOriginalInteractionResponse(ctx, s, i.ApplicationID, i.Token)
 }
 
 // SendFollowup sends a followup message.
 // messageArg: arguments for sending message.
-func (i *Interaction) SendFollowup(s *Session, messageParams WebhookMessageParams) (*InteractionFollowup, error) {
-	message, err := CreateFollowupMessage(s, i.ApplicationID, i.Token, messageParams)
+func (i *Interaction) SendFollowup(ctx context.Context, s *Session, messageParams WebhookMessageParams) (*InteractionFollowup, error) {
+	message, err := CreateFollowupMessage(ctx, s, i.ApplicationID, i.Token, messageParams)
 	if err != nil {
 		return nil, err
 	}
@@ -153,13 +156,13 @@ type InteractionFollowup struct {
 
 // EditFollowup edits the followup message.
 // messageArg: arguments for editing message.
-func (inf *InteractionFollowup) EditFollowup(s *Session, messageParams WebhookMessageParams) (*Message, error) {
-	return EditFollowupMessage(s, inf.ApplicationID, inf.Token, inf.Message.ID, messageParams)
+func (inf *InteractionFollowup) EditFollowup(ctx context.Context, s *Session, messageParams WebhookMessageParams) (*Message, error) {
+	return EditFollowupMessage(ctx, s, inf.ApplicationID, inf.Token, inf.Message.ID, messageParams)
 }
 
 // DeleteFollowup deletes the followup message.
-func (inf *InteractionFollowup) DeleteFollowup(s *Session) error {
-	return DeleteFollowupMessage(s, inf.ApplicationID, inf.Token, inf.Message.ID)
+func (inf *InteractionFollowup) DeleteFollowup(ctx context.Context, s *Session) error {
+	return DeleteFollowupMessage(ctx, s, inf.ApplicationID, inf.Token, inf.Message.ID)
 }
 
 // InteractionResponse represents the interaction response object.

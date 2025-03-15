@@ -42,6 +42,8 @@ func NewEmbed(embedType EmbedType) *Embed {
 }
 
 func (e *Embed) SetTitle(title string) *Embed {
+	e.Title = title
+
 	return e
 }
 

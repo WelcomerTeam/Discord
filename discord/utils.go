@@ -20,14 +20,14 @@ func bytesToBase64Data(b []byte) (string, error) {
 	}
 
 	var out bytes.Buffer
-	w := base64.NewEncoder(base64.StdEncoding, &out)
+	base64Encoder := base64.NewEncoder(base64.StdEncoding, &out)
 
-	_, err = w.Write(b)
+	_, err = base64Encoder.Write(b)
 	if err != nil {
 		return "", fmt.Errorf("failed to base64 bytes: %w", err)
 	}
 
-	defer w.Close()
+	defer base64Encoder.Close()
 
 	return "data:" + mime + ";base64," + out.String(), nil
 }
@@ -75,13 +75,13 @@ func multipartBodyWithJSON(data interface{}, files []File) (contentType string, 
 		return "", nil, fmt.Errorf("failed to write payload: %w", err)
 	}
 
-	for i, file := range files {
+	for fileIndex, file := range files {
 		header := make(textproto.MIMEHeader)
 		header.Set(
 			"Content-Disposition",
 			fmt.Sprintf(
 				`form-data; name="file%d"; filename="%s"`,
-				i, quoteEscaper.Replace(file.Name),
+				fileIndex, quoteEscaper.Replace(file.Name),
 			),
 		)
 
