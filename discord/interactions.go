@@ -84,6 +84,7 @@ const (
 	InteractionComponentStyleSuccess
 	InteractionComponentStyleDanger
 	InteractionComponentStyleLink
+	InteractionComponentStylePremium
 )
 
 const (
@@ -239,6 +240,7 @@ type InteractionComponent struct {
 	Disabled     bool                      `json:"disabled,omitempty"`
 	Type         InteractionComponentType  `json:"type"`
 	Style        InteractionComponentStyle `json:"style,omitempty"`
+	SKUID        Snowflake                 `json:"sku_id,omitempty"`
 }
 
 func NewInteractionComponent(componentType InteractionComponentType) *InteractionComponent {
