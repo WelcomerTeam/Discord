@@ -69,10 +69,24 @@ const (
 	InteractionComponentTypeStringSelect
 	// InteractionComponentTypeTextInput allows for users to freely input text.
 	InteractionComponentTypeTextInput
+	// InteractionComponentTypeUserSelect allows for users to select from a list of users.
 	InteractionComponentTypeUserInput
+	// InteractionComponentTypeRoleSelect allows for users to select from a list of roles.
 	InteractionComponentTypeRoleSelect
+	// InteractionComponentTypeMentionableSelect allows for users to select from a list of users and roles.
 	InteractionComponentTypeMentionableSelect
+	// InteractionComponentTypeChannelSelect allows for users to select from a list of channels.
 	InteractionComponentTypeChannelSelect
+
+	InteractionComponentTypeSection
+	InteractionComponentTypeTextDisplay
+	InteractionComponentTypeThumbnail
+	InteractionComponentTypeMediaGallery
+	InteractionComponentTypeFile
+	InteractionComponentTypeSeparator
+	_
+	_
+	InteractionComponentTypeContainer
 )
 
 // InteractionComponentStyle represents the style of a component.
@@ -113,7 +127,7 @@ type Interaction struct {
 	Type           InteractionType  `json:"type"`
 }
 
-// SendResponse sends an interacion response.
+// SendResponse sends an interaction response.
 // interactionType: The type of interaction callback.
 // messageArg: arguments for sending message.
 // choices: optional autocomplete choices.
@@ -225,22 +239,62 @@ type InteractionResolvedData struct {
 	Attachments map[Snowflake]MessageAttachment `json:"attachments,omitempty"`
 }
 
+// InteractionComponentDefaultValueType represents the type of default values for a component.
+type InteractionComponentDefaultValueType string
+
+const (
+	InteractionComponentDefaultValuesTypeUser    InteractionComponentDefaultValueType = "user"
+	InteractionComponentDefaultValuesTypeRole    InteractionComponentDefaultValueType = "role"
+	InteractionComponentDefaultValuesTypeChannel InteractionComponentDefaultValueType = "channel"
+)
+
+// InteractionComponentDefaultValue represents the default values for a component.
+type InteractionComponentDefaultValue struct {
+	ID   Snowflake                            `json:"id"`
+	Type InteractionComponentDefaultValueType `json:"type"`
+}
+
+type InteractionComponentMediaGalleryItem struct {
+	Media       MediaItem `json:"media,omitempty"`
+	Description string    `json:"description,omitempty"`
+	Spoiler     bool      `json:"spoiler,omitempty"`
+}
+
+type InteractionComponentSeparatorSpacing uint16
+
+const (
+	InteractionComponentSeparatorSpacingSmall InteractionComponentSeparatorSpacing = 1 + iota
+	InteractionComponentSeparatorSpacingLarge
+)
+
 // InteractionComponent represents the structure of a component.
 type InteractionComponent struct {
-	Emoji        *Emoji                    `json:"emoji,omitempty"`
-	MaxValues    *int32                    `json:"max_values,omitempty"`
-	MinValues    *int32                    `json:"min_values,omitempty"`
-	Placeholder  string                    `json:"placeholder,omitempty"`
-	CustomID     string                    `json:"custom_id,omitempty"`
-	URL          string                    `json:"url,omitempty"`
-	Label        string                    `json:"label,omitempty"`
-	Options      []ApplicationSelectOption `json:"options,omitempty"`
-	ChannelTypes []ChannelType             `json:"channel_types,omitempty"`
-	Components   []InteractionComponent    `json:"components,omitempty"`
-	Disabled     bool                      `json:"disabled,omitempty"`
-	Type         InteractionComponentType  `json:"type"`
-	Style        InteractionComponentStyle `json:"style,omitempty"`
-	SKUID        Snowflake                 `json:"sku_id,omitempty"`
+	AccentColor   *uint32                                `json:"accent_color,omitempty"`
+	Accessory     *InteractionComponent                  `json:"accessory,omitempty"`
+	Divider       *bool                                  `json:"divider,omitempty"`
+	Emoji         *Emoji                                 `json:"emoji,omitempty"`
+	File          *MediaItem                             `json:"file,omitempty"`
+	MaxValues     *int32                                 `json:"max_values,omitempty"`
+	Media         *MediaItem                             `json:"media,omitempty"`
+	MinValues     *int32                                 `json:"min_values,omitempty"`
+	Spoiler       *bool                                  `json:"spoiler,omitempty"`
+	Content       string                                 `json:"content,omitempty"`
+	CustomID      string                                 `json:"custom_id,omitempty"`
+	Description   string                                 `json:"description,omitempty"`
+	Label         string                                 `json:"label,omitempty"`
+	Placeholder   string                                 `json:"placeholder,omitempty"`
+	URL           string                                 `json:"url,omitempty"`
+	ChannelTypes  []ChannelType                          `json:"channel_types,omitempty"`
+	Components    []InteractionComponent                 `json:"components,omitempty"`
+	DefaultValues []InteractionComponentDefaultValue     `json:"default_values,omitempty"`
+	Items         []InteractionComponentMediaGalleryItem `json:"items,omitempty"`
+	Options       []ApplicationSelectOption              `json:"options,omitempty"`
+	Disabled      bool                                   `json:"disabled,omitempty"`
+	Type          InteractionComponentType               `json:"type"`
+	Spacing       InteractionComponentSeparatorSpacing   `json:"spacing,omitempty"`
+	Style         InteractionComponentStyle              `json:"style,omitempty"`
+	ID            int64                                  `json:"id,omitempty"`
+	SKUID         Snowflake                              `json:"sku_id,omitempty"`
 }
 
 func NewInteractionComponent(componentType InteractionComponentType) *InteractionComponent {

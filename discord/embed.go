@@ -20,19 +20,19 @@ const (
 
 // Embed represents a message embed.
 type Embed struct {
-	Video       *EmbedVideo     `json:"video,omitempty"`
-	Timestamp   *time.Time      `json:"timestamp,omitempty"`
-	Footer      *EmbedFooter    `json:"footer,omitempty"`
-	Image       *EmbedImage     `json:"image,omitempty"`
-	Thumbnail   *EmbedThumbnail `json:"thumbnail,omitempty"`
-	Provider    *EmbedProvider  `json:"provider,omitempty"`
-	Author      *EmbedAuthor    `json:"author,omitempty"`
-	Type        EmbedType       `json:"type,omitempty"`
-	Description string          `json:"description,omitempty"`
-	URL         string          `json:"url,omitempty"`
-	Title       string          `json:"title,omitempty"`
-	Fields      []EmbedField    `json:"fields,omitempty"`
-	Color       int32           `json:"color,omitempty"`
+	Video       *EmbedVideo    `json:"video,omitempty"`
+	Timestamp   *time.Time     `json:"timestamp,omitempty"`
+	Footer      *EmbedFooter   `json:"footer,omitempty"`
+	Image       *MediaItem     `json:"image,omitempty"`
+	Thumbnail   *MediaItem     `json:"thumbnail,omitempty"`
+	Provider    *EmbedProvider `json:"provider,omitempty"`
+	Author      *EmbedAuthor   `json:"author,omitempty"`
+	Type        EmbedType      `json:"type,omitempty"`
+	Description string         `json:"description,omitempty"`
+	URL         string         `json:"url,omitempty"`
+	Title       string         `json:"title,omitempty"`
+	Fields      []EmbedField   `json:"fields,omitempty"`
+	Color       int32          `json:"color,omitempty"`
 }
 
 func NewEmbed(embedType EmbedType) *Embed {
@@ -77,13 +77,13 @@ func (e *Embed) SetFooter(footer *EmbedFooter) *Embed {
 	return e
 }
 
-func (e *Embed) SetImage(image *EmbedImage) *Embed {
+func (e *Embed) SetImage(image *MediaItem) *Embed {
 	e.Image = image
 
 	return e
 }
 
-func (e *Embed) SetThumbnail(thumbnail *EmbedThumbnail) *Embed {
+func (e *Embed) SetThumbnail(thumbnail *MediaItem) *Embed {
 	e.Thumbnail = thumbnail
 
 	return e
@@ -127,30 +127,14 @@ func NewEmbedFooter(text, iconURL string) *EmbedFooter {
 	}
 }
 
-// EmbedImage represents an image in an embed.
-type EmbedImage struct {
-	URL      string `json:"url"`
-	ProxyURL string `json:"proxy_url,omitempty"`
-	Height   int32  `json:"height,omitempty"`
-	Width    int32  `json:"width,omitempty"`
-}
-
-func NewEmbedImage(url string) *EmbedImage {
-	return &EmbedImage{
+func NewEmbedImage(url string) *MediaItem {
+	return &MediaItem{
 		URL: url,
 	}
 }
 
-// EmbedThumbnail represents the thumbnail of an embed.
-type EmbedThumbnail struct {
-	URL      string `json:"url"`
-	ProxyURL string `json:"proxy_url,omitempty"`
-	Height   int32  `json:"height,omitempty"`
-	Width    int32  `json:"width,omitempty"`
-}
-
-func NewEmbedThumbnail(url string) *EmbedThumbnail {
-	return &EmbedThumbnail{
+func NewEmbedThumbnail(url string) *MediaItem {
+	return &MediaItem{
 		URL: url,
 	}
 }

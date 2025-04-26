@@ -189,7 +189,7 @@ func GetReactions(ctx context.Context, s *Session, channelID Snowflake, messageI
 	}
 
 	if limit != nil {
-		values.Add("limit", strconv.Itoa(int(*limit)))
+		values.Add("limit", strconv.Itoa(*limit))
 	}
 
 	if len(values) > 0 {

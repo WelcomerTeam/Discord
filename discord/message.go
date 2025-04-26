@@ -50,6 +50,13 @@ const (
 	MessageFlagEphemeral
 	MessageFlagLoading
 	MessageFlagFailedToMentionSomeRolesInThread
+	_
+	_
+	_
+	MessageFlagSuppressNotifications
+	MessageFlagIsVoiceMessage
+	MessageFlagHasSnapshot
+	MessageFlagIsComponentsV2
 )
 
 // MessageAllowedMentionsType represents all the allowed mention types.
@@ -273,16 +280,22 @@ type MessageAllowedMentions struct {
 	RepliedUser bool                         `json:"replied_user"`
 }
 
+// MediaItem represents an image in an embed or any media type.
+type MediaItem struct {
+	URL         string `json:"url"`
+	ProxyURL    string `json:"proxy_url,omitempty"`
+	Height      int32  `json:"height,omitempty"`
+	Width       int32  `json:"width,omitempty"`
+	ContentType string `json:"content_type,omitempty"`
+}
+
 // MessageAttachment represents a message attachment on discord.
 type MessageAttachment struct {
-	Filename  string    `json:"filename"`
-	URL       string    `json:"url"`
-	ProxyURL  string    `json:"proxy_url"`
+	MediaItem
 	ID        Snowflake `json:"id"`
 	Size      int32     `json:"size"`
-	Height    int32     `json:"height"`
-	Width     int32     `json:"width"`
 	Ephemeral bool      `json:"ephemeral"`
+	Filename  string    `json:"filename"`
 }
 
 // MessageActivity represents a message activity on discord.
