@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func CreateInteractionResponse(ctx context.Context, s *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) error {
+func CreateInteractionResponse(ctx context.Context, session *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) error {
 	endpoint := EndpointInteractionResponse(interactionID.String(), interactionToken)
 
 	if len(interactionResponse.Data.Files) > 0 {
@@ -15,12 +15,12 @@ func CreateInteractionResponse(ctx context.Context, s *Session, interactionID Sn
 			return err
 		}
 
-		err = s.Interface.FetchBJ(ctx, s, http.MethodPost, endpoint, contentType, body, nil, nil)
+		err = session.Interface.FetchBJ(ctx, session, http.MethodPost, endpoint, contentType, body, nil, nil)
 		if err != nil {
 			return fmt.Errorf("failed to create interaction response: %w", err)
 		}
 	} else {
-		err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, interactionResponse, nil, nil)
+		err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, interactionResponse, nil, nil)
 		if err != nil {
 			return fmt.Errorf("failed to create interaction response: %w", err)
 		}
@@ -29,12 +29,12 @@ func CreateInteractionResponse(ctx context.Context, s *Session, interactionID Sn
 	return nil
 }
 
-func GetOriginalInteractionResponse(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string) (*Message, error) {
+func GetOriginalInteractionResponse(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string) (*Message, error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
 	var message *Message
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &message)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get original interaction response: %w", err)
 	}
@@ -42,7 +42,7 @@ func GetOriginalInteractionResponse(ctx context.Context, s *Session, application
 	return message, nil
 }
 
-func EditOriginalInteractionResponse(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string, messageParam WebhookMessageParams) (*Message, error) {
+func EditOriginalInteractionResponse(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string, messageParam WebhookMessageParams) (*Message, error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
 	var message *Message
@@ -53,12 +53,12 @@ func EditOriginalInteractionResponse(ctx context.Context, s *Session, applicatio
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(ctx, s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		err = session.Interface.FetchBJ(ctx, session, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit original interaction response: %w", err)
 		}
 	} else {
-		err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, messageParam, nil, &message)
+		err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, messageParam, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit original interaction response: %w", err)
 		}
@@ -67,10 +67,10 @@ func EditOriginalInteractionResponse(ctx context.Context, s *Session, applicatio
 	return message, nil
 }
 
-func DeleteOriginalInteractionResponse(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string) error {
+func DeleteOriginalInteractionResponse(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string) error {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create interaction response: %w", err)
 	}
@@ -78,7 +78,7 @@ func DeleteOriginalInteractionResponse(ctx context.Context, s *Session, applicat
 	return nil
 }
 
-func CreateFollowupMessage(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (*Message, error) {
+func CreateFollowupMessage(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string, messageParams WebhookMessageParams) (*Message, error) {
 	endpoint := EndpointFollowupMessage(applicationID.String(), interactionToken)
 
 	var message *Message
@@ -89,12 +89,12 @@ func CreateFollowupMessage(ctx context.Context, s *Session, applicationID Snowfl
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(ctx, s, http.MethodPost, endpoint, contentType, body, nil, &message)
+		err = session.Interface.FetchBJ(ctx, session, http.MethodPost, endpoint, contentType, body, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create followup message: %w", err)
 		}
 	} else {
-		err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, messageParams, nil, &message)
+		err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, messageParams, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create followup message: %w", err)
 		}
@@ -103,12 +103,12 @@ func CreateFollowupMessage(ctx context.Context, s *Session, applicationID Snowfl
 	return message, nil
 }
 
-func GetFollowupMessage(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string, messageID Snowflake) (*Message, error) {
+func GetFollowupMessage(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string, messageID Snowflake) (*Message, error) {
 	endpoint := EndpointFollowupMessageActions(applicationID.String(), interactionToken, messageID.String())
 
 	var message *Message
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &message)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get followup message: %w", err)
 	}
@@ -116,7 +116,7 @@ func GetFollowupMessage(ctx context.Context, s *Session, applicationID Snowflake
 	return message, nil
 }
 
-func EditFollowupMessage(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string, messageID Snowflake, messageParams WebhookMessageParams) (*Message, error) {
+func EditFollowupMessage(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string, messageID Snowflake, messageParams WebhookMessageParams) (*Message, error) {
 	endpoint := EndpointFollowupMessageActions(applicationID.String(), interactionToken, messageID.String())
 
 	var message *Message
@@ -127,12 +127,12 @@ func EditFollowupMessage(ctx context.Context, s *Session, applicationID Snowflak
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(ctx, s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		err = session.Interface.FetchBJ(ctx, session, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit followup message: %w", err)
 		}
 	} else {
-		err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, messageParams, nil, &message)
+		err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, messageParams, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit followup message: %w", err)
 		}
@@ -141,10 +141,10 @@ func EditFollowupMessage(ctx context.Context, s *Session, applicationID Snowflak
 	return message, nil
 }
 
-func DeleteFollowupMessage(ctx context.Context, s *Session, applicationID Snowflake, interactionToken string, messageID Snowflake) error {
+func DeleteFollowupMessage(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string, messageID Snowflake) error {
 	endpoint := EndpointFollowupMessageActions(applicationID.String(), interactionToken, messageID.String())
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete followup message: %w", err)
 	}

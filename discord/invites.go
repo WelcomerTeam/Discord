@@ -58,8 +58,8 @@ type Invite struct {
 
 // Delete deletes an invite.
 // reason: Reason for deleting an invite.
-func (i *Invite) Delete(ctx context.Context, s *Session, reason *string) error {
-	return DeleteInvite(ctx, s, i.Code, reason)
+func (i *Invite) Delete(ctx context.Context, session *Session, reason *string) error {
+	return DeleteInvite(ctx, session, i.Code, reason)
 }
 
 // InviteStageInstance represents the structure of an invite stage instance.

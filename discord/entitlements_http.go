@@ -10,7 +10,7 @@ import (
 )
 
 // ListEntitlements returns a list of entitlements for an application.
-func ListEntitlements(ctx context.Context, s *Session, applicationID Snowflake, userID *Snowflake, skuIDs []Snowflake, before, after *Snowflake, limit *Int64, guildID *Snowflake, exludeEnded *bool, exludeDeleted *bool) ([]Entitlement, error) {
+func ListEntitlements(ctx context.Context, session *Session, applicationID Snowflake, userID *Snowflake, skuIDs []Snowflake, before, after *Snowflake, limit *Int64, guildID *Snowflake, exludeEnded, exludeDeleted *bool) ([]Entitlement, error) {
 	endpoint := EndpointEntitlements(applicationID.String())
 
 	values := url.Values{}
@@ -59,7 +59,7 @@ func ListEntitlements(ctx context.Context, s *Session, applicationID Snowflake, 
 
 	var entitlements []Entitlement
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &entitlements)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &entitlements)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list entitlements: %w", err)
 	}
@@ -67,14 +67,14 @@ func ListEntitlements(ctx context.Context, s *Session, applicationID Snowflake, 
 	return entitlements, nil
 }
 
-func CreateTestEntitlement(ctx context.Context, s *Session, applicationID Snowflake, entitlementParams EntitlementParams) (*Entitlement, error) {
+func CreateTestEntitlement(ctx context.Context, session *Session, applicationID Snowflake, entitlementParams EntitlementParams) (*Entitlement, error) {
 	endpoint := EndpointEntitlements(applicationID.String())
 
 	headers := http.Header{}
 
 	var entitlement *Entitlement
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, entitlementParams, headers, &entitlement)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, entitlementParams, headers, &entitlement)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create test entitlement: %w", err)
 	}
@@ -82,10 +82,10 @@ func CreateTestEntitlement(ctx context.Context, s *Session, applicationID Snowfl
 	return entitlement, nil
 }
 
-func DeleteTestEntitlement(ctx context.Context, s *Session, applicationID Snowflake, entitlementID Snowflake) error {
+func DeleteTestEntitlement(ctx context.Context, session *Session, applicationID, entitlementID Snowflake) error {
 	endpoint := EndpointEntitlement(applicationID.String(), entitlementID.String())
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete test entitlement: %w", err)
 	}

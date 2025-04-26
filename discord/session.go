@@ -20,9 +20,9 @@ const (
 type RESTInterface interface {
 	// Fetch constructs a request. It will return a response body along with any errors.
 	// Errors can include ErrInvalidToken, ErrRateLimited,
-	Fetch(ctx context.Context, s *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error)
-	FetchBJ(ctx context.Context, s *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error
-	FetchJJ(ctx context.Context, s *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error
+	Fetch(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error)
+	FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error
+	FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error
 
 	SetDebug(value bool)
 }
@@ -58,7 +58,7 @@ func NewBaseInterface() RESTInterface {
 	}, EndpointDiscord, APIVersion, UserAgent)
 }
 
-func NewInterface(httpClient *http.Client, endpoint string, version string, useragent string) RESTInterface {
+func NewInterface(httpClient *http.Client, endpoint, version, useragent string) RESTInterface {
 	url, err := url.Parse(endpoint)
 	if err != nil {
 		panic(fmt.Sprintf("failed to parse: %v", err))
@@ -280,6 +280,7 @@ func (tl *TwilightProxy) FetchBJ(ctx context.Context, session *Session, method, 
 
 func (tl *TwilightProxy) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
 	var body []byte
+
 	var err error
 
 	if payload != nil {

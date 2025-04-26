@@ -13,8 +13,8 @@ import (
 
 var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
 
-func bytesToBase64Data(b []byte) (string, error) {
-	mime, err := getImageMimeType(b)
+func bytesToBase64Data(data []byte) (string, error) {
+	mime, err := getImageMimeType(data)
 	if err != nil {
 		return "", err
 	}
@@ -22,7 +22,7 @@ func bytesToBase64Data(b []byte) (string, error) {
 	var out bytes.Buffer
 	base64Encoder := base64.NewEncoder(base64.StdEncoding, &out)
 
-	_, err = base64Encoder.Write(b)
+	_, err = base64Encoder.Write(data)
 	if err != nil {
 		return "", fmt.Errorf("failed to base64 bytes: %w", err)
 	}
@@ -32,18 +32,18 @@ func bytesToBase64Data(b []byte) (string, error) {
 	return "data:" + mime + ";base64," + out.String(), nil
 }
 
-func getImageMimeType(b []byte) (string, error) {
+func getImageMimeType(data []byte) (string, error) {
 	switch {
-	case bytes.Equal(b[0:8], []byte{137, 80, 78, 71, 13, 10, 26, 10}):
+	case bytes.Equal(data[0:8], []byte{137, 80, 78, 71, 13, 10, 26, 10}):
 		return "image/png", nil
-	case bytes.Equal(b[0:3], []byte{255, 216, 255}) ||
-		bytes.Equal(b[6:10], []byte("JFIF")) ||
-		bytes.Equal(b[6:10], []byte("Exif")):
+	case bytes.Equal(data[0:3], []byte{255, 216, 255}) ||
+		bytes.Equal(data[6:10], []byte("JFIF")) ||
+		bytes.Equal(data[6:10], []byte("Exif")):
 		return "image/jpeg", nil
-	case bytes.Equal(b[0:6], []byte{71, 73, 70, 56, 55, 97}) ||
-		bytes.Equal(b[0:6], []byte{71, 73, 70, 56, 57, 97}):
+	case bytes.Equal(data[0:6], []byte{71, 73, 70, 56, 55, 97}) ||
+		bytes.Equal(data[0:6], []byte{71, 73, 70, 56, 57, 97}):
 		return "image/gif", nil
-	case bytes.Equal(b[0:4], []byte("RIFF")) && bytes.Equal(b[8:12], []byte("WEBP")):
+	case bytes.Equal(data[0:4], []byte("RIFF")) && bytes.Equal(data[8:12], []byte("WEBP")):
 		return "image/webp", nil
 	default:
 		return "", ErrUnsupportedImageType

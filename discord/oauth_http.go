@@ -6,12 +6,12 @@ import (
 	"net/http"
 )
 
-func GetCurrentBotApplicationInformation(ctx context.Context, s *Session) (*Application, error) {
+func GetCurrentBotApplicationInformation(ctx context.Context, session *Session) (*Application, error) {
 	endpoint := EndpointOAuth2Application("@me")
 
 	var application *Application
 
-	err := s.Interface.FetchBJ(ctx, s, http.MethodGet, endpoint, "", nil, nil, &application)
+	err := session.Interface.FetchBJ(ctx, session, http.MethodGet, endpoint, "", nil, nil, &application)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get current bot application information: %w", err)
 	}
@@ -19,12 +19,12 @@ func GetCurrentBotApplicationInformation(ctx context.Context, s *Session) (*Appl
 	return application, nil
 }
 
-func GetCurrentAuthorizationInformation(ctx context.Context, s *Session) (*AuthorizationInformation, error) {
+func GetCurrentAuthorizationInformation(ctx context.Context, session *Session) (*AuthorizationInformation, error) {
 	endpoint := EndpointOAuth2Me
 
 	var authorizationInformation *AuthorizationInformation
 
-	err := s.Interface.FetchBJ(ctx, s, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
+	err := session.Interface.FetchBJ(ctx, session, http.MethodGet, endpoint, "", nil, nil, &authorizationInformation)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get current authorization information: %w", err)
 	}

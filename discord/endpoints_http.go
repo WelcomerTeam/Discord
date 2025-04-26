@@ -22,10 +22,10 @@ var (
 	EndpointUser = func(userID string) string {
 		return EndpointUsers + userID
 	}
-	EndpointUserAvatar = func(userID string, avatarID string) string {
+	EndpointUserAvatar = func(userID, avatarID string) string {
 		return EndpointCDNAvatars + userID + "/" + avatarID + ".png"
 	}
-	EndpointUserAvatarAnimated = func(userID string, avatarID string) string {
+	EndpointUserAvatarAnimated = func(userID, avatarID string) string {
 		return EndpointCDNAvatars + userID + "/" + avatarID + ".gif"
 	}
 	EndpointDefaultUserAvatar = func(index string) string {
@@ -101,13 +101,13 @@ var (
 	EndpointGuildPrune = func(guildID string) string {
 		return EndpointGuilds + guildID + "/prune"
 	}
-	EndpointGuildIcon = func(guildID string, hash string) string {
+	EndpointGuildIcon = func(guildID, hash string) string {
 		return EndpointCDNIcons + guildID + "/" + hash + ".png"
 	}
-	EndpointGuildIconAnimated = func(guildID string, hash string) string {
+	EndpointGuildIconAnimated = func(guildID, hash string) string {
 		return EndpointCDNIcons + guildID + "/" + hash + ".gif"
 	}
-	EndpointGuildSplash = func(guildID string, hash string) string {
+	EndpointGuildSplash = func(guildID, hash string) string {
 		return EndpointCDNSplashes + guildID + "/" + hash + ".png"
 	}
 	EndpointGuildWebhooks = func(guildID string) string {
@@ -122,7 +122,7 @@ var (
 	EndpointGuildEmoji = func(guildID, emojiID string) string {
 		return EndpointGuilds + guildID + "/emojis/" + emojiID
 	}
-	EndpointGuildBanner = func(guildID string, hash string) string {
+	EndpointGuildBanner = func(guildID, hash string) string {
 		return EndpointCDNBanners + guildID + "/" + hash + ".png"
 	}
 
@@ -176,7 +176,7 @@ var (
 		return EndpointChannel(channelID) + "/followers"
 	}
 
-	EndpointGroupIcon = func(channelID string, hash string) string {
+	EndpointGroupIcon = func(channelID, hash string) string {
 		return EndpointCDNChannelIcons + channelID + "/" + hash + ".png"
 	}
 
@@ -186,10 +186,10 @@ var (
 	EndpointWebhook = func(webhookID string) string {
 		return EndpointWebhooks + webhookID
 	}
-	EndpointWebhookToken = func(webhookID string, token string) string {
+	EndpointWebhookToken = func(webhookID, token string) string {
 		return EndpointWebhooks + webhookID + "/" + token
 	}
-	EndpointWebhookMessage = func(webhookID string, token string, messageID string) string {
+	EndpointWebhookMessage = func(webhookID, token, messageID string) string {
 		return EndpointWebhookToken(webhookID, token) + "/messages/" + messageID
 	}
 
@@ -222,19 +222,19 @@ var (
 	EndpointApplicationGuildCommandPermissions = func(applicationID, guildID, commandID string) string {
 		return EndpointApplicationGuildCommands(applicationID, guildID) + "/" + commandID + "/permissions"
 	}
-	EndpointInteraction = func(applicationID string, interactionToken string) string {
+	EndpointInteraction = func(applicationID, interactionToken string) string {
 		return "/interactions/" + applicationID + "/" + interactionToken
 	}
-	EndpointInteractionResponse = func(interactionID string, interactionToken string) string {
+	EndpointInteractionResponse = func(interactionID, interactionToken string) string {
 		return EndpointInteraction(interactionID, interactionToken) + "/callback"
 	}
-	EndpointInteractionResponseActions = func(applicationID string, interactionToken string) string {
+	EndpointInteractionResponseActions = func(applicationID, interactionToken string) string {
 		return EndpointWebhookMessage(applicationID, interactionToken, "@original")
 	}
-	EndpointFollowupMessage = func(applicationID string, interactionToken string) string {
+	EndpointFollowupMessage = func(applicationID, interactionToken string) string {
 		return EndpointWebhookToken(applicationID, interactionToken)
 	}
-	EndpointFollowupMessageActions = func(applicationID string, interactionToken string, messageID string) string {
+	EndpointFollowupMessageActions = func(applicationID, interactionToken, messageID string) string {
 		return EndpointWebhookMessage(applicationID, interactionToken, messageID)
 	}
 

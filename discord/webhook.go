@@ -31,15 +31,15 @@ type Webhook struct {
 
 // Delete deletes this webhook.
 // reason: The reason for deleting this webhook.
-func (w *Webhook) Delete(ctx context.Context, s *Session, reason *string) error {
-	return DeleteWebhook(ctx, s, w.ID, reason)
+func (w *Webhook) Delete(ctx context.Context, session *Session, reason *string) error {
+	return DeleteWebhook(ctx, session, w.ID, reason)
 }
 
 // Edit edits this webhook.
 // name: The webhooks new default name.
 // avatar: bytes representing the webhooks new avatar.
 // reason: The reason for editing this webhook.
-func (w *Webhook) Edit(ctx context.Context, s *Session, name *string, avatar *[]byte, reason *string) error {
+func (w *Webhook) Edit(ctx context.Context, session *Session, name *string, avatar *[]byte, reason *string) error {
 	params := WebhookParam{
 		Name: name,
 	}
@@ -58,9 +58,9 @@ func (w *Webhook) Edit(ctx context.Context, s *Session, name *string, avatar *[]
 	var err error
 
 	if w.Token != "" {
-		newWebhook, err = ModifyWebhookWithToken(ctx, s, w.ID, w.Token, params)
+		newWebhook, err = ModifyWebhookWithToken(ctx, session, w.ID, w.Token, params)
 	} else {
-		newWebhook, err = ModifyWebhook(ctx, s, w.ID, params, reason)
+		newWebhook, err = ModifyWebhook(ctx, session, w.ID, params, reason)
 	}
 
 	if err != nil {
@@ -74,21 +74,21 @@ func (w *Webhook) Edit(ctx context.Context, s *Session, name *string, avatar *[]
 
 // Send sends a webhook message.
 // params: The message parameters to send.
-func (w *Webhook) Send(ctx context.Context, s *Session, params WebhookMessageParams, wait bool) (*WebhookMessage, error) {
-	return ExecuteWebhook(ctx, s, w.ID, w.Token, params, wait)
+func (w *Webhook) Send(ctx context.Context, session *Session, params WebhookMessageParams, wait bool) (*WebhookMessage, error) {
+	return ExecuteWebhook(ctx, session, w.ID, w.Token, params, wait)
 }
 
 // EditMessage edits a webhook message.
 // messageID: The message id you are editing.
 // params: The message parameters used to update the message.
-func (w *Webhook) EditMessage(ctx context.Context, s *Session, messageID Snowflake, params WebhookMessageParams) (*WebhookMessage, error) {
-	return EditWebhookMessage(ctx, s, w.ID, w.Token, messageID, params)
+func (w *Webhook) EditMessage(ctx context.Context, session *Session, messageID Snowflake, params WebhookMessageParams) (*WebhookMessage, error) {
+	return EditWebhookMessage(ctx, session, w.ID, w.Token, messageID, params)
 }
 
 // DeleteMessage deletes a webhook message.
 // messageID: The message id you are deleting.
-func (w *Webhook) DeleteMessage(ctx context.Context, s *Session, messageID Snowflake) error {
-	return DeleteWebhookMessage(ctx, s, w.ID, w.Token, messageID)
+func (w *Webhook) DeleteMessage(ctx context.Context, session *Session, messageID Snowflake) error {
+	return DeleteWebhookMessage(ctx, session, w.ID, w.Token, messageID)
 }
 
 // WebhookMessage aliases Message to provide webhook specific methods.
@@ -97,14 +97,14 @@ type WebhookMessage Message
 // Edit edits a webhook message.
 // token: The token of the parent webhook.
 // params: The message parameters used to update the message.
-func (wm *WebhookMessage) Edit(ctx context.Context, s *Session, token string, params WebhookMessageParams) (*WebhookMessage, error) {
-	return EditWebhookMessage(ctx, s, *wm.WebhookID, token, wm.ID, params)
+func (wm *WebhookMessage) Edit(ctx context.Context, session *Session, token string, params WebhookMessageParams) (*WebhookMessage, error) {
+	return EditWebhookMessage(ctx, session, *wm.WebhookID, token, wm.ID, params)
 }
 
 // Delete deletes a webhook message.
 // token: The token of the parent webhook.
-func (wm *WebhookMessage) Delete(ctx context.Context, s *Session, token string) error {
-	return DeleteWebhookMessage(ctx, s, *wm.WebhookID, token, wm.ID)
+func (wm *WebhookMessage) Delete(ctx context.Context, session *Session, token string) error {
+	return DeleteWebhookMessage(ctx, session, *wm.WebhookID, token, wm.ID)
 }
 
 // WebhookMessage represents the structure for sending a webhook message.

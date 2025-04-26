@@ -19,21 +19,21 @@ type Emoji struct {
 
 // Delete deletes the emoji.
 // reason: Reason for deleting the emoji.
-func (e *Emoji) Delete(ctx context.Context, s *Session, reason *string) error {
-	return DeleteGuildEmoji(ctx, s, *e.GuildID, e.ID, reason)
+func (e *Emoji) Delete(ctx context.Context, session *Session, reason *string) error {
+	return DeleteGuildEmoji(ctx, session, *e.GuildID, e.ID, reason)
 }
 
 // Edit edits the emoji.
 // name: The name of the emoji
 // roles: Roles this emoji is limited to.
 // reason: Reason for editing the emoji.
-func (e *Emoji) Edit(ctx context.Context, s *Session, name string, roles []Snowflake, reason *string) error {
+func (e *Emoji) Edit(ctx context.Context, session *Session, name string, roles []Snowflake, reason *string) error {
 	params := EmojiParams{
 		Name:  name,
 		Roles: roles,
 	}
 
-	newEmoji, err := ModifyGuildEmoji(ctx, s, *e.GuildID, e.ID, params, reason)
+	newEmoji, err := ModifyGuildEmoji(ctx, session, *e.GuildID, e.ID, params, reason)
 	if err != nil {
 		return err
 	}

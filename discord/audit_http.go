@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func GetGuildAuditLog(ctx context.Context, s *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]AuditLogEntry, error) {
+func GetGuildAuditLog(ctx context.Context, session *Session, guildID Snowflake, userID *Snowflake, actionType *AuditLogActionType, before *Snowflake, limit *int32) ([]AuditLogEntry, error) {
 	endpoint := EndpointGuildAuditLogs(guildID.String())
 
 	values := url.Values{}
@@ -35,7 +35,7 @@ func GetGuildAuditLog(ctx context.Context, s *Session, guildID Snowflake, userID
 
 	var entries []AuditLogEntry
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &entries)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &entries)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild audit log: %w", err)
 	}

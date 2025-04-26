@@ -8,12 +8,12 @@ import (
 	"strconv"
 )
 
-func CreateGuild(ctx context.Context, s *Session, guildArg Guild) (*Guild, error) {
+func CreateGuild(ctx context.Context, session *Session, guildArg Guild) (*Guild, error) {
 	endpoint := EndpointGuilds
 
 	var guild *Guild
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, guildArg, nil, &guild)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, guildArg, nil, &guild)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create guild: %w", err)
 	}
@@ -21,12 +21,12 @@ func CreateGuild(ctx context.Context, s *Session, guildArg Guild) (*Guild, error
 	return guild, nil
 }
 
-func GetGuild(ctx context.Context, s *Session, guildID Snowflake) (*Guild, error) {
+func GetGuild(ctx context.Context, session *Session, guildID Snowflake) (*Guild, error) {
 	endpoint := EndpointGuild(guildID.String())
 
 	var guild *Guild
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &guild)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &guild)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild: %w", err)
 	}
@@ -34,12 +34,12 @@ func GetGuild(ctx context.Context, s *Session, guildID Snowflake) (*Guild, error
 	return guild, nil
 }
 
-func GetGuildPreview(ctx context.Context, s *Session, guildID Snowflake) (*Guild, error) {
+func GetGuildPreview(ctx context.Context, session *Session, guildID Snowflake) (*Guild, error) {
 	endpoint := EndpointGuildPreview(guildID.String())
 
 	var guildPreview *Guild
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &guildPreview)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &guildPreview)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild preview: %w", err)
 	}
@@ -47,7 +47,7 @@ func GetGuildPreview(ctx context.Context, s *Session, guildID Snowflake) (*Guild
 	return guildPreview, nil
 }
 
-func ModifyGuild(ctx context.Context, s *Session, guildID Snowflake, guildArg GuildParam, reason *string) (*Guild, error) {
+func ModifyGuild(ctx context.Context, session *Session, guildID Snowflake, guildArg GuildParam, reason *string) (*Guild, error) {
 	endpoint := EndpointGuild(guildID.String())
 
 	headers := http.Header{}
@@ -58,7 +58,7 @@ func ModifyGuild(ctx context.Context, s *Session, guildID Snowflake, guildArg Gu
 
 	var guild *Guild
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, guildArg, headers, &guild)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, guildArg, headers, &guild)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify guild: %w", err)
 	}
@@ -66,10 +66,10 @@ func ModifyGuild(ctx context.Context, s *Session, guildID Snowflake, guildArg Gu
 	return guild, nil
 }
 
-func DeleteGuild(ctx context.Context, s *Session, guildID Snowflake) error {
+func DeleteGuild(ctx context.Context, session *Session, guildID Snowflake) error {
 	endpoint := EndpointGuild(guildID.String())
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete guild: %w", err)
 	}
@@ -77,12 +77,12 @@ func DeleteGuild(ctx context.Context, s *Session, guildID Snowflake) error {
 	return nil
 }
 
-func GetGuildChannels(ctx context.Context, s *Session, guildID Snowflake) ([]Channel, error) {
+func GetGuildChannels(ctx context.Context, session *Session, guildID Snowflake) ([]Channel, error) {
 	endpoint := EndpointGuildChannels(guildID.String())
 
 	var channels []Channel
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &channels)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &channels)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild channels: %w", err)
 	}
@@ -90,7 +90,7 @@ func GetGuildChannels(ctx context.Context, s *Session, guildID Snowflake) ([]Cha
 	return channels, nil
 }
 
-func CreateGuildChannel(ctx context.Context, s *Session, guildID Snowflake, channelParams ChannelParams, reason *string) (*Channel, error) {
+func CreateGuildChannel(ctx context.Context, session *Session, guildID Snowflake, channelParams ChannelParams, reason *string) (*Channel, error) {
 	endpoint := EndpointGuildChannels(guildID.String())
 
 	headers := http.Header{}
@@ -101,7 +101,7 @@ func CreateGuildChannel(ctx context.Context, s *Session, guildID Snowflake, chan
 
 	var channel *Channel
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, channelParams, headers, &channel)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, channelParams, headers, &channel)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create guild channel: %w", err)
 	}
@@ -109,7 +109,7 @@ func CreateGuildChannel(ctx context.Context, s *Session, guildID Snowflake, chan
 	return channel, nil
 }
 
-func ModifyGuildChannelPositions(ctx context.Context, s *Session, guildID Snowflake, channelPermissionsArgs []ChannelPermissionsParams, reason *string) error {
+func ModifyGuildChannelPositions(ctx context.Context, session *Session, guildID Snowflake, channelPermissionsArgs []ChannelPermissionsParams, reason *string) error {
 	endpoint := EndpointGuildChannels(guildID.String())
 
 	headers := http.Header{}
@@ -118,7 +118,7 @@ func ModifyGuildChannelPositions(ctx context.Context, s *Session, guildID Snowfl
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, channelPermissionsArgs, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, channelPermissionsArgs, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to modify guild channel positions: %w", err)
 	}
@@ -126,12 +126,12 @@ func ModifyGuildChannelPositions(ctx context.Context, s *Session, guildID Snowfl
 	return nil
 }
 
-func GetGuildMember(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake) (*GuildMember, error) {
+func GetGuildMember(ctx context.Context, session *Session, guildID, userID Snowflake) (*GuildMember, error) {
 	endpoint := EndpointGuildMember(guildID.String(), userID.String())
 
 	var guildMember *GuildMember
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &guildMember)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &guildMember)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild member: %w", err)
 	}
@@ -139,7 +139,7 @@ func GetGuildMember(ctx context.Context, s *Session, guildID Snowflake, userID S
 	return guildMember, nil
 }
 
-func ListGuildMembers(ctx context.Context, s *Session, guildID Snowflake, limit *int32, after *Snowflake) ([]GuildMember, error) {
+func ListGuildMembers(ctx context.Context, session *Session, guildID Snowflake, limit *int32, after *Snowflake) ([]GuildMember, error) {
 	endpoint := EndpointGuildMembers(guildID.String())
 
 	values := url.Values{}
@@ -158,7 +158,7 @@ func ListGuildMembers(ctx context.Context, s *Session, guildID Snowflake, limit 
 
 	var guildMembers []GuildMember
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &guildMembers)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &guildMembers)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list guild members: %w", err)
 	}
@@ -166,7 +166,7 @@ func ListGuildMembers(ctx context.Context, s *Session, guildID Snowflake, limit 
 	return guildMembers, nil
 }
 
-func SearchGuildMembers(ctx context.Context, s *Session, guildID Snowflake, query string, limit *int32) ([]GuildMember, error) {
+func SearchGuildMembers(ctx context.Context, session *Session, guildID Snowflake, query string, limit *int32) ([]GuildMember, error) {
 	endpoint := EndpointGuildMembersSearch(guildID.String())
 
 	values := url.Values{}
@@ -181,7 +181,7 @@ func SearchGuildMembers(ctx context.Context, s *Session, guildID Snowflake, quer
 
 	var guildMembers []GuildMember
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &guildMembers)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &guildMembers)
 	if err != nil {
 		return nil, fmt.Errorf("failed to search guild members: %w", err)
 	}
@@ -189,7 +189,7 @@ func SearchGuildMembers(ctx context.Context, s *Session, guildID Snowflake, quer
 	return guildMembers, nil
 }
 
-func ModifyGuildMember(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake, guildMemberParams GuildMemberParams, reason *string) (*GuildMember, error) {
+func ModifyGuildMember(ctx context.Context, session *Session, guildID, userID Snowflake, guildMemberParams GuildMemberParams, reason *string) (*GuildMember, error) {
 	endpoint := EndpointGuildMember(guildID.String(), userID.String())
 
 	headers := http.Header{}
@@ -200,7 +200,7 @@ func ModifyGuildMember(ctx context.Context, s *Session, guildID Snowflake, userI
 
 	var guildMember *GuildMember
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, guildMemberParams, headers, &guildMember)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, guildMemberParams, headers, &guildMember)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify guild member: %w", err)
 	}
@@ -208,7 +208,7 @@ func ModifyGuildMember(ctx context.Context, s *Session, guildID Snowflake, userI
 	return guildMember, nil
 }
 
-func ModifyCurrentMember(ctx context.Context, s *Session, guildID Snowflake, guildMemberArg GuildMember, reason *string) (*GuildMember, error) {
+func ModifyCurrentMember(ctx context.Context, session *Session, guildID Snowflake, guildMemberArg GuildMember, reason *string) (*GuildMember, error) {
 	endpoint := EndpointGuildMember(guildID.String(), "@me")
 
 	headers := http.Header{}
@@ -219,7 +219,7 @@ func ModifyCurrentMember(ctx context.Context, s *Session, guildID Snowflake, gui
 
 	var guildMember *GuildMember
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, guildMemberArg, headers, &guildMember)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, guildMemberArg, headers, &guildMember)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify current member: %w", err)
 	}
@@ -227,7 +227,7 @@ func ModifyCurrentMember(ctx context.Context, s *Session, guildID Snowflake, gui
 	return guildMember, nil
 }
 
-func AddGuildMemberRole(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake, roleID Snowflake, reason *string) error {
+func AddGuildMemberRole(ctx context.Context, session *Session, guildID, userID, roleID Snowflake, reason *string) error {
 	endpoint := EndpointGuildMemberRole(guildID.String(), userID.String(), roleID.String())
 
 	headers := http.Header{}
@@ -236,7 +236,7 @@ func AddGuildMemberRole(ctx context.Context, s *Session, guildID Snowflake, user
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to add guild member role: %w", err)
 	}
@@ -244,7 +244,7 @@ func AddGuildMemberRole(ctx context.Context, s *Session, guildID Snowflake, user
 	return nil
 }
 
-func RemoveGuildMemberRole(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake, roleID Snowflake, reason *string) error {
+func RemoveGuildMemberRole(ctx context.Context, session *Session, guildID, userID, roleID Snowflake, reason *string) error {
 	endpoint := EndpointGuildMemberRole(guildID.String(), userID.String(), roleID.String())
 
 	headers := http.Header{}
@@ -253,7 +253,7 @@ func RemoveGuildMemberRole(ctx context.Context, s *Session, guildID Snowflake, u
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to remove guild member role: %w", err)
 	}
@@ -261,7 +261,7 @@ func RemoveGuildMemberRole(ctx context.Context, s *Session, guildID Snowflake, u
 	return nil
 }
 
-func RemoveGuildMember(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake, reason *string) error {
+func RemoveGuildMember(ctx context.Context, session *Session, guildID, userID Snowflake, reason *string) error {
 	endpoint := EndpointGuildMember(guildID.String(), userID.String())
 
 	headers := http.Header{}
@@ -270,7 +270,7 @@ func RemoveGuildMember(ctx context.Context, s *Session, guildID Snowflake, userI
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to remove guild member: %w", err)
 	}
@@ -278,12 +278,12 @@ func RemoveGuildMember(ctx context.Context, s *Session, guildID Snowflake, userI
 	return nil
 }
 
-func GetGuildBans(ctx context.Context, s *Session, guildID Snowflake) ([]GuildBan, error) {
+func GetGuildBans(ctx context.Context, session *Session, guildID Snowflake) ([]GuildBan, error) {
 	endpoint := EndpointGuildBans(guildID.String())
 
 	var bans []GuildBan
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &bans)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &bans)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild bans: %w", err)
 	}
@@ -291,12 +291,12 @@ func GetGuildBans(ctx context.Context, s *Session, guildID Snowflake) ([]GuildBa
 	return bans, nil
 }
 
-func GetGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake) (*GuildBan, error) {
+func GetGuildBan(ctx context.Context, session *Session, guildID, userID Snowflake) (*GuildBan, error) {
 	endpoint := EndpointGuildBan(guildID.String(), userID.String())
 
 	var ban *GuildBan
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &ban)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &ban)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild ban: %w", err)
 	}
@@ -304,7 +304,7 @@ func GetGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID Snow
 	return ban, nil
 }
 
-func CreateGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake, reason *string) error {
+func CreateGuildBan(ctx context.Context, session *Session, guildID, userID Snowflake, reason *string) error {
 	endpoint := EndpointGuildBan(guildID.String(), userID.String())
 
 	headers := http.Header{}
@@ -313,7 +313,7 @@ func CreateGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID S
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create guild ban: %w", err)
 	}
@@ -321,7 +321,7 @@ func CreateGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID S
 	return nil
 }
 
-func RemoveGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID Snowflake, reason *string) error {
+func RemoveGuildBan(ctx context.Context, session *Session, guildID, userID Snowflake, reason *string) error {
 	endpoint := EndpointGuildBan(guildID.String(), userID.String())
 
 	headers := http.Header{}
@@ -330,7 +330,7 @@ func RemoveGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID S
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPut, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to create guild ban: %w", err)
 	}
@@ -338,12 +338,12 @@ func RemoveGuildBan(ctx context.Context, s *Session, guildID Snowflake, userID S
 	return nil
 }
 
-func GetGuildRoles(ctx context.Context, s *Session, guildID Snowflake) ([]Role, error) {
+func GetGuildRoles(ctx context.Context, session *Session, guildID Snowflake) ([]Role, error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
 	var roles []Role
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &roles)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &roles)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild roles: %w", err)
 	}
@@ -351,7 +351,7 @@ func GetGuildRoles(ctx context.Context, s *Session, guildID Snowflake) ([]Role, 
 	return roles, nil
 }
 
-func CreateGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleParams RoleParams, reason *string) (*Role, error) {
+func CreateGuildRole(ctx context.Context, session *Session, guildID Snowflake, roleParams RoleParams, reason *string) (*Role, error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
 	headers := http.Header{}
@@ -362,7 +362,7 @@ func CreateGuildRole(ctx context.Context, s *Session, guildID Snowflake, rolePar
 
 	var role *Role
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, roleParams, headers, &role)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, roleParams, headers, &role)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create guild role: %w", err)
 	}
@@ -370,7 +370,7 @@ func CreateGuildRole(ctx context.Context, s *Session, guildID Snowflake, rolePar
 	return role, nil
 }
 
-func ModifyGuildRolePositions(ctx context.Context, s *Session, guildID Snowflake, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]Role, error) {
+func ModifyGuildRolePositions(ctx context.Context, session *Session, guildID Snowflake, guildRolePositionArgs []ModifyGuildRolePosition, reason *string) ([]Role, error) {
 	endpoint := EndpointGuildRoles(guildID.String())
 
 	headers := http.Header{}
@@ -381,7 +381,7 @@ func ModifyGuildRolePositions(ctx context.Context, s *Session, guildID Snowflake
 
 	var roles []Role
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, guildRolePositionArgs, headers, &roles)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, guildRolePositionArgs, headers, &roles)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify guild role positions: %w", err)
 	}
@@ -389,7 +389,7 @@ func ModifyGuildRolePositions(ctx context.Context, s *Session, guildID Snowflake
 	return roles, nil
 }
 
-func ModifyGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleID Snowflake, roleArg Role, reason *string) (*Role, error) {
+func ModifyGuildRole(ctx context.Context, session *Session, guildID, roleID Snowflake, roleArg Role, reason *string) (*Role, error) {
 	endpoint := EndpointGuildRole(guildID.String(), roleID.String())
 
 	headers := http.Header{}
@@ -400,7 +400,7 @@ func ModifyGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleID 
 
 	var role *Role
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, roleArg, headers, &role)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, roleArg, headers, &role)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify guild role: %w", err)
 	}
@@ -408,7 +408,7 @@ func ModifyGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleID 
 	return role, nil
 }
 
-func DeleteGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleID Snowflake, reason *string) error {
+func DeleteGuildRole(ctx context.Context, session *Session, guildID, roleID Snowflake, reason *string) error {
 	endpoint := EndpointGuildRole(guildID.String(), roleID.String())
 
 	headers := http.Header{}
@@ -417,7 +417,7 @@ func DeleteGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleID 
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete guild role: %w", err)
 	}
@@ -425,7 +425,7 @@ func DeleteGuildRole(ctx context.Context, s *Session, guildID Snowflake, roleID 
 	return nil
 }
 
-func GetGuildPruneCount(ctx context.Context, s *Session, guildID Snowflake, days *int32, includedRoles []Snowflake) (*int32, error) {
+func GetGuildPruneCount(ctx context.Context, session *Session, guildID Snowflake, days *int32, includedRoles []Snowflake) (*int32, error) {
 	endpoint := EndpointGuildPrune(guildID.String())
 
 	// Construct includedRoles query argument.
@@ -456,7 +456,7 @@ func GetGuildPruneCount(ctx context.Context, s *Session, guildID Snowflake, days
 		Pruned int32 `json:"pruned"`
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &prunedStruct)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &prunedStruct)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild prune count: %w", err)
 	}
@@ -464,7 +464,7 @@ func GetGuildPruneCount(ctx context.Context, s *Session, guildID Snowflake, days
 	return &prunedStruct.Pruned, nil
 }
 
-func BeginGuildPrune(ctx context.Context, s *Session, guildID Snowflake, days *int32, includedRoles []Snowflake, computePruneCount bool, reason *string) (*int32, error) {
+func BeginGuildPrune(ctx context.Context, session *Session, guildID Snowflake, days *int32, includedRoles []Snowflake, computePruneCount bool, reason *string) (*int32, error) {
 	endpoint := EndpointGuildPrune(guildID.String())
 
 	pruneArg := GuildPruneParam{
@@ -490,7 +490,7 @@ func BeginGuildPrune(ctx context.Context, s *Session, guildID Snowflake, days *i
 		Pruned int32 `json:"pruned"`
 	}{}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, pruneArg, headers, &prunedStruct)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, pruneArg, headers, &prunedStruct)
 	if err != nil {
 		return nil, fmt.Errorf("failed to begin guild prune: %w", err)
 	}
@@ -498,12 +498,12 @@ func BeginGuildPrune(ctx context.Context, s *Session, guildID Snowflake, days *i
 	return &prunedStruct.Pruned, nil
 }
 
-func GetGuildInvites(ctx context.Context, s *Session, guildID Snowflake) ([]Invite, error) {
+func GetGuildInvites(ctx context.Context, session *Session, guildID Snowflake) ([]Invite, error) {
 	endpoint := EndpointGuildInvites(guildID.String())
 
 	var invites []Invite
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &invites)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &invites)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild invites: %w", err)
 	}
@@ -511,12 +511,12 @@ func GetGuildInvites(ctx context.Context, s *Session, guildID Snowflake) ([]Invi
 	return invites, nil
 }
 
-func GetGuildIntegrations(ctx context.Context, s *Session, guildID Snowflake) ([]Integration, error) {
+func GetGuildIntegrations(ctx context.Context, session *Session, guildID Snowflake) ([]Integration, error) {
 	endpoint := EndpointGuildIntegrations(guildID.String())
 
 	var integrations []Integration
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &integrations)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &integrations)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild integrations: %w", err)
 	}
@@ -524,7 +524,7 @@ func GetGuildIntegrations(ctx context.Context, s *Session, guildID Snowflake) ([
 	return integrations, nil
 }
 
-func DeleteGuildIntegration(ctx context.Context, s *Session, guildID Snowflake, integrationID Snowflake, reason *string) error {
+func DeleteGuildIntegration(ctx context.Context, session *Session, guildID, integrationID Snowflake, reason *string) error {
 	endpoint := EndpointGuildIntegration(guildID.String(), integrationID.String())
 
 	headers := http.Header{}
@@ -533,7 +533,7 @@ func DeleteGuildIntegration(ctx context.Context, s *Session, guildID Snowflake, 
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete guild integration: %w", err)
 	}
@@ -541,12 +541,12 @@ func DeleteGuildIntegration(ctx context.Context, s *Session, guildID Snowflake, 
 	return nil
 }
 
-func GetGuildVanityURL(ctx context.Context, s *Session, guildID Snowflake) (*Invite, error) {
+func GetGuildVanityURL(ctx context.Context, session *Session, guildID Snowflake) (*Invite, error) {
 	endpoint := EndpointGuildVanityURL(guildID.String())
 
 	var invite *Invite
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &invite)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &invite)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild vanity url: %w", err)
 	}

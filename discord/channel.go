@@ -93,35 +93,35 @@ type ChannelParams struct {
 // CreateInvite creates an invite to a channel.
 // inviteArg: Parameters passed for creating an invite.
 // reason: Reason for creating the invite.
-func (c *Channel) CreateInvite(ctx context.Context, s *Session, inviteParams InviteParams, reason *string) (*Invite, error) {
-	return CreateChannelInvite(ctx, s, c.ID, inviteParams, reason)
+func (c *Channel) CreateInvite(ctx context.Context, session *Session, inviteParams InviteParams, reason *string) (*Invite, error) {
+	return CreateChannelInvite(ctx, session, c.ID, inviteParams, reason)
 }
 
 // CreateWebhook creates a webhook for a channel.
 // webhookArg: Parameters passed for creating a webhook.
 // reason: Reason for creating the webhook
-func (c *Channel) CreateWebhook(ctx context.Context, s *Session, webhookArg WebhookParam, reason *string) (*Webhook, error) {
-	return CreateWebhook(ctx, s, c.ID, webhookArg, reason)
+func (c *Channel) CreateWebhook(ctx context.Context, session *Session, webhookArg WebhookParam, reason *string) (*Webhook, error) {
+	return CreateWebhook(ctx, session, c.ID, webhookArg, reason)
 }
 
 // Delete deletes a webhook channel.
 // reason: Reason for deleting the channel.
-func (c *Channel) Delete(ctx context.Context, s *Session, reason *string) error {
-	return DeleteChannel(ctx, s, c.ID, reason)
+func (c *Channel) Delete(ctx context.Context, session *Session, reason *string) error {
+	return DeleteChannel(ctx, session, c.ID, reason)
 }
 
 // DeleteMessages bulk deletes messages in a channel.
 // messageIDs: List of message IDs to remove.
 // reason: Reason for bulk delete.
-func (c *Channel) DeleteMessages(ctx context.Context, s *Session, messageIDs []Snowflake, reason *string) error {
-	return BulkDeleteMessages(ctx, s, c.ID, messageIDs, reason)
+func (c *Channel) DeleteMessages(ctx context.Context, session *Session, messageIDs []Snowflake, reason *string) error {
+	return BulkDeleteMessages(ctx, session, c.ID, messageIDs, reason)
 }
 
 // Edit edits a channel.
 // channelArg: Parameters passed for editing a channel.
 // reason: Reason for editing the channel.
-func (c *Channel) Edit(ctx context.Context, s *Session, channelParams ChannelParams, reason *string) error {
-	newChannel, err := ModifyChannel(ctx, s, c.ID, channelParams, reason)
+func (c *Channel) Edit(ctx context.Context, session *Session, channelParams ChannelParams, reason *string) error {
+	newChannel, err := ModifyChannel(ctx, session, c.ID, channelParams, reason)
 	if err != nil {
 		return err
 	}
@@ -136,18 +136,18 @@ func (c *Channel) Edit(ctx context.Context, s *Session, channelParams ChannelPar
 // before: Get messages before this message ID.
 // after: Get messages after this message ID.
 // limit: Maximum number of messages to return.
-func (c *Channel) History(ctx context.Context, s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32) ([]Message, error) {
-	return GetChannelMessages(ctx, s, c.ID, around, before, after, limit)
+func (c *Channel) History(ctx context.Context, session *Session, around, before, after *Snowflake, limit *int32) ([]Message, error) {
+	return GetChannelMessages(ctx, session, c.ID, around, before, after, limit)
 }
 
 // Invites returns all invites for this channel.
-func (c *Channel) Invites(ctx context.Context, s *Session) ([]Invite, error) {
-	return GetChannelInvites(ctx, s, c.ID)
+func (c *Channel) Invites(ctx context.Context, session *Session) ([]Invite, error) {
+	return GetChannelInvites(ctx, session, c.ID)
 }
 
 // Pins returns all pinned messages in this channel.
-func (c *Channel) Pins(ctx context.Context, s *Session) ([]Message, error) {
-	return GetPinnedMessages(ctx, s, c.ID)
+func (c *Channel) Pins(ctx context.Context, session *Session) ([]Message, error) {
+	return GetPinnedMessages(ctx, session, c.ID)
 }
 
 // Purge acts similar to History() however the resulting messages are deleted.
@@ -155,8 +155,8 @@ func (c *Channel) Pins(ctx context.Context, s *Session) ([]Message, error) {
 // before: Get messages before this message ID.
 // after: Get messages after this message ID.
 // limit: Maximum number of messages to return.
-func (c *Channel) Purge(ctx context.Context, s *Session, around *Snowflake, before *Snowflake, after *Snowflake, limit *int32, reason *string) ([]Message, error) {
-	messages, err := c.History(ctx, s, around, before, after, limit)
+func (c *Channel) Purge(ctx context.Context, session *Session, around, before, after *Snowflake, limit *int32, reason *string) ([]Message, error) {
+	messages, err := c.History(ctx, session, around, before, after, limit)
 	if err != nil {
 		return messages, err
 	}
@@ -166,33 +166,33 @@ func (c *Channel) Purge(ctx context.Context, s *Session, around *Snowflake, befo
 		messageIDs = append(messageIDs, message.ID)
 	}
 
-	err = BulkDeleteMessages(ctx, s, c.ID, messageIDs, reason)
+	err = BulkDeleteMessages(ctx, session, c.ID, messageIDs, reason)
 
 	return messages, err
 }
 
 // Sends a message in a channel.
 // messageArg: Parameters used to send a message.
-func (c *Channel) Send(ctx context.Context, s *Session, messageParams MessageParams) (*Message, error) {
-	return CreateMessage(ctx, s, c.ID, messageParams)
+func (c *Channel) Send(ctx context.Context, session *Session, messageParams MessageParams) (*Message, error) {
+	return CreateMessage(ctx, session, c.ID, messageParams)
 }
 
 // SetPermissions sets permission overwrites.
 // overwriteID: The role or user ID to overwrite permissions for.
 // overwriteArg: Parameters used to overwrite permissions.
 // reason: Reason for setting permission overwrite.
-func (c *Channel) SetPermissions(ctx context.Context, s *Session, overwriteID Snowflake, overwriteArg ChannelOverwrite, reason *string) error {
-	return EditChannelPermissions(ctx, s, c.ID, overwriteID, overwriteArg, reason)
+func (c *Channel) SetPermissions(ctx context.Context, session *Session, overwriteID Snowflake, overwriteArg ChannelOverwrite, reason *string) error {
+	return EditChannelPermissions(ctx, session, c.ID, overwriteID, overwriteArg, reason)
 }
 
 // TriggerTyping will show a typing indicator in the channel.
-func (c *Channel) TriggerTyping(ctx context.Context, s *Session) error {
-	return TriggerTypingIndicator(ctx, s, c.ID)
+func (c *Channel) TriggerTyping(ctx context.Context, session *Session) error {
+	return TriggerTypingIndicator(ctx, session, c.ID)
 }
 
 // Webhooks returns all webhooks for a channel.
-func (c *Channel) Webhooks(ctx context.Context, s *Session) ([]Webhook, error) {
-	return GetChannelWebhooks(ctx, s, c.ID)
+func (c *Channel) Webhooks(ctx context.Context, session *Session) ([]Webhook, error) {
+	return GetChannelWebhooks(ctx, session, c.ID)
 }
 
 // ChannelOverwrite represents a permission overwrite for a channel.
@@ -210,18 +210,18 @@ func (o *ChannelOverrideType) IsNil() bool {
 	return *o == 0
 }
 
-func (o *ChannelOverrideType) UnmarshalJSON(b []byte) error {
-	if !bytes.Equal(b, null) {
+func (o *ChannelOverrideType) UnmarshalJSON(data []byte) error {
+	if !bytes.Equal(data, null) {
 		// Discord will pass ChannelOverrideType as a string if it is in an audit log.
-		if b[0] == '"' {
-			i, err := strconv.ParseInt(string(b[1:len(b)-1]), 10, 64)
+		if data[0] == '"' {
+			i, err := strconv.ParseInt(string(data[1:len(data)-1]), 10, 64)
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal json: %v", err)
 			}
 
 			*o = ChannelOverrideType(i)
 		} else {
-			i, err := strconv.ParseInt(string(b), 10, 64)
+			i, err := strconv.ParseInt(string(data), 10, 64)
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal json: %v", err)
 			}

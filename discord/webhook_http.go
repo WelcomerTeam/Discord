@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-func CreateWebhook(ctx context.Context, s *Session, channelID Snowflake, webhookParam WebhookParam, reason *string) (*Webhook, error) {
+func CreateWebhook(ctx context.Context, session *Session, channelID Snowflake, webhookParam WebhookParam, reason *string) (*Webhook, error) {
 	endpoint := EndpointChannelWebhooks(channelID.String())
 
 	headers := http.Header{}
@@ -18,7 +18,7 @@ func CreateWebhook(ctx context.Context, s *Session, channelID Snowflake, webhook
 
 	var webhook *Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, webhookParam, headers, &webhook)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, webhookParam, headers, &webhook)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create webhook: %w", err)
 	}
@@ -26,12 +26,12 @@ func CreateWebhook(ctx context.Context, s *Session, channelID Snowflake, webhook
 	return webhook, nil
 }
 
-func GetChannelWebhooks(ctx context.Context, s *Session, channelID Snowflake) ([]Webhook, error) {
+func GetChannelWebhooks(ctx context.Context, session *Session, channelID Snowflake) ([]Webhook, error) {
 	endpoint := EndpointChannelWebhooks(channelID.String())
 
 	var webhooks []Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &webhooks)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &webhooks)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get channel webhooks: %w", err)
 	}
@@ -39,12 +39,12 @@ func GetChannelWebhooks(ctx context.Context, s *Session, channelID Snowflake) ([
 	return webhooks, nil
 }
 
-func GetGuildWebhooks(ctx context.Context, s *Session, guildID Snowflake) ([]Webhook, error) {
+func GetGuildWebhooks(ctx context.Context, session *Session, guildID Snowflake) ([]Webhook, error) {
 	endpoint := EndpointGuildWebhooks(guildID.String())
 
 	var webhooks []Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &webhooks)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &webhooks)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get guild webhooks: %w", err)
 	}
@@ -52,12 +52,12 @@ func GetGuildWebhooks(ctx context.Context, s *Session, guildID Snowflake) ([]Web
 	return webhooks, nil
 }
 
-func GetWebhook(ctx context.Context, s *Session, webhookID Snowflake) (*Webhook, error) {
+func GetWebhook(ctx context.Context, session *Session, webhookID Snowflake) (*Webhook, error) {
 	endpoint := EndpointWebhook(webhookID.String())
 
 	var webhook *Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &webhook)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &webhook)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get webhook: %w", err)
 	}
@@ -65,12 +65,12 @@ func GetWebhook(ctx context.Context, s *Session, webhookID Snowflake) (*Webhook,
 	return webhook, nil
 }
 
-func GetWebhookWithToken(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string) (*Webhook, error) {
+func GetWebhookWithToken(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string) (*Webhook, error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
 	var webhook *Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &webhook)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &webhook)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get webhook with token: %w", err)
 	}
@@ -78,7 +78,7 @@ func GetWebhookWithToken(ctx context.Context, s *Session, webhookID Snowflake, w
 	return webhook, nil
 }
 
-func ModifyWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhookParam WebhookParam, reason *string) (*Webhook, error) {
+func ModifyWebhook(ctx context.Context, session *Session, webhookID Snowflake, webhookParam WebhookParam, reason *string) (*Webhook, error) {
 	endpoint := EndpointWebhook(webhookID.String())
 
 	headers := http.Header{}
@@ -89,7 +89,7 @@ func ModifyWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhook
 
 	var webhook *Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, webhookParam, headers, &webhook)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, webhookParam, headers, &webhook)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify webhook: %w", err)
 	}
@@ -97,12 +97,12 @@ func ModifyWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhook
 	return webhook, nil
 }
 
-func ModifyWebhookWithToken(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string, webhookParam WebhookParam) (*Webhook, error) {
+func ModifyWebhookWithToken(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, webhookParam WebhookParam) (*Webhook, error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
 	var webhook *Webhook
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, webhookParam, nil, &webhook)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, webhookParam, nil, &webhook)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify webhook with token: %w", err)
 	}
@@ -110,7 +110,7 @@ func ModifyWebhookWithToken(ctx context.Context, s *Session, webhookID Snowflake
 	return webhook, nil
 }
 
-func DeleteWebhook(ctx context.Context, s *Session, webhookID Snowflake, reason *string) error {
+func DeleteWebhook(ctx context.Context, session *Session, webhookID Snowflake, reason *string) error {
 	endpoint := EndpointWebhook(webhookID.String())
 
 	headers := http.Header{}
@@ -119,7 +119,7 @@ func DeleteWebhook(ctx context.Context, s *Session, webhookID Snowflake, reason 
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, headers, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, headers, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete webhook: %w", err)
 	}
@@ -127,10 +127,10 @@ func DeleteWebhook(ctx context.Context, s *Session, webhookID Snowflake, reason 
 	return nil
 }
 
-func DeleteWebhookWithToken(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string) error {
+func DeleteWebhookWithToken(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string) error {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete webhook with token: %w", err)
 	}
@@ -138,7 +138,7 @@ func DeleteWebhookWithToken(ctx context.Context, s *Session, webhookID Snowflake
 	return nil
 }
 
-func ExecuteWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string, messageParams WebhookMessageParams, wait bool) (*WebhookMessage, error) {
+func ExecuteWebhook(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, messageParams WebhookMessageParams, wait bool) (*WebhookMessage, error) {
 	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken)
 
 	values := url.Values{}
@@ -162,9 +162,9 @@ func ExecuteWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhoo
 		}
 
 		if wait {
-			err = s.Interface.FetchBJ(ctx, s, http.MethodPost, endpoint, contentType, body, nil, &message)
+			err = session.Interface.FetchBJ(ctx, session, http.MethodPost, endpoint, contentType, body, nil, &message)
 		} else {
-			err = s.Interface.FetchBJ(ctx, s, http.MethodPost, endpoint, contentType, body, nil, nil)
+			err = session.Interface.FetchBJ(ctx, session, http.MethodPost, endpoint, contentType, body, nil, nil)
 		}
 
 		if err != nil {
@@ -172,9 +172,9 @@ func ExecuteWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhoo
 		}
 	} else {
 		if wait {
-			err = s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, messageParams, nil, &message)
+			err = session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, messageParams, nil, &message)
 		} else {
-			err = s.Interface.FetchJJ(ctx, s, http.MethodPost, endpoint, messageParams, nil, nil)
+			err = session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, messageParams, nil, nil)
 		}
 
 		if err != nil {
@@ -185,12 +185,12 @@ func ExecuteWebhook(ctx context.Context, s *Session, webhookID Snowflake, webhoo
 	return message, nil
 }
 
-func GetWebhookMessage(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string, messageID Snowflake) (*WebhookMessage, error) {
+func GetWebhookMessage(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, messageID Snowflake) (*WebhookMessage, error) {
 	endpoint := EndpointWebhookMessage(webhookID.String(), webhookToken, messageID.String())
 
 	var message *WebhookMessage
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodGet, endpoint, nil, nil, &message)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &message)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get webhook message: %w", err)
 	}
@@ -198,7 +198,7 @@ func GetWebhookMessage(ctx context.Context, s *Session, webhookID Snowflake, web
 	return message, nil
 }
 
-func EditWebhookMessage(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string, messageID Snowflake, messageParam WebhookMessageParams) (*WebhookMessage, error) {
+func EditWebhookMessage(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, messageID Snowflake, messageParam WebhookMessageParams) (*WebhookMessage, error) {
 	endpoint := EndpointWebhookMessage(webhookID.String(), webhookToken, messageID.String())
 
 	var message *WebhookMessage
@@ -210,12 +210,12 @@ func EditWebhookMessage(ctx context.Context, s *Session, webhookID Snowflake, we
 			return nil, err
 		}
 
-		err = s.Interface.FetchBJ(ctx, s, http.MethodPatch, endpoint, contentType, body, nil, &message)
+		err = session.Interface.FetchBJ(ctx, session, http.MethodPatch, endpoint, contentType, body, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit webhook message: %w", err)
 		}
 	} else {
-		err = s.Interface.FetchJJ(ctx, s, http.MethodPatch, endpoint, messageParam, nil, &message)
+		err = session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, messageParam, nil, &message)
 		if err != nil {
 			return nil, fmt.Errorf("failed to edit webhook message: %w", err)
 		}
@@ -224,10 +224,10 @@ func EditWebhookMessage(ctx context.Context, s *Session, webhookID Snowflake, we
 	return message, nil
 }
 
-func DeleteWebhookMessage(ctx context.Context, s *Session, webhookID Snowflake, webhookToken string, messageID Snowflake) error {
+func DeleteWebhookMessage(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, messageID Snowflake) error {
 	endpoint := EndpointWebhookMessage(webhookID.String(), webhookToken, messageID.String())
 
-	err := s.Interface.FetchJJ(ctx, s, http.MethodDelete, endpoint, nil, nil, nil)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete webhook message: %w", err)
 	}
