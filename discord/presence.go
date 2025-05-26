@@ -36,24 +36,26 @@ const (
 
 // Activity represents an activity as sent as part of other packets.
 type Activity struct {
-	Timestamps    *Timestamps   `json:"timestamps,omitempty"`
-	ApplicationID Snowflake     `json:"application_id"`
-	Party         *Party        `json:"party,omitempty"`
-	Assets        *Assets       `json:"assets,omitempty"`
-	Secrets       *Secrets      `json:"secrets,omitempty"`
-	Flags         *ActivityFlag `json:"flags,omitempty"`
-	Name          string        `json:"name"`
-	URL           string        `json:"url"`
-	Details       string        `json:"details"`
-	State         string        `json:"state"`
-	Type          ActivityType  `json:"type"`
-	Instance      bool          `json:"instance"`
+	Timestamps    *Timestamps    `json:"timestamps,omitempty"`
+	ApplicationID *ApplicationID `json:"application_id,omitempty"`
+	Party         *Party         `json:"party,omitempty"`
+	Assets        *Assets        `json:"assets,omitempty"`
+	Secrets       *Secrets       `json:"secrets,omitempty"`
+	Flags         *ActivityFlag  `json:"flags,omitempty"`
+	URL           *string        `json:"url,omitempty"`
+	Details       *string        `json:"details,omitempty"`
+	Instance      *bool          `json:"instance,omitempty"`
+	CreatedAt     *int64         `json:"created_at,omitempty"`
+	Emoji         *Emoji         `json:"emoji,omitempty"`
+	Name          string         `json:"name"`
+	State         string         `json:"state"`
+	Type          ActivityType   `json:"type"`
 }
 
 // Timestamps represents the starting and ending timestamp of an activity.
 type Timestamps struct {
-	Start int32 `json:"start"`
-	End   int32 `json:"end"`
+	Start int64 `json:"start,omitempty"`
+	End   int64 `json:"end,omitempty"`
 }
 
 // Party represents an activity's current party information.
@@ -64,22 +66,22 @@ type Party struct {
 
 // Assets represents an activity's images and their hover texts.
 type Assets struct {
-	LargeImage string `json:"large_image"`
-	LargeText  string `json:"large_text"`
-	SmallImage string `json:"small_image"`
-	SmallText  string `json:"small_text"`
+	LargeImage string `json:"large_image,omitempty"`
+	LargeText  string `json:"large_text,omitempty"`
+	SmallImage string `json:"small_image,omitempty"`
+	SmallText  string `json:"small_text,omitempty"`
 }
 
 // Secrets represents an activity's secrets for Rich Presence joining and spectating.
 type Secrets struct {
-	Join     string `json:"join"`
-	Spectate string `json:"spectate"`
-	Match    string `json:"match"`
+	Join     string `json:"join,omitempty"`
+	Spectate string `json:"spectate,omitempty"`
+	Match    string `json:"match,omitempty"`
 }
 
 // ClientStatus represent's the status of a client.
 type ClientStatus struct {
-	Desktop string `json:"desktop"`
-	Mobile  string `json:"mobile"`
-	Web     string `json:"web"`
+	Desktop string `json:"desktop,omitempty"`
+	Mobile  string `json:"mobile,omitempty"`
+	Web     string `json:"web,omitempty"`
 }

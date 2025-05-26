@@ -1,9 +1,5 @@
 package discord
 
-import (
-	"time"
-)
-
 // embed.go contains all structures for constructing embeds
 
 type EmbedType string
@@ -20,19 +16,19 @@ const (
 
 // Embed represents a message embed.
 type Embed struct {
-	Video       *EmbedVideo    `json:"video,omitempty"`
-	Timestamp   *time.Time     `json:"timestamp,omitempty"`
-	Footer      *EmbedFooter   `json:"footer,omitempty"`
-	Image       *MediaItem     `json:"image,omitempty"`
-	Thumbnail   *MediaItem     `json:"thumbnail,omitempty"`
-	Provider    *EmbedProvider `json:"provider,omitempty"`
-	Author      *EmbedAuthor   `json:"author,omitempty"`
-	Type        EmbedType      `json:"type,omitempty"`
-	Description string         `json:"description,omitempty"`
-	URL         string         `json:"url,omitempty"`
-	Title       string         `json:"title,omitempty"`
-	Fields      []EmbedField   `json:"fields,omitempty"`
-	Color       int32          `json:"color,omitempty"`
+	Video       *EmbedVideo     `json:"video,omitempty"`
+	Timestamp   *Timestamp      `json:"timestamp,omitempty"`
+	Footer      *EmbedFooter    `json:"footer,omitempty"`
+	Image       *EmbedImage     `json:"image,omitempty"`
+	Thumbnail   *EmbedThumbnail `json:"thumbnail,omitempty"`
+	Provider    *EmbedProvider  `json:"provider,omitempty"`
+	Author      *EmbedAuthor    `json:"author,omitempty"`
+	Type        EmbedType       `json:"type,omitempty"`
+	Description string          `json:"description,omitempty"`
+	URL         string          `json:"url,omitempty"`
+	Title       string          `json:"title,omitempty"`
+	Fields      EmbedFieldList  `json:"fields,omitempty"`
+	Color       int32           `json:"color,omitempty"`
 }
 
 func NewEmbed(embedType EmbedType) *Embed {
@@ -42,8 +38,6 @@ func NewEmbed(embedType EmbedType) *Embed {
 }
 
 func (e *Embed) SetTitle(title string) *Embed {
-	e.Title = title
-
 	return e
 }
 
@@ -59,7 +53,7 @@ func (e *Embed) SetURL(url string) *Embed {
 	return e
 }
 
-func (e *Embed) SetTimestamp(timestamp *time.Time) *Embed {
+func (e *Embed) SetTimestamp(timestamp *Timestamp) *Embed {
 	e.Timestamp = timestamp
 
 	return e
@@ -77,13 +71,13 @@ func (e *Embed) SetFooter(footer *EmbedFooter) *Embed {
 	return e
 }
 
-func (e *Embed) SetImage(image *MediaItem) *Embed {
+func (e *Embed) SetImage(image *EmbedImage) *Embed {
 	e.Image = image
 
 	return e
 }
 
-func (e *Embed) SetThumbnail(thumbnail *MediaItem) *Embed {
+func (e *Embed) SetThumbnail(thumbnail *EmbedThumbnail) *Embed {
 	e.Thumbnail = thumbnail
 
 	return e
@@ -127,14 +121,30 @@ func NewEmbedFooter(text, iconURL string) *EmbedFooter {
 	}
 }
 
-func NewEmbedImage(url string) *MediaItem {
-	return &MediaItem{
+// EmbedImage represents an image in an embed.
+type EmbedImage struct {
+	URL      string `json:"url"`
+	ProxyURL string `json:"proxy_url,omitempty"`
+	Height   int32  `json:"height,omitempty"`
+	Width    int32  `json:"width,omitempty"`
+}
+
+func NewEmbedImage(url string) *EmbedImage {
+	return &EmbedImage{
 		URL: url,
 	}
 }
 
-func NewEmbedThumbnail(url string) *MediaItem {
-	return &MediaItem{
+// EmbedThumbnail represents the thumbnail of an embed.
+type EmbedThumbnail struct {
+	URL      string `json:"url"`
+	ProxyURL string `json:"proxy_url,omitempty"`
+	Height   int32  `json:"height,omitempty"`
+	Width    int32  `json:"width,omitempty"`
+}
+
+func NewEmbedThumbnail(url string) *EmbedThumbnail {
+	return &EmbedThumbnail{
 		URL: url,
 	}
 }

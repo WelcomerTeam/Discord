@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/WelcomerTeam/Sandwich-Daemon/sandwichjson"
 )
 
 var (
@@ -30,7 +32,7 @@ type ErrorMessage struct {
 func NewRestError(req *http.Request, resp *http.Response, body []byte) *RestError {
 	var errorMessage ErrorMessage
 
-	_ = json.Unmarshal(body, &errorMessage)
+	_ = sandwichjson.Unmarshal(body, errorMessage)
 
 	return &RestError{
 		Request:      req,

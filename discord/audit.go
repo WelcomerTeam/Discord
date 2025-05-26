@@ -142,12 +142,12 @@ const (
 )
 
 type GuildAuditLog struct {
-	AuditLogEntries []AuditLogEntry  `json:"audit_log_entries"`
-	ScheduledEvents []ScheduledEvent `json:"guild_scheduled_events"`
-	Integrations    []Integration    `json:"integrations"`
-	Threads         []Channel        `json:"threads"`
-	Users           []User           `json:"users"`
-	Webhooks        []Webhook        `json:"webhooks"`
+	AuditLogEntries AuditLogEntryList  `json:"audit_log_entries"`
+	ScheduledEvents ScheduledEventList `json:"guild_scheduled_events"`
+	Integrations    IntegrationList    `json:"integrations"`
+	Threads         ChannelList        `json:"threads"`
+	Users           UserList           `json:"users"`
+	Webhooks        WebhookList        `json:"webhooks"`
 }
 
 type AuditLogEntry struct {
@@ -156,7 +156,7 @@ type AuditLogEntry struct {
 	Options    *AuditLogOptions   `json:"options,omitempty"`
 	Reason     string             `json:"reason,omitempty"`
 	Changes    []AuditLogChanges  `json:"changes,omitempty"`
-	ID         Snowflake          `json:"id"`
+	ID         AuditLogEntryID    `json:"id"`
 	ActionType AuditLogActionType `json:"action_type"`
 }
 
@@ -167,12 +167,12 @@ type AuditLogChanges struct {
 }
 
 type AuditLogOptions struct {
-	ChannelID        *Snowflake           `json:"channel_id,omitempty"`
+	ChannelID        *ChannelID           `json:"channel_id,omitempty"`
 	ID               *Snowflake           `json:"id,omitempty"`
-	MessageID        *Snowflake           `json:"message_id,omitempty"`
+	MessageID        *MessageID           `json:"message_id,omitempty"`
 	Type             *ChannelOverrideType `json:"type,omitempty"`
 	RoleName         string               `json:"role_name,omitempty"`
 	Count            Int64                `json:"count,omitempty"`
-	DeleteMemberDays Int64                `json:"delete_member_days,omitempty"`
-	MembersRemoved   Int64                `json:"members_removed,omitempty"`
+	DeleteMemberDays int32                `json:"delete_member_days,omitempty"`
+	MembersRemoved   int32                `json:"members_removed,omitempty"`
 }
