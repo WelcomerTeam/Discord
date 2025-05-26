@@ -90,3 +90,49 @@ func int64ToStringBytes(s int64) []byte {
 
 	return buf
 }
+
+type List[T any] []T
+
+func (l List[T]) MarshalJSON() ([]byte, error) {
+	if len(l) == 0 {
+		return []byte("[]"), nil
+	}
+
+	return sandwichjson.Marshal([]T(l))
+}
+
+type SnowflakeList = List[Snowflake]
+type StringList = List[string]
+type Int64List = List[Int64]
+type StageInstanceList = List[StageInstance]
+type StickerList = List[Sticker]
+type ScheduledEventList = List[ScheduledEvent]
+type RoleList = List[Role]
+type EmojiList = List[Emoji]
+type VoiceStateList = List[VoiceState]
+type GuildMemberList = List[GuildMember]
+type ChannelList = List[Channel]
+type ActivityList = List[Activity]
+type PresenceUpdateList = List[PresenceUpdate]
+type ChannelOverwriteList = List[ChannelOverwrite]
+type UserList = List[User]
+type AuditLogEntryList = List[AuditLogEntry]
+type AuditLogChangesList = List[AuditLogChanges]
+type IntegrationList = List[Integration]
+type WebhookList = List[Webhook]
+type EmbedFieldList = List[EmbedField]
+type EmbedList = List[Embed]
+type UnavailableGuildList = List[UnavailableGuild]
+type ThreadMemberList = List[ThreadMember]
+
+type NullMap bool
+
+func (n NullMap) MarshalJSON() ([]byte, error) {
+	return []byte("{}"), nil
+}
+
+type NullSeq bool
+
+func (n NullSeq) MarshalJSON() ([]byte, error) {
+	return []byte("[]"), nil
+}
