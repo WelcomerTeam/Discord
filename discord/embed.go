@@ -31,7 +31,7 @@ type Embed struct {
 	Description string         `json:"description,omitempty"`
 	URL         string         `json:"url,omitempty"`
 	Title       string         `json:"title,omitempty"`
-	Fields      []EmbedField   `json:"fields,omitempty"`
+	Fields      EmbedFieldList `json:"fields,omitempty"`
 	Color       int32          `json:"color,omitempty"`
 }
 

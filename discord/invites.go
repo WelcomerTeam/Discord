@@ -64,10 +64,10 @@ func (i *Invite) Delete(ctx context.Context, session *Session, reason *string) e
 
 // InviteStageInstance represents the structure of an invite stage instance.
 type InviteStageInstance struct {
-	Topic            string        `json:"topic"`
-	Members          []GuildMember `json:"members"`
-	ParticipantCount int32         `json:"participant_count"`
-	SpeakerCount     int32         `json:"speaker_count"`
+	Topic            string          `json:"topic"`
+	Members          GuildMemberList `json:"members"`
+	ParticipantCount int32           `json:"participant_count"`
+	SpeakerCount     int32           `json:"speaker_count"`
 }
 
 // ScheduledEvent represents an scheduled event.

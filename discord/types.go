@@ -2,6 +2,7 @@ package discord
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"time"
@@ -91,6 +92,7 @@ func int64ToStringBytes(s int64) []byte {
 	return buf
 }
 
+// Ensure empty lists are marshalled as []
 type List[T any] []T
 
 func (l List[T]) MarshalJSON() ([]byte, error) {
@@ -98,7 +100,7 @@ func (l List[T]) MarshalJSON() ([]byte, error) {
 		return []byte("[]"), nil
 	}
 
-	return sandwichjson.Marshal([]T(l))
+	return json.Marshal([]T(l))
 }
 
 type SnowflakeList = List[Snowflake]
@@ -124,7 +126,12 @@ type EmbedFieldList = List[EmbedField]
 type EmbedList = List[Embed]
 type UnavailableGuildList = List[UnavailableGuild]
 type ThreadMemberList = List[ThreadMember]
-
+type ApplicationCommandOptionList = List[ApplicationCommandOption]
+type ApplicationCommandPermissionsList = List[ApplicationCommandPermissions]
+type ChannelTypeList = List[ChannelType]
+type PresenceStatusList = List[PresenceStatus]
+type MessageReactionList = List[MessageReaction]
+type MessageAttachmentList = List[MessageAttachment]
 type NullMap bool
 
 func (n NullMap) MarshalJSON() ([]byte, error) {

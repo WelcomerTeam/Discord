@@ -93,14 +93,14 @@ type Message struct {
 	Application       *Application            `json:"application,omitempty"`
 	Activity          *MessageActivity        `json:"activity,omitempty"`
 	Content           string                  `json:"content"`
-	Embeds            []Embed                 `json:"embeds"`
-	MentionRoles      []Snowflake             `json:"mention_roles"`
-	Reactions         []MessageReaction       `json:"reactions"`
+	Embeds            EmbedList               `json:"embeds"`
+	MentionRoles      SnowflakeList           `json:"mention_roles"`
+	Reactions         MessageReactionList     `json:"reactions"`
 	StickerItems      []MessageSticker        `json:"sticker_items,omitempty"`
-	Attachments       []MessageAttachment     `json:"attachments"`
+	Attachments       MessageAttachmentList   `json:"attachments"`
 	Components        []InteractionComponent  `json:"components,omitempty"`
 	MentionChannels   []MessageChannelMention `json:"mention_channels,omitempty"`
-	Mentions          []User                  `json:"mentions"`
+	Mentions          UserList                `json:"mentions"`
 	MessageReference  []MessageReference      `json:"message_referenced,omitempty"`
 	ID                Snowflake               `json:"id"`
 	ChannelID         Snowflake               `json:"channel_id"`
@@ -257,7 +257,7 @@ type MessageReference struct {
 // MessageReaction represents a reaction to a message on discord.
 type MessageReaction struct {
 	Emoji        Emoji                       `json:"emoji"`
-	BurstColors  []string                    `json:"burst_colors"`
+	BurstColors  StringList                  `json:"burst_colors"`
 	CountDetails MessageReactionCountDetails `json:"count_details"`
 	Count        int32                       `json:"count"`
 	BurstCount   int32                       `json:"burst_count"`

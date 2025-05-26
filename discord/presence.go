@@ -48,6 +48,8 @@ type Activity struct {
 	State         string        `json:"state"`
 	Type          ActivityType  `json:"type"`
 	Instance      bool          `json:"instance"`
+	CreatedAt     *int64        `json:"created_at,omitempty"`
+	Emoji         *Emoji        `json:"emoji,omitempty"`
 }
 
 // Timestamps represents the starting and ending timestamp of an activity.
