@@ -132,14 +132,3 @@ type ChannelTypeList = List[ChannelType]
 type PresenceStatusList = List[PresenceStatus]
 type MessageReactionList = List[MessageReaction]
 type MessageAttachmentList = List[MessageAttachment]
-type NullMap bool
-
-func (n NullMap) MarshalJSON() ([]byte, error) {
-	return []byte("{}"), nil
-}
-
-type NullSeq bool
-
-func (n NullSeq) MarshalJSON() ([]byte, error) {
-	return []byte("[]"), nil
-}
