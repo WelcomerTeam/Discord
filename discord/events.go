@@ -16,12 +16,12 @@ type Hello struct {
 
 // Ready represents when the client has completed the initial handshake.
 type Ready struct {
-	Application Application        `json:"application"`
-	User        User               `json:"user"`
-	SessionID   string             `json:"session_id"`
-	Guilds      []UnavailableGuild `json:"guilds"`
-	Shard       []int32            `json:"shard,omitempty"`
-	Version     int32              `json:"v"`
+	Application Application          `json:"application"`
+	User        User                 `json:"user"`
+	SessionID   string               `json:"session_id"`
+	Guilds      UnavailableGuildList `json:"guilds"`
+	Shard       int32                `json:"shard,omitempty"`
+	Version     int32                `json:"v"`
 }
 
 // Resumed represents the response to a resume event.
@@ -71,10 +71,10 @@ type ThreadDelete Channel
 
 // ThreadListSync represents a thread list sync event.
 type ThreadListSync struct {
-	ChannelIDs []Snowflake    `json:"channel_ids,omitempty"`
-	Threads    []Channel      `json:"threads"`
-	Members    []ThreadMember `json:"members"`
-	GuildID    Snowflake      `json:"guild_id"`
+	ChannelIDs SnowflakeList    `json:"channel_ids,omitempty"`
+	Threads    ChannelList      `json:"threads"`
+	Members    ThreadMemberList `json:"members"`
+	GuildID    Snowflake        `json:"guild_id"`
 }
 
 // ThreadMemberUpdate represents a thread member update event.
@@ -82,11 +82,11 @@ type ThreadMemberUpdate ThreadMember
 
 // ThreadMembersUpdate represents a thread members update event.
 type ThreadMembersUpdate struct {
-	AddedMembers     []ThreadMember `json:"added_members,omitempty"`
-	RemovedMemberIDs []Snowflake    `json:"removed_member_ids,omitempty"`
-	ID               Snowflake      `json:"id"`
-	GuildID          Snowflake      `json:"guild_id"`
-	MemberCount      int32          `json:"member_count"`
+	AddedMembers     ThreadMemberList `json:"added_members,omitempty"`
+	RemovedMemberIDs SnowflakeList    `json:"removed_member_ids,omitempty"`
+	ID               Snowflake        `json:"id"`
+	GuildID          Snowflake        `json:"guild_id"`
+	MemberCount      int32            `json:"member_count"`
 }
 
 // GuildAuditLogEntryCreate represents when a guild audit log entry is created.
@@ -112,14 +112,14 @@ type GuildBanRemove GuildBan
 
 // GuildEmojisUpdate represents a guild emojis update event.
 type GuildEmojisUpdate struct {
-	Emojis  []Emoji   `json:"emojis"`
+	Emojis  EmojiList `json:"emojis"`
 	GuildID Snowflake `json:"guild_id"`
 }
 
 // GuildStickersUpdate represents a guild stickers update event.
 type GuildStickersUpdate struct {
-	Stickers []Sticker `json:"stickers"`
-	GuildID  Snowflake `json:"guild_id"`
+	Stickers StickerList `json:"stickers"`
+	GuildID  Snowflake   `json:"guild_id"`
 }
 
 // GuildIntegrationsUpdate represents a guild integrations update event.
@@ -141,13 +141,13 @@ type GuildMemberUpdate GuildMember
 
 // GuildMembersChunk represents a guild members chunk event.
 type GuildMembersChunk struct {
-	Nonce      string           `json:"nonce"`
-	Members    []GuildMember    `json:"members"`
-	NotFound   []Snowflake      `json:"not_found,omitempty"`
-	Presences  []PresenceStatus `json:"presences,omitempty"`
-	GuildID    Snowflake        `json:"guild_id"`
-	ChunkIndex int32            `json:"chunk_index"`
-	ChunkCount int32            `json:"chunk_count"`
+	Nonce      string             `json:"nonce"`
+	Members    GuildMemberList    `json:"members"`
+	NotFound   SnowflakeList      `json:"not_found,omitempty"`
+	Presences  PresenceStatusList `json:"presences,omitempty"`
+	GuildID    Snowflake          `json:"guild_id"`
+	ChunkIndex int32              `json:"chunk_index"`
+	ChunkCount int32              `json:"chunk_count"`
 }
 
 // GuildRoleCreate represents a guild role create event.
@@ -202,9 +202,9 @@ type MessageDelete struct {
 
 // MessageCreate represents the message bulk delete event.
 type MessageDeleteBulk struct {
-	GuildID   *Snowflake  `json:"guild_id,omitempty"`
-	IDs       []Snowflake `json:"ids"`
-	ChannelID Snowflake   `json:"channel_id"`
+	GuildID   *Snowflake    `json:"guild_id,omitempty"`
+	IDs       SnowflakeList `json:"ids"`
+	ChannelID Snowflake     `json:"channel_id"`
 }
 
 // MessageReactionAdd represents a message reaction add event.
@@ -246,7 +246,7 @@ type PresenceUpdate struct {
 	User         User           `json:"user"`
 	ClientStatus ClientStatus   `json:"clienbt_status"`
 	Status       PresenceStatus `json:"status"`
-	Activities   []Activity     `json:"activities"`
+	Activities   ActivityList   `json:"activities"`
 	GuildID      Snowflake      `json:"guild_id"`
 }
 

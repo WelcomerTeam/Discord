@@ -104,16 +104,16 @@ type Guild struct {
 	Splash                      string                     `json:"splash"`
 	DiscoverySplash             string                     `json:"discovery_splash"`
 	Region                      string                     `json:"region"`
-	Presences                   []Activity                 `json:"presences,omitempty"`
-	GuildScheduledEvents        []ScheduledEvent           `json:"guild_scheduled_events"`
-	Stickers                    []Sticker                  `json:"stickers"`
-	Features                    []string                   `json:"features"`
-	StageInstances              []StageInstance            `json:"stage_instances,omitempty"`
-	Roles                       []Role                     `json:"roles"`
-	Emojis                      []Emoji                    `json:"emojis"`
-	VoiceStates                 []VoiceState               `json:"voice_states,omitempty"`
-	Members                     []GuildMember              `json:"members,omitempty"`
-	Channels                    []Channel                  `json:"channels,omitempty"`
+	Presences                   ActivityList               `json:"presences,omitempty"`
+	GuildScheduledEvents        ScheduledEventList         `json:"guild_scheduled_events"`
+	Stickers                    StickerList                `json:"stickers"`
+	Features                    StringList                 `json:"features"`
+	StageInstances              StageInstanceList          `json:"stage_instances,omitempty"`
+	Roles                       RoleList                   `json:"roles"`
+	Emojis                      EmojiList                  `json:"emojis"`
+	VoiceStates                 VoiceStateList             `json:"voice_states,omitempty"`
+	Members                     GuildMemberList            `json:"members,omitempty"`
+	Channels                    ChannelList                `json:"channels,omitempty"`
 	ID                          Snowflake                  `json:"id"`
 	ExplicitContentFilter       ExplicitContentFilterLevel `json:"explicit_content_filter"`
 	DefaultMessageNotifications MessageNotificationLevel   `json:"default_message_notifications"`
@@ -155,7 +155,7 @@ type GuildParam struct {
 	PreferredLocale             *string                     `json:"preferred_locale,omitempty"`
 	DiscoverySplash             *string                     `json:"discovery_splash,omitempty"`
 	Description                 *string                     `json:"description,omitempty"`
-	Features                    []string                    `json:"features,omitempty"`
+	Features                    StringList                  `json:"features,omitempty"`
 }
 
 // AuditLogs returns all audit logs matching query.
@@ -333,18 +333,18 @@ type UnavailableGuild struct {
 
 // GuildMember represents a guild member on discord.
 type GuildMember struct {
-	JoinedAt                   time.Time   `json:"joined_at"`
-	CommunicationDisabledUntil *time.Time  `json:"communication_disabled_until,omitempty"`
-	PremiumSince               *time.Time  `json:"premium_since,omitempty"`
-	User                       *User       `json:"user,omitempty"`
-	GuildID                    *Snowflake  `json:"guild_id,omitempty"`
-	Permissions                *Int64      `json:"permissions"`
-	Nick                       string      `json:"nick,omitempty"`
-	Avatar                     string      `json:"avatar,omitempty"`
-	Roles                      []Snowflake `json:"roles"`
-	Deaf                       bool        `json:"deaf"`
-	Mute                       bool        `json:"mute"`
-	Pending                    bool        `json:"pending"`
+	JoinedAt                   time.Time     `json:"joined_at"`
+	CommunicationDisabledUntil *time.Time    `json:"communication_disabled_until,omitempty"`
+	PremiumSince               *time.Time    `json:"premium_since,omitempty"`
+	User                       *User         `json:"user,omitempty"`
+	GuildID                    *Snowflake    `json:"guild_id,omitempty"`
+	Permissions                *Int64        `json:"permissions"`
+	Nick                       string        `json:"nick,omitempty"`
+	Avatar                     string        `json:"avatar,omitempty"`
+	Roles                      SnowflakeList `json:"roles"`
+	Deaf                       bool          `json:"deaf"`
+	Mute                       bool          `json:"mute"`
+	Pending                    bool          `json:"pending"`
 }
 
 // GuildMemberParams represents the arguments used to modify a guild member.

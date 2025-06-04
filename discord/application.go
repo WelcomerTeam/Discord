@@ -107,27 +107,27 @@ type ApplicationTeamMember struct {
 
 // ApplicationCommand represents an application's command.
 type ApplicationCommand struct {
-	DefaultMemberPermission  *Int64                     `json:"default_member_permissions,omitempty"`
-	Type                     *ApplicationCommandType    `json:"type,omitempty"`
-	ApplicationID            *Snowflake                 `json:"application_id,omitempty"`
-	GuildID                  *Snowflake                 `json:"guild_id,omitempty"`
-	NameLocalizations        map[string]string          `json:"name_localizations,omitempty"`
-	DescriptionLocalizations map[string]string          `json:"description_localizations,omitempty"`
-	ID                       *Snowflake                 `json:"id,omitempty"`
-	DMPermission             *bool                      `json:"dm_permission,omitempty"`
-	DefaultPermission        *bool                      `json:"default_permission,omitempty"`
-	Name                     string                     `json:"name"`
-	Description              string                     `json:"description,omitempty"`
-	Options                  []ApplicationCommandOption `json:"options,omitempty"`
-	Version                  Int64                      `json:"version,omitempty"`
+	DefaultMemberPermission  *Int64                       `json:"default_member_permissions,omitempty"`
+	Type                     *ApplicationCommandType      `json:"type,omitempty"`
+	ApplicationID            *Snowflake                   `json:"application_id,omitempty"`
+	GuildID                  *Snowflake                   `json:"guild_id,omitempty"`
+	NameLocalizations        map[string]string            `json:"name_localizations,omitempty"`
+	DescriptionLocalizations map[string]string            `json:"description_localizations,omitempty"`
+	ID                       *Snowflake                   `json:"id,omitempty"`
+	DMPermission             *bool                        `json:"dm_permission,omitempty"`
+	DefaultPermission        *bool                        `json:"default_permission,omitempty"`
+	Name                     string                       `json:"name"`
+	Description              string                       `json:"description,omitempty"`
+	Options                  ApplicationCommandOptionList `json:"options,omitempty"`
+	Version                  Int64                        `json:"version,omitempty"`
 }
 
 // GuildApplicationCommandPermissions represent a guilds application permissions.
 type GuildApplicationCommandPermissions struct {
-	Permissions   []ApplicationCommandPermissions `json:"permissions"`
-	ID            Snowflake                       `json:"id"`
-	ApplicationID Snowflake                       `json:"application_id"`
-	GuildID       Snowflake                       `json:"guild_id"`
+	Permissions   ApplicationCommandPermissionsList `json:"permissions"`
+	ID            Snowflake                         `json:"id"`
+	ApplicationID Snowflake                         `json:"application_id"`
+	GuildID       Snowflake                         `json:"guild_id"`
 }
 
 // ApplicationCommandPermissions represents the rules for enabling or disabling a command.
@@ -148,7 +148,7 @@ type ApplicationCommandOption struct {
 	MaxValue                 *int32                           `json:"max_value,omitempty"`
 	Description              string                           `json:"description,omitempty"`
 	Name                     string                           `json:"name"`
-	ChannelTypes             []ChannelType                    `json:"channel_types,omitempty"`
+	ChannelTypes             ChannelTypeList                  `json:"channel_types,omitempty"`
 	Options                  []ApplicationCommandOption       `json:"options,omitempty"`
 	Choices                  []ApplicationCommandOptionChoice `json:"choices,omitempty"`
 	Required                 bool                             `json:"required,omitempty"`
