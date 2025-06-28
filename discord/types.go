@@ -24,7 +24,7 @@ func (s *Snowflake) IsNil() bool {
 func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	if !bytes.Equal(b, null) {
 		if len(b) >= 2 && b[0] == '"' {
-			i, err := strconv.ParseInt(string(b[1:len(b)-1]), 10, 64)
+			i, err := strconv.ParseInt(string(b[1:len(b)-2]), 10, 64)
 			if err != nil {
 				return fmt.Errorf("failed to unmarshal json: %v", err)
 			}
