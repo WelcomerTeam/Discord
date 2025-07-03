@@ -20,7 +20,7 @@ type Ready struct {
 	User        User                 `json:"user"`
 	SessionID   string               `json:"session_id"`
 	Guilds      UnavailableGuildList `json:"guilds"`
-	Shard       int32                `json:"shard,omitempty"`
+	Shard       []int32                `json:"shard,omitempty"`
 	Version     int32                `json:"v"`
 }
 
