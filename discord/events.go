@@ -20,7 +20,7 @@ type Ready struct {
 	User        User                 `json:"user"`
 	SessionID   string               `json:"session_id"`
 	Guilds      UnavailableGuildList `json:"guilds"`
-	Shard       []int32                `json:"shard,omitempty"`
+	Shard       []int32              `json:"shard,omitempty"`
 	Version     int32                `json:"v"`
 }
 
@@ -151,7 +151,10 @@ type GuildMembersChunk struct {
 }
 
 // GuildRoleCreate represents a guild role create event.
-type GuildRoleCreate Role
+type GuildRoleCreate struct {
+	GuildID Snowflake `json:"guild_id"`
+	Role    Role      `json:"role"`
+}
 
 // GuildRoleUpdate represents a guild role update event.
 type GuildRoleUpdate struct {
