@@ -127,6 +127,14 @@ type Interaction struct {
 	Type           InteractionType  `json:"type"`
 }
 
+func (i *Interaction) GetUser() *User {
+	if i.Member != nil && i.Member.User != nil {
+		return i.Member.User
+	}
+
+	return i.User
+}
+
 // SendResponse sends an interaction response.
 // interactionType: The type of interaction callback.
 // messageArg: arguments for sending message.
