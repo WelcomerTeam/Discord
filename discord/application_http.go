@@ -230,3 +230,71 @@ func BatchEditApplicationCommandPermissions(ctx context.Context, session *Sessio
 
 	return permissions, nil
 }
+
+// ListApplicationEmojis lists all emojis for an application.
+func ListApplicationEmojis(ctx context.Context, session *Session, applicationID Snowflake) ([]Emoji, error) {
+	endpoint := "/applications/" + applicationID.String() + "/emojis"
+
+	var emojis []Emoji
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &emojis)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list application emojis: %w", err)
+	}
+
+	return emojis, nil
+}
+
+// GetApplicationEmoji retrieves a single emoji for an application.
+func GetApplicationEmoji(ctx context.Context, session *Session, applicationID, emojiID Snowflake) (*Emoji, error) {
+	endpoint := "/applications/" + applicationID.String() + "/emojis/" + emojiID.String()
+
+	var emoji *Emoji
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &emoji)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get application emoji: %w", err)
+	}
+
+	return emoji, nil
+}
+
+// CreateApplicationEmoji creates an emoji for an application.
+func CreateApplicationEmoji(ctx context.Context, session *Session, applicationID Snowflake, emojiParams EmojiParams) (*Emoji, error) {
+	endpoint := "/applications/" + applicationID.String() + "/emojis"
+
+	var emoji *Emoji
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, emojiParams, nil, &emoji)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create application emoji: %w", err)
+	}
+
+	return emoji, nil
+}
+
+// UpdateApplicationEmoji updates an emoji for an application.
+func UpdateApplicationEmoji(ctx context.Context, session *Session, applicationID, emojiID Snowflake, emojiParams EmojiParams) (*Emoji, error) {
+	endpoint := "/applications/" + applicationID.String() + "/emojis/" + emojiID.String()
+
+	var emoji *Emoji
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, emojiParams, nil, &emoji)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update application emoji: %w", err)
+	}
+
+	return emoji, nil
+}
+
+// DeleteApplicationEmoji deletes an emoji from an application.
+func DeleteApplicationEmoji(ctx context.Context, session *Session, applicationID, emojiID Snowflake) error {
+	endpoint := "/applications/" + applicationID.String() + "/emojis/" + emojiID.String()
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to delete application emoji: %w", err)
+	}
+
+	return nil
+}

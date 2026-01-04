@@ -233,12 +233,12 @@ func (o *ChannelOverrideType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o ChannelOverrideType) MarshalJSON() ([]byte, error) {
-	return int64ToStringBytes(int64(o)), nil
+func (o *ChannelOverrideType) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(*o)), nil
 }
 
-func (o ChannelOverrideType) String() string {
-	return strconv.FormatInt(int64(o), 10)
+func (o *ChannelOverrideType) String() string {
+	return strconv.FormatInt(int64(*o), 10)
 }
 
 const (

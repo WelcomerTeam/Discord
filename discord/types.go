@@ -45,17 +45,17 @@ func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (s Snowflake) MarshalJSON() ([]byte, error) {
-	return int64ToStringBytes(int64(s)), nil
+func (s *Snowflake) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(*s)), nil
 }
 
-func (s Snowflake) String() string {
-	return strconv.FormatInt(int64(s), 10)
+func (s *Snowflake) String() string {
+	return strconv.FormatInt(int64(*s), 10)
 }
 
 // Time returns the creation time of the Snowflake.
-func (s Snowflake) Time() time.Time {
-	nsec := (int64(s) >> 22) + DiscordCreation
+func (s *Snowflake) Time() time.Time {
+	nsec := (int64(*s) >> 22) + DiscordCreation
 
 	return time.Unix(0, nsec*1000000)
 }
@@ -83,12 +83,12 @@ func (in *Int64) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (in Int64) MarshalJSON() ([]byte, error) {
-	return int64ToStringBytes(int64(in)), nil
+func (in *Int64) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(*in)), nil
 }
 
-func (in Int64) String() string {
-	return strconv.FormatInt(int64(in), 10)
+func (in *Int64) String() string {
+	return strconv.FormatInt(int64(*in), 10)
 }
 
 func int64ToStringBytes(s int64) []byte {
@@ -101,7 +101,7 @@ func int64ToStringBytes(s int64) []byte {
 	return buf
 }
 
-// Ensure empty lists are marshalled as []
+// Ensure empty lists are marshalled as [].
 type List[T any] []T
 
 func (l List[T]) MarshalJSON() ([]byte, error) {
@@ -112,32 +112,34 @@ func (l List[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal([]T(l))
 }
 
-type SnowflakeList = List[Snowflake]
-type StringList = List[string]
-type Int64List = List[Int64]
-type StageInstanceList = List[StageInstance]
-type StickerList = List[Sticker]
-type ScheduledEventList = List[ScheduledEvent]
-type RoleList = List[Role]
-type EmojiList = List[Emoji]
-type VoiceStateList = List[VoiceState]
-type GuildMemberList = List[GuildMember]
-type ChannelList = List[Channel]
-type ActivityList = List[Activity]
-type PresenceUpdateList = List[PresenceUpdate]
-type ChannelOverwriteList = List[ChannelOverwrite]
-type UserList = List[User]
-type AuditLogEntryList = List[AuditLogEntry]
-type AuditLogChangesList = List[AuditLogChanges]
-type IntegrationList = List[Integration]
-type WebhookList = List[Webhook]
-type EmbedFieldList = List[EmbedField]
-type EmbedList = List[Embed]
-type UnavailableGuildList = List[UnavailableGuild]
-type ThreadMemberList = List[ThreadMember]
-type ApplicationCommandOptionList = List[ApplicationCommandOption]
-type ApplicationCommandPermissionsList = List[ApplicationCommandPermissions]
-type ChannelTypeList = List[ChannelType]
-type PresenceStatusList = List[PresenceStatus]
-type MessageReactionList = List[MessageReaction]
-type MessageAttachmentList = List[MessageAttachment]
+type (
+	SnowflakeList                     = List[Snowflake]
+	StringList                        = List[string]
+	Int64List                         = List[Int64]
+	StageInstanceList                 = List[StageInstance]
+	StickerList                       = List[Sticker]
+	ScheduledEventList                = List[ScheduledEvent]
+	RoleList                          = List[Role]
+	EmojiList                         = List[Emoji]
+	VoiceStateList                    = List[VoiceState]
+	GuildMemberList                   = List[GuildMember]
+	ChannelList                       = List[Channel]
+	ActivityList                      = List[Activity]
+	PresenceUpdateList                = List[PresenceUpdate]
+	ChannelOverwriteList              = List[ChannelOverwrite]
+	UserList                          = List[User]
+	AuditLogEntryList                 = List[AuditLogEntry]
+	AuditLogChangesList               = List[AuditLogChanges]
+	IntegrationList                   = List[Integration]
+	WebhookList                       = List[Webhook]
+	EmbedFieldList                    = List[EmbedField]
+	EmbedList                         = List[Embed]
+	UnavailableGuildList              = List[UnavailableGuild]
+	ThreadMemberList                  = List[ThreadMember]
+	ApplicationCommandOptionList      = List[ApplicationCommandOption]
+	ApplicationCommandPermissionsList = List[ApplicationCommandPermissions]
+	ChannelTypeList                   = List[ChannelType]
+	PresenceStatusList                = List[PresenceStatus]
+	MessageReactionList               = List[MessageReaction]
+	MessageAttachmentList             = List[MessageAttachment]
+)

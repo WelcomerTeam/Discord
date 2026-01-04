@@ -52,19 +52,19 @@ type BaseInterface struct {
 	Debug bool
 }
 
-func NewBaseInterface() RESTInterface {
+func NewBaseInterface() BaseInterface {
 	return NewInterface(&http.Client{
 		Timeout: 20 * time.Second,
 	}, EndpointDiscord, APIVersion, UserAgent)
 }
 
-func NewInterface(httpClient *http.Client, endpoint, version, useragent string) RESTInterface {
+func NewInterface(httpClient *http.Client, endpoint, version, useragent string) BaseInterface {
 	url, err := url.Parse(endpoint)
 	if err != nil {
 		panic(fmt.Sprintf("failed to parse: %v", err))
 	}
 
-	return &BaseInterface{
+	return BaseInterface{
 		HTTP:       httpClient,
 		APIVersion: version,
 		URLHost:    url.Host,
@@ -186,8 +186,8 @@ type TwilightProxy struct {
 	Debug bool
 }
 
-func NewTwilightProxy(url url.URL) RESTInterface {
-	return &TwilightProxy{
+func NewTwilightProxy(url url.URL) TwilightProxy {
+	return TwilightProxy{
 		HTTP: &http.Client{
 			Timeout: 20 * time.Second,
 		},

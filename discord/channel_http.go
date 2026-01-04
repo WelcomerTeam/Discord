@@ -432,16 +432,262 @@ func UnpinMessage(ctx context.Context, session *Session, channelID, messageID Sn
 	return nil
 }
 
-// TODO: GroupDMAddRecipient
-// TODO: GroupDMRemoveRecipient
-// TODO: StartThreadwithMessage
-// TODO: StartThreadwithoutMessage
-// TODO: JoinThread
-// TODO: AddThreadMember
-// TODO: LeaveThread
-// TODO: RemoveThreadMember
-// TODO: GetThreadMember
-// TODO: ListThreadMembers
-// TODO: ListPublicArchivedThreads
-// TODO: ListPrivateArchivedThreads
-// TODO: ListJoinedPrivateArchivedThreads
+// CreateThreadParams represents parameters for creating a thread.
+type CreateThreadParams struct {
+	Name                int32        `json:"name"`
+	AutoArchiveDuration int32        `json:"auto_archive_duration,omitempty"`
+	Type                *ChannelType `json:"type,omitempty"`
+	Invitable           *bool        `json:"invitable,omitempty"`
+}
+
+// GroupDMAddRecipientParams represents parameters for adding a recipient to a group DM.
+type GroupDMAddRecipientParams struct {
+	AccessToken string `json:"access_token"`
+	Nick        string `json:"nick,omitempty"`
+}
+
+// StartThreadWithMessage creates a thread from an existing message.
+func StartThreadWithMessage(ctx context.Context, session *Session, channelID, messageID Snowflake, name string, autoArchiveDuration int32, reason *string) (*Channel, error) {
+	endpoint := EndpointChannelMessage(channelID.String(), messageID.String()) + "/threads"
+
+	params := struct {
+		Name                string `json:"name"`
+		AutoArchiveDuration int32  `json:"auto_archive_duration"`
+	}{
+		Name:                name,
+		AutoArchiveDuration: autoArchiveDuration,
+	}
+
+	headers := http.Header{}
+
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var thread *Channel
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, headers, &thread)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start thread with message: %w", err)
+	}
+
+	return thread, nil
+}
+
+// StartThreadWithoutMessage creates a thread without an associated message.
+func StartThreadWithoutMessage(ctx context.Context, session *Session, channelID Snowflake, params CreateThreadParams, reason *string) (*Channel, error) {
+	endpoint := EndpointChannelThreads(channelID.String())
+
+	headers := http.Header{}
+
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var thread *Channel
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, nil, &thread)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start thread without message: %w", err)
+	}
+
+	return thread, nil
+}
+
+// JoinThread adds the current user to a thread.
+func JoinThread(ctx context.Context, session *Session, channelID Snowflake) error {
+	endpoint := EndpointChannel(channelID.String()) + "/thread-members/@me"
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to join thread: %w", err)
+	}
+
+	return nil
+}
+
+// LeaveThread removes the current user from a thread.
+func LeaveThread(ctx context.Context, session *Session, channelID Snowflake) error {
+	endpoint := EndpointChannel(channelID.String()) + "/thread-members/@me"
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to leave thread: %w", err)
+	}
+
+	return nil
+}
+
+// AddThreadMember adds a user to a thread.
+func AddThreadMember(ctx context.Context, session *Session, channelID, userID Snowflake) error {
+	endpoint := EndpointChannel(channelID.String()) + "/thread-members/" + userID.String()
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to add thread member: %w", err)
+	}
+
+	return nil
+}
+
+// RemoveThreadMember removes a user from a thread.
+func RemoveThreadMember(ctx context.Context, session *Session, channelID, userID Snowflake) error {
+	endpoint := EndpointChannel(channelID.String()) + "/thread-members/" + userID.String()
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to remove thread member: %w", err)
+	}
+
+	return nil
+}
+
+// GetThreadMember retrieves information about a user in a thread.
+func GetThreadMember(ctx context.Context, session *Session, channelID, userID Snowflake) (*ThreadMember, error) {
+	endpoint := EndpointChannel(channelID.String()) + "/thread-members/" + userID.String()
+
+	var threadMember *ThreadMember
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threadMember)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get thread member: %w", err)
+	}
+
+	return threadMember, nil
+}
+
+// ListThreadMembers lists all members in a thread.
+func ListThreadMembers(ctx context.Context, session *Session, channelID Snowflake, after *Snowflake, limit *int32) ([]ThreadMember, error) {
+	endpoint := EndpointChannel(channelID.String()) + "/thread-members"
+
+	values := url.Values{}
+
+	if after != nil {
+		values.Add("after", after.String())
+	}
+
+	if limit != nil {
+		values.Add("limit", strconv.FormatInt(int64(*limit), 10))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
+
+	var threadMembers []ThreadMember
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threadMembers)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list thread members: %w", err)
+	}
+
+	return threadMembers, nil
+}
+
+// ListPublicArchivedThreads lists archived public threads in a channel.
+func ListPublicArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (interface{}, error) {
+	endpoint := EndpointChannel(channelID.String()) + "/threads/archived/public"
+
+	values := url.Values{}
+
+	if before != nil {
+		values.Add("before", *before)
+	}
+
+	if limit != nil {
+		values.Add("limit", strconv.FormatInt(int64(*limit), 10))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
+
+	var threads interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list public archived threads: %w", err)
+	}
+
+	return threads, nil
+}
+
+// ListPrivateArchivedThreads lists archived private threads in a channel.
+func ListPrivateArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (interface{}, error) {
+	endpoint := EndpointChannel(channelID.String()) + "/threads/archived/private"
+
+	values := url.Values{}
+
+	if before != nil {
+		values.Add("before", *before)
+	}
+
+	if limit != nil {
+		values.Add("limit", strconv.FormatInt(int64(*limit), 10))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
+
+	var threads interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list private archived threads: %w", err)
+	}
+
+	return threads, nil
+}
+
+// ListJoinedPrivateArchivedThreads lists archived private threads the current user is a member of.
+func ListJoinedPrivateArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (interface{}, error) {
+	endpoint := EndpointChannel(channelID.String()) + "/users/@me/threads/archived/private"
+
+	values := url.Values{}
+
+	if before != nil {
+		values.Add("before", *before)
+	}
+
+	if limit != nil {
+		values.Add("limit", strconv.FormatInt(int64(*limit), 10))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
+
+	var threads interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list joined private archived threads: %w", err)
+	}
+
+	return threads, nil
+}
+
+// GroupDMAddRecipient adds a user to a group DM.
+func GroupDMAddRecipient(ctx context.Context, session *Session, channelID, userID Snowflake, params GroupDMAddRecipientParams) error {
+	endpoint := EndpointChannel(channelID.String()) + "/recipients/" + userID.String()
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, params, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to add group dm recipient: %w", err)
+	}
+
+	return nil
+}
+
+// GroupDMRemoveRecipient removes a user from a group DM.
+func GroupDMRemoveRecipient(ctx context.Context, session *Session, channelID, userID Snowflake) error {
+	endpoint := EndpointChannel(channelID.String()) + "/recipients/" + userID.String()
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to remove group dm recipient: %w", err)
+	}
+
+	return nil
+}

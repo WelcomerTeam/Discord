@@ -95,6 +95,39 @@ var (
 	EndpointGuildWidget = func(guildID string) string {
 		return EndpointGuilds + guildID + "/widget"
 	}
+	EndpointGuildWidgetImage = func(guildID string) string {
+		return EndpointGuilds + guildID + "/widget.png"
+	}
+	EndpointGuildWidgetJSON = func(guildID string) string {
+		return EndpointGuilds + guildID + "/widget.json"
+	}
+	EndpointGuildWelcomeScreen = func(guildID string) string {
+		return EndpointGuilds + guildID + "/welcome-screen"
+	}
+	EndpointGuildStickers = func(guildID string) string {
+		return EndpointGuilds + guildID + "/stickers"
+	}
+	EndpointGuildSticker = func(guildID, stickerID string) string {
+		return EndpointGuilds + guildID + "/stickers/" + stickerID
+	}
+	EndpointGuildTemplates = func(guildID string) string {
+		return EndpointGuilds + guildID + "/templates"
+	}
+	EndpointGuildTemplate = func(guildID, templateCode string) string {
+		return EndpointGuilds + guildID + "/templates/" + templateCode
+	}
+	EndpointGuildVoiceRegions = func(guildID string) string {
+		return EndpointGuilds + guildID + "/regions"
+	}
+	EndpointGuildVoiceStates = func(guildID string) string {
+		return EndpointGuilds + guildID + "/voice-states"
+	}
+	EndpointGuildVoiceState = func(guildID, userID string) string {
+		return EndpointGuilds + guildID + "/voice-states/" + userID
+	}
+	EndpointGuildVoiceStateSelf = func(guildID string) string {
+		return EndpointGuilds + guildID + "/voice-states/@me"
+	}
 
 	EndpointGuildEmbed = EndpointGuildWidget
 
@@ -253,6 +286,10 @@ var (
 	}
 	EndpointEmojiAnimated = func(emojiID string) string {
 		return "/emojis/" + emojiID + ".gif"
+	}
+
+	EndpointChannelThreads = func(channelID string) string {
+		return EndpointChannels + channelID + "/threads"
 	}
 
 	EndpointApplications = "/applications"

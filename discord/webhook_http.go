@@ -202,6 +202,7 @@ func EditWebhookMessage(ctx context.Context, session *Session, webhookID Snowfla
 	endpoint := EndpointWebhookMessage(webhookID.String(), webhookToken, messageID.String())
 
 	var message *WebhookMessage
+
 	var err error
 
 	if len(messageParam.Files) > 0 {

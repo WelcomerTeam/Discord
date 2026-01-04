@@ -208,7 +208,14 @@ func ModifyGuildMember(ctx context.Context, session *Session, guildID, userID Sn
 	return guildMember, nil
 }
 
-func ModifyCurrentMember(ctx context.Context, session *Session, guildID Snowflake, guildMemberArg GuildMember, reason *string) (*GuildMember, error) {
+type ModifyCurrentMemberParams struct {
+	Nick   *string `json:"nick,omitempty"`
+	Avatar *string `json:"avatar,omitempty"`
+	Banner *string `json:"banner,omitempty"`
+	Bio    *string `json:"bio,omitempty"`
+}
+
+func ModifyCurrentMember(ctx context.Context, session *Session, guildID Snowflake, params ModifyCurrentMemberParams, reason *string) (*GuildMember, error) {
 	endpoint := EndpointGuildMember(guildID.String(), "@me")
 
 	headers := http.Header{}
@@ -219,7 +226,7 @@ func ModifyCurrentMember(ctx context.Context, session *Session, guildID Snowflak
 
 	var guildMember *GuildMember
 
-	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, guildMemberArg, headers, &guildMember)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, headers, &guildMember)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify current member: %w", err)
 	}
@@ -336,6 +343,44 @@ func RemoveGuildBan(ctx context.Context, session *Session, guildID, userID Snowf
 	}
 
 	return nil
+}
+
+// BulkBanUserParams represents a single user to ban in bulk ban operation.
+type BulkBanUserParams struct {
+	UserID            Snowflake `json:"user_id"`
+	DeleteMessageDays int32     `json:"delete_message_days,omitempty"`
+}
+
+// BulkBanUsersParams represents the parameters for bulk banning users.
+type BulkBanUsersParams struct {
+	UserIDs           []Snowflake `json:"user_ids"`
+	DeleteMessageDays int32       `json:"delete_message_days,omitempty"`
+	AuditLogReason    string      `json:"-"`
+}
+
+// BulkBanUsersResponse represents the response from bulk banning users.
+type BulkBanUsersResponse struct {
+	BannedUserIDs []Snowflake `json:"banned_user_ids"`
+}
+
+// BulkBanUsers bans multiple users from a guild.
+func BulkBanUsers(ctx context.Context, session *Session, guildID Snowflake, params BulkBanUsersParams, reason *string) (*BulkBanUsersResponse, error) {
+	endpoint := "/guilds/" + guildID.String() + "/bulk-ban"
+
+	headers := http.Header{}
+
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var response *BulkBanUsersResponse
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, headers, &response)
+	if err != nil {
+		return nil, fmt.Errorf("failed to bulk ban users: %w", err)
+	}
+
+	return response, nil
 }
 
 func GetGuildRoles(ctx context.Context, session *Session, guildID Snowflake) ([]Role, error) {
@@ -554,31 +599,444 @@ func GetGuildVanityURL(ctx context.Context, session *Session, guildID Snowflake)
 	return invite, nil
 }
 
-// TODO: GetGuildWidgetImage
-// TODO: GetGuildWelcomeScreen
-// TODO: ModifyGuildWelcomeScreen
-// TODO: GetGuildWidget
-// TODO: ModifyGuildWidget
-// TODO: GetGuildWidgetSettings
-// TODO: AddGuildMember
-// TODO: GetGuildVoiceRegions
+// GetGuildWidgetImage gets the guild widget image.
+func GetGuildWidgetImage(ctx context.Context, session *Session, guildID Snowflake, style *string) ([]byte, error) {
+	endpoint := EndpointGuildWidgetImage(guildID.String())
 
-// TODO: ModifyCurrentUserVoiceState
-// TODO: ModifyUserVoiceState
+	params := url.Values{}
+	if style != nil {
+		params.Add("style", *style)
+	}
 
-// TODO: ListScheduledEventsforGuild
-// TODO: CreateGuildScheduledEvent
-// TODO: GetGuildScheduledEvent
-// TODO: ModifyGuildScheduledEvent
-// TODO: DeleteGuildScheduledEvent
-// TODO: GetGuildScheduledEventUsers
-// TODO: GuildScheduledEventStatusUpdateAutomation
-// TODO: GuildScheduledEventPermissionsRequirements
+	if len(params) > 0 {
+		endpoint += "?" + params.Encode()
+	}
 
-// TODO: GetGuildTemplate
-// TODO: CreateGuildfromGuildTemplate
-// TODO: GetGuildTemplates
-// TODO: CreateGuildTemplate
-// TODO: SyncGuildTemplate
-// TODO: ModifyGuildTemplate
-// TODO: DeleteGuildTemplate
+	var imageData []byte
+
+	err := session.Interface.FetchBJ(ctx, session, http.MethodGet, endpoint, "image/png", nil, nil, &imageData)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild widget image: %w", err)
+	}
+
+	return imageData, nil
+}
+
+// GetGuildWelcomeScreen gets the guild's welcome screen.
+func GetGuildWelcomeScreen(ctx context.Context, session *Session, guildID Snowflake) (interface{}, error) {
+	endpoint := EndpointGuildWelcomeScreen(guildID.String())
+
+	var welcomeScreen interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &welcomeScreen)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild welcome screen: %w", err)
+	}
+
+	return welcomeScreen, nil
+}
+
+// ModifyGuildWelcomeScreen modifies the guild's welcome screen.
+func ModifyGuildWelcomeScreen(ctx context.Context, session *Session, guildID Snowflake, params interface{}, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildWelcomeScreen(guildID.String())
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var welcomeScreen interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, headers, &welcomeScreen)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify guild welcome screen: %w", err)
+	}
+
+	return welcomeScreen, nil
+}
+
+// GetGuildWidget gets the guild widget.
+func GetGuildWidget(ctx context.Context, session *Session, guildID Snowflake) (interface{}, error) {
+	endpoint := EndpointGuildWidgetJSON(guildID.String())
+
+	var widget interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &widget)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild widget: %w", err)
+	}
+
+	return widget, nil
+}
+
+// ModifyGuildWidget modifies the guild widget.
+func ModifyGuildWidget(ctx context.Context, session *Session, guildID Snowflake, params interface{}, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildWidget(guildID.String())
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var widget interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, headers, &widget)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify guild widget: %w", err)
+	}
+
+	return widget, nil
+}
+
+// GetGuildWidgetSettings gets the guild widget settings.
+func GetGuildWidgetSettings(ctx context.Context, session *Session, guildID Snowflake) (interface{}, error) {
+	endpoint := EndpointGuildWidget(guildID.String())
+
+	var settings interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &settings)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild widget settings: %w", err)
+	}
+
+	return settings, nil
+}
+
+// AddGuildMember adds a guild member using an OAuth2 access token.
+func AddGuildMember(ctx context.Context, session *Session, guildID, userID Snowflake, accessToken string, nick *string, roles []Snowflake, mute, deaf *bool) (interface{}, error) {
+	endpoint := EndpointGuildMember(guildID.String(), userID.String())
+
+	params := struct {
+		AccessToken string      `json:"access_token"`
+		Nick        *string     `json:"nick,omitempty"`
+		Roles       []Snowflake `json:"roles,omitempty"`
+		Mute        *bool       `json:"mute,omitempty"`
+		Deaf        *bool       `json:"deaf,omitempty"`
+	}{
+		AccessToken: accessToken,
+		Nick:        nick,
+		Roles:       roles,
+		Mute:        mute,
+		Deaf:        deaf,
+	}
+
+	var member interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, params, nil, &member)
+	if err != nil {
+		return nil, fmt.Errorf("failed to add guild member: %w", err)
+	}
+
+	return member, nil
+}
+
+// ListVoiceRegions lists voice regions available to guilds.
+func ListVoiceRegions(ctx context.Context, session *Session) ([]interface{}, error) {
+	endpoint := "/voice/regions"
+
+	var regions []interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &regions)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list voice regions: %w", err)
+	}
+
+	return regions, nil
+}
+
+// GetGuildVoiceRegions lists voice regions available to a specific guild.
+func GetGuildVoiceRegions(ctx context.Context, session *Session, guildID Snowflake) ([]interface{}, error) {
+	endpoint := EndpointGuildVoiceRegions(guildID.String())
+
+	var regions []interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &regions)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild voice regions: %w", err)
+	}
+
+	return regions, nil
+}
+
+// ModifyCurrentUserVoiceState modifies the voice state of the current user.
+func ModifyCurrentUserVoiceState(ctx context.Context, session *Session, guildID Snowflake, channelID *Snowflake, suppress *bool) error {
+	endpoint := EndpointGuildVoiceStateSelf(guildID.String())
+
+	params := struct {
+		ChannelID *Snowflake `json:"channel_id,omitempty"`
+		Suppress  *bool      `json:"suppress,omitempty"`
+	}{
+		ChannelID: channelID,
+		Suppress:  suppress,
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to modify current user voice state: %w", err)
+	}
+
+	return nil
+}
+
+// ModifyUserVoiceState modifies the voice state of a user.
+func ModifyUserVoiceState(ctx context.Context, session *Session, guildID, userID Snowflake, channelID *Snowflake, suppress *bool) error {
+	endpoint := EndpointGuildVoiceState(guildID.String(), userID.String())
+
+	params := struct {
+		ChannelID *Snowflake `json:"channel_id,omitempty"`
+		Suppress  *bool      `json:"suppress,omitempty"`
+	}{
+		ChannelID: channelID,
+		Suppress:  suppress,
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to modify user voice state: %w", err)
+	}
+
+	return nil
+}
+
+// ListScheduledEventsForGuild lists scheduled events for a guild.
+func ListScheduledEventsForGuild(ctx context.Context, session *Session, guildID Snowflake, withUserCount *bool) ([]interface{}, error) {
+	endpoint := EndpointGuildScheduledEvents(guildID.String())
+
+	params := url.Values{}
+	if withUserCount != nil {
+		params.Add("with_user_count", strconv.FormatBool(*withUserCount))
+	}
+
+	if len(params) > 0 {
+		endpoint += "?" + params.Encode()
+	}
+
+	var events []interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &events)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list scheduled events for guild: %w", err)
+	}
+
+	return events, nil
+}
+
+// CreateGuildScheduledEvent creates a scheduled event for a guild.
+func CreateGuildScheduledEvent(ctx context.Context, session *Session, guildID Snowflake, params interface{}, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildScheduledEvents(guildID.String())
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var event interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, headers, &event)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create guild scheduled event: %w", err)
+	}
+
+	return event, nil
+}
+
+// GetGuildScheduledEvent gets a scheduled event for a guild.
+func GetGuildScheduledEvent(ctx context.Context, session *Session, guildID, eventID Snowflake, withUserCount *bool) (interface{}, error) {
+	endpoint := EndpointGuildScheduledEvent(guildID.String(), eventID.String())
+
+	params := url.Values{}
+	if withUserCount != nil {
+		params.Add("with_user_count", strconv.FormatBool(*withUserCount))
+	}
+
+	if len(params) > 0 {
+		endpoint += "?" + params.Encode()
+	}
+
+	var event interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &event)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild scheduled event: %w", err)
+	}
+
+	return event, nil
+}
+
+// ModifyGuildScheduledEvent modifies a scheduled event for a guild.
+func ModifyGuildScheduledEvent(ctx context.Context, session *Session, guildID, eventID Snowflake, params interface{}, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildScheduledEvent(guildID.String(), eventID.String())
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var event interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, headers, &event)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify guild scheduled event: %w", err)
+	}
+
+	return event, nil
+}
+
+// DeleteGuildScheduledEvent deletes a scheduled event for a guild.
+func DeleteGuildScheduledEvent(ctx context.Context, session *Session, guildID, eventID Snowflake) error {
+	endpoint := EndpointGuildScheduledEvent(guildID.String(), eventID.String())
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to delete guild scheduled event: %w", err)
+	}
+
+	return nil
+}
+
+// GetGuildScheduledEventUsers gets users who have responded to a scheduled event.
+func GetGuildScheduledEventUsers(ctx context.Context, session *Session, guildID, eventID Snowflake, limit *int, before, after *Snowflake) ([]interface{}, error) {
+	endpoint := EndpointGuildScheduledEventUsers(guildID.String(), eventID.String())
+
+	params := url.Values{}
+	if limit != nil {
+		params.Add("limit", strconv.Itoa(*limit))
+	}
+
+	if before != nil {
+		params.Add("before", before.String())
+	}
+
+	if after != nil {
+		params.Add("after", after.String())
+	}
+
+	if len(params) > 0 {
+		endpoint += "?" + params.Encode()
+	}
+
+	var users []interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &users)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild scheduled event users: %w", err)
+	}
+
+	return users, nil
+}
+
+// GetGuildTemplate gets a guild template.
+func GetGuildTemplate(ctx context.Context, session *Session, templateCode string) (interface{}, error) {
+	endpoint := "/guilds/templates/" + templateCode
+
+	var template interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &template)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild template: %w", err)
+	}
+
+	return template, nil
+}
+
+// CreateGuildFromTemplate creates a guild from a template.
+func CreateGuildFromTemplate(ctx context.Context, session *Session, templateCode string, params interface{}) (interface{}, error) {
+	endpoint := "/guilds/templates/" + templateCode
+
+	var guild interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, nil, &guild)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create guild from template: %w", err)
+	}
+
+	return guild, nil
+}
+
+// GetGuildTemplates gets the guild templates for a guild.
+func GetGuildTemplates(ctx context.Context, session *Session, guildID Snowflake) ([]interface{}, error) {
+	endpoint := EndpointGuildTemplates(guildID.String())
+
+	var templates []interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &templates)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild templates: %w", err)
+	}
+
+	return templates, nil
+}
+
+// CreateGuildTemplate creates a template for a guild.
+func CreateGuildTemplate(ctx context.Context, session *Session, guildID Snowflake, params interface{}, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildTemplates(guildID.String())
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var template interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, headers, &template)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create guild template: %w", err)
+	}
+
+	return template, nil
+}
+
+// SyncGuildTemplate syncs a guild template.
+func SyncGuildTemplate(ctx context.Context, session *Session, guildID Snowflake, templateCode string, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildTemplate(guildID.String(), templateCode)
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var template interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, nil, headers, &template)
+	if err != nil {
+		return nil, fmt.Errorf("failed to sync guild template: %w", err)
+	}
+
+	return template, nil
+}
+
+// ModifyGuildTemplate modifies a guild template.
+func ModifyGuildTemplate(ctx context.Context, session *Session, guildID Snowflake, templateCode string, params interface{}, reason *string) (interface{}, error) {
+	endpoint := EndpointGuildTemplate(guildID.String(), templateCode)
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var template interface{}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, headers, &template)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify guild template: %w", err)
+	}
+
+	return template, nil
+}
+
+// DeleteGuildTemplate deletes a guild template.
+func DeleteGuildTemplate(ctx context.Context, session *Session, guildID Snowflake, templateCode string, reason *string) error {
+	endpoint := EndpointGuildTemplate(guildID.String(), templateCode)
+
+	headers := http.Header{}
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, headers, nil)
+	if err != nil {
+		return fmt.Errorf("failed to delete guild template: %w", err)
+	}
+
+	return nil
+}
