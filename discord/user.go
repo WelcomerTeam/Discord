@@ -1,6 +1,9 @@
 package discord
 
-import "context"
+import (
+	"context"
+	"fmt"
+)
 
 // user.go represents all structures for a discord user.
 
@@ -76,7 +79,7 @@ func (u *User) CreateDM(ctx context.Context, session *Session) (*Channel, error)
 
 	channel, err := CreateDM(ctx, session, u.ID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create DM channel: %w", err)
 	}
 
 	u.DMChannelID = &channel.ID
@@ -89,7 +92,7 @@ func (u *User) CreateDM(ctx context.Context, session *Session) (*Channel, error)
 func (u *User) Send(ctx context.Context, session *Session, params MessageParams) (*Message, error) {
 	dmChannel, err := u.CreateDM(ctx, session)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create DM channel: %w", err)
 	}
 
 	return dmChannel.Send(ctx, session, params)

@@ -2,6 +2,7 @@ package discord
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -216,7 +217,7 @@ func (g *Guild) CreateCustomEmoji(ctx context.Context, session *Session, name st
 
 	imageData, err := bytesToBase64Data(image)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to encode emoji: %w", err)
 	}
 
 	params.Image = imageData

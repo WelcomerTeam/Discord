@@ -3,6 +3,7 @@ package discord
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 )
 
 // interactions.go represents the interaction objects.
@@ -162,7 +163,7 @@ func (i *Interaction) DeleteOriginalResponse(ctx context.Context, session *Sessi
 func (i *Interaction) SendFollowup(ctx context.Context, session *Session, messageParams WebhookMessageParams) (*InteractionFollowup, error) {
 	message, err := CreateFollowupMessage(ctx, session, i.ApplicationID, i.Token, messageParams)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create followup message: %w", err)
 	}
 
 	return &InteractionFollowup{

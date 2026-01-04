@@ -158,7 +158,7 @@ func ExecuteWebhook(ctx context.Context, session *Session, webhookID Snowflake, 
 	if len(messageParams.Files) > 0 {
 		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to create multipart body: %w", err)
 		}
 
 		if wait {
@@ -208,7 +208,7 @@ func EditWebhookMessage(ctx context.Context, session *Session, webhookID Snowfla
 	if len(messageParam.Files) > 0 {
 		contentType, body, err := multipartBodyWithJSON(messageParam, messageParam.Files)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to create multipart body: %w", err)
 		}
 
 		err = session.Interface.FetchBJ(ctx, session, http.MethodPatch, endpoint, contentType, body, nil, &message)

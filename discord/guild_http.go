@@ -210,6 +210,13 @@ func ModifyGuildMember(ctx context.Context, session *Session, guildID, userID Sn
 
 type ModifyCurrentMemberParams struct {
 	Nick   *string `json:"nick,omitempty"`
+	Avatar []byte  `json:"avatar,omitempty"`
+	Banner []byte  `json:"banner,omitempty"`
+	Bio    *string `json:"bio,omitempty"`
+}
+
+type ModifyCurrentMemberParamsDiscord struct {
+	Nick   *string `json:"nick,omitempty"`
 	Avatar *string `json:"avatar,omitempty"`
 	Banner *string `json:"banner,omitempty"`
 	Bio    *string `json:"bio,omitempty"`
@@ -224,9 +231,32 @@ func ModifyCurrentMember(ctx context.Context, session *Session, guildID Snowflak
 		headers.Add(AuditLogReasonHeader, *reason)
 	}
 
+	discordParams := ModifyCurrentMemberParamsDiscord{
+		Nick: params.Nick,
+		Bio:  params.Bio,
+	}
+
+	if params.Avatar != nil {
+		discordAvatar, err := bytesToBase64Data(params.Avatar)
+		if err != nil {
+			return nil, fmt.Errorf("failed to encode avatar: %w", err)
+		}
+
+		discordParams.Avatar = &discordAvatar
+	}
+
+	if params.Banner != nil {
+		discordBanner, err := bytesToBase64Data(params.Banner)
+		if err != nil {
+			return nil, fmt.Errorf("failed to encode banner: %w", err)
+		}
+
+		discordParams.Banner = &discordBanner
+	}
+
 	var guildMember *GuildMember
 
-	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, headers, &guildMember)
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, discordParams, headers, &guildMember)
 	if err != nil {
 		return nil, fmt.Errorf("failed to modify current member: %w", err)
 	}

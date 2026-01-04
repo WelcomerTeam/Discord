@@ -50,7 +50,7 @@ func EditOriginalInteractionResponse(ctx context.Context, session *Session, appl
 	if len(messageParam.Files) > 0 {
 		contentType, body, err := multipartBodyWithJSON(messageParam, messageParam.Files)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to create multipart body: %w", err)
 		}
 
 		err = session.Interface.FetchBJ(ctx, session, http.MethodPatch, endpoint, contentType, body, nil, &message)
@@ -86,7 +86,7 @@ func CreateFollowupMessage(ctx context.Context, session *Session, applicationID 
 	if len(messageParams.Files) > 0 {
 		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to create multipart body: %w", err)
 		}
 
 		err = session.Interface.FetchBJ(ctx, session, http.MethodPost, endpoint, contentType, body, nil, &message)
@@ -124,7 +124,7 @@ func EditFollowupMessage(ctx context.Context, session *Session, applicationID Sn
 	if len(messageParams.Files) > 0 {
 		contentType, body, err := multipartBodyWithJSON(messageParams, messageParams.Files)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to create multipart body: %w", err)
 		}
 
 		err = session.Interface.FetchBJ(ctx, session, http.MethodPatch, endpoint, contentType, body, nil, &message)
