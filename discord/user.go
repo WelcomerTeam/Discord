@@ -57,11 +57,11 @@ type User struct {
 	Username             string                `json:"username"`
 	Discriminator        string                `json:"discriminator"`
 	Locale               string                `json:"locale,omitempty"`
-	GlobalName           *string               `json:"global_name"`
-	Avatar               *string               `json:"avatar"`
-	Banner               *string               `json:"banner,omitempty"`
-	Email                *string               `json:"email,omitempty"`
-	AccentColor          *int32                `json:"accent_color,omitempty"`
+	GlobalName           string                `json:"global_name"`
+	Avatar               string                `json:"avatar"`
+	Banner               string                `json:"banner,omitempty"`
+	Email                string                `json:"email,omitempty"`
+	AccentColor          int32                 `json:"accent_color,omitempty"`
 	Flags                UserFlags             `json:"flags,omitempty"`
 	PublicFlags          UserFlags             `json:"public_flags,omitempty"`
 	PremiumType          UserPremiumType       `json:"premium_type,omitempty"`
