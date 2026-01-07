@@ -523,3 +523,11 @@ type GuildPruneParam struct {
 	IncludeRoles      []Snowflake `json:"include_roles"`
 	ComputePruneCount bool        `json:"compute_prune_count"`
 }
+
+// ModifyCurrentMemberParams represents the parameters used to modify the current member.
+type ModifyCurrentMemberParams struct {
+	Nick   *string `json:"nick,omitempty"`
+	Avatar *string `json:"avatar,omitempty"`
+	Banner *string `json:"banner,omitempty"`
+	Bio    *string `json:"bio,omitempty"`
+}
