@@ -334,18 +334,21 @@ type UnavailableGuild struct {
 
 // GuildMember represents a guild member on discord.
 type GuildMember struct {
-	JoinedAt                   time.Time     `json:"joined_at"`
-	CommunicationDisabledUntil *time.Time    `json:"communication_disabled_until,omitempty"`
-	PremiumSince               *time.Time    `json:"premium_since,omitempty"`
-	User                       *User         `json:"user,omitempty"`
-	GuildID                    *Snowflake    `json:"guild_id,omitempty"`
-	Permissions                *Int64        `json:"permissions"`
-	Nick                       string        `json:"nick,omitempty"`
-	Avatar                     string        `json:"avatar,omitempty"`
-	Roles                      SnowflakeList `json:"roles"`
-	Deaf                       bool          `json:"deaf"`
-	Mute                       bool          `json:"mute"`
-	Pending                    bool          `json:"pending"`
+	JoinedAt                   time.Time             `json:"joined_at"`
+	CommunicationDisabledUntil *time.Time            `json:"communication_disabled_until,omitempty"`
+	PremiumSince               *time.Time            `json:"premium_since,omitempty"`
+	User                       *User                 `json:"user,omitempty"`
+	GuildID                    *Snowflake            `json:"guild_id,omitempty"`
+	Permissions                *Int64                `json:"permissions,omitempty"`
+	AvatarDecorationData       *AvatarDecorationData `json:"avatar_decoration_data,omitempty"`
+	Nick                       string                `json:"nick,omitempty"`
+	Avatar                     string                `json:"avatar,omitempty"`
+	Banner                     string                `json:"banner,omitempty"`
+	Roles                      SnowflakeList         `json:"roles"`
+	Flags                      UserFlags             `json:"flags"`
+	Deaf                       bool                  `json:"deaf"`
+	Mute                       bool                  `json:"mute"`
+	Pending                    bool                  `json:"pending,omitempty"`
 }
 
 // GuildMemberParams represents the arguments used to modify a guild member.

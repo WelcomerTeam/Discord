@@ -45,27 +45,44 @@ const (
 	UserPremiumTypeNone UserPremiumType = iota
 	UserPremiumTypeNitroClassic
 	UserPremiumTypeNitro
+	UserPremiumTypeNitroBasic
 )
 
 // User represents a user on discord.
 type User struct {
-	DMChannelID   *Snowflake      `json:"dm_channel_id,omitempty"`
-	Banner        string          `json:"banner,omitempty"`
-	GlobalName    string          `json:"global_name"`
-	Avatar        string          `json:"avatar"`
-	Username      string          `json:"username"`
-	Discriminator string          `json:"discriminator"`
-	Locale        string          `json:"locale,omitempty"`
-	Email         string          `json:"email,omitempty"`
-	ID            Snowflake       `json:"id"`
-	PremiumType   UserPremiumType `json:"premium_type,omitempty"`
-	Flags         UserFlags       `json:"flags,omitempty"`
-	AccentColor   int32           `json:"accent_color"`
-	PublicFlags   UserFlags       `json:"public_flags,omitempty"`
-	MFAEnabled    bool            `json:"mfa_enabled,omitempty"`
-	Verified      bool            `json:"verified,omitempty"`
-	Bot           bool            `json:"bot"`
-	System        bool            `json:"system,omitempty"`
+	ID                   Snowflake             `json:"id"`
+	DMChannelID          *Snowflake            `json:"dm_channel_id,omitempty"`
+	AvatarDecorationData *AvatarDecorationData `json:"avatar_decoration_data,omitempty"`
+	PrimaryGuild         *UserPrimaryGuild     `json:"primary_guild,omitempty"`
+	Username             string                `json:"username"`
+	Discriminator        string                `json:"discriminator"`
+	Locale               string                `json:"locale,omitempty"`
+	GlobalName           *string               `json:"global_name"`
+	Avatar               *string               `json:"avatar"`
+	Banner               *string               `json:"banner,omitempty"`
+	Email                *string               `json:"email,omitempty"`
+	AccentColor          *int32                `json:"accent_color,omitempty"`
+	Flags                UserFlags             `json:"flags,omitempty"`
+	PublicFlags          UserFlags             `json:"public_flags,omitempty"`
+	PremiumType          UserPremiumType       `json:"premium_type,omitempty"`
+	Bot                  bool                  `json:"bot,omitempty"`
+	System               bool                  `json:"system,omitempty"`
+	MFAEnabled           bool                  `json:"mfa_enabled,omitempty"`
+	Verified             bool                  `json:"verified,omitempty"`
+}
+
+// AvatarDecorationData represents the avatar decoration data for a user.
+type AvatarDecorationData struct {
+	Asset string    `json:"asset"`
+	SKUID Snowflake `json:"sku_id"`
+}
+
+// UserPrimaryGuild represents the primary guild information for a user.
+type UserPrimaryGuild struct {
+	IdentityGuildID *Snowflake `json:"identity_guild_id,omitempty"`
+	IdentityEnabled *bool      `json:"identity_enabled,omitempty"`
+	Tag             *string    `json:"tag,omitempty"`
+	Badge           *string    `json:"badge,omitempty"`
 }
 
 // CreateDM creates a DMChannel with a user. This should not need to be called as Send() transparently does this.
