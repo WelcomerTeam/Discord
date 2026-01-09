@@ -17,8 +17,8 @@ var null = []byte("null")
 // Placeholder type for easy identification.
 type Snowflake int64
 
-func (s *Snowflake) IsNil() bool {
-	return *s == 0
+func (s Snowflake) IsNil() bool {
+	return s == 0
 }
 
 func (s *Snowflake) UnmarshalJSON(b []byte) error {
@@ -45,17 +45,17 @@ func (s *Snowflake) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (s *Snowflake) MarshalJSON() ([]byte, error) {
-	return int64ToStringBytes(int64(*s)), nil
+func (s Snowflake) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(s)), nil
 }
 
-func (s *Snowflake) String() string {
-	return strconv.FormatInt(int64(*s), 10)
+func (s Snowflake) String() string {
+	return strconv.FormatInt(int64(s), 10)
 }
 
 // Time returns the creation time of the Snowflake.
-func (s *Snowflake) Time() time.Time {
-	nsec := (int64(*s) >> 22) + DiscordCreation
+func (s Snowflake) Time() time.Time {
+	nsec := (int64(s) >> 22) + DiscordCreation
 
 	return time.Unix(0, nsec*1000000)
 }
@@ -83,12 +83,12 @@ func (in *Int64) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func (in *Int64) MarshalJSON() ([]byte, error) {
-	return int64ToStringBytes(int64(*in)), nil
+func (in Int64) MarshalJSON() ([]byte, error) {
+	return int64ToStringBytes(int64(in)), nil
 }
 
-func (in *Int64) String() string {
-	return strconv.FormatInt(int64(*in), 10)
+func (in Int64) String() string {
+	return strconv.FormatInt(int64(in), 10)
 }
 
 func int64ToStringBytes(s int64) []byte {
