@@ -185,13 +185,13 @@ type MessageParams struct {
 	PayloadJSON      *json.RawMessage         `json:"payload_json"`
 	Content          string                   `json:"content"`
 	Embeds           []Embed                  `json:"embeds"`
-	AllowedMentions  []MessageAllowedMentions `json:"allowed_mentions"`
+	AllowedMentions  []MessageAllowedMentions `json:"allowed_mentions,omitempty"`
 	Components       []InteractionComponent   `json:"components"`
-	StickerIDs       []Snowflake              `json:"sticker_ids"`
+	StickerIDs       []Snowflake              `json:"sticker_ids,omitempty"`
 	Files            []File                   `json:"-"`
-	Attachments      []MessageAttachment      `json:"attachments"`
-	Flags            MessageFlags             `json:"flags"`
-	TTS              bool                     `json:"tts"`
+	Attachments      []MessageAttachment      `json:"attachments,omitempty"`
+	Flags            MessageFlags             `json:"flags,omitempty"`
+	TTS              bool                     `json:"tts,omitempty"`
 }
 
 func NewMessage(content string) *MessageParams {
