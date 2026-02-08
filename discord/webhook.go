@@ -113,11 +113,11 @@ type WebhookMessageParams struct {
 	Content         string                   `json:"content,omitempty"`
 	Username        string                   `json:"username,omitempty"`
 	AvatarURL       string                   `json:"avatar_url,omitempty"`
-	Embeds          []Embed                  `json:"embeds,omitempty"`
-	AllowedMentions []MessageAllowedMentions `json:"allowed_mentions,omitempty"`
-	Components      []InteractionComponent   `json:"components,omitempty"`
+	Embeds          []Embed                  `json:"embeds"`
+	AllowedMentions []MessageAllowedMentions `json:"allowed_mentions"`
+	Components      []InteractionComponent   `json:"components"`
 	Files           []File                   `json:"-"`
-	Attachments     []MessageAttachment      `json:"attachments,omitempty"`
+	Attachments     []MessageAttachment      `json:"attachments"`
 	TTS             bool                     `json:"tts,omitempty"`
 }
 

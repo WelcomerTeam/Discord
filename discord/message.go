@@ -181,16 +181,16 @@ func (m *Message) Unpin(ctx context.Context, session *Session, reason *string) e
 
 // MessageParams represents the structure for sending a message on discord.
 type MessageParams struct {
-	MessageReference *MessageReference        `json:"message_reference,omitempty"`
-	PayloadJSON      *json.RawMessage         `json:"payload_json,omitempty"`
+	MessageReference *MessageReference        `json:"message_reference"`
+	PayloadJSON      *json.RawMessage         `json:"payload_json"`
 	Content          string                   `json:"content"`
-	Embeds           []Embed                  `json:"embeds,omitempty"`
-	AllowedMentions  []MessageAllowedMentions `json:"allowed_mentions,omitempty"`
-	Components       []InteractionComponent   `json:"components,omitempty"`
-	StickerIDs       []Snowflake              `json:"sticker_ids,omitempty"`
+	Embeds           []Embed                  `json:"embeds"`
+	AllowedMentions  []MessageAllowedMentions `json:"allowed_mentions"`
+	Components       []InteractionComponent   `json:"components"`
+	StickerIDs       []Snowflake              `json:"sticker_ids"`
 	Files            []File                   `json:"-"`
-	Attachments      []MessageAttachment      `json:"attachments,omitempty"`
-	Flags            MessageFlags             `json:"flags,omitempty"`
+	Attachments      []MessageAttachment      `json:"attachments"`
+	Flags            MessageFlags             `json:"flags"`
 	TTS              bool                     `json:"tts"`
 }
 
