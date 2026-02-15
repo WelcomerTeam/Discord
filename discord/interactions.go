@@ -204,7 +204,7 @@ type InteractionData struct {
 	Name          string                    `json:"name"`
 	CustomID      string                    `json:"custom_id,omitempty"`
 	Options       []InteractionDataOption   `json:"options,omitempty"`
-	Values        []ApplicationSelectOption `json:"values,omitempty"`
+	Values        []string                  `json:"values,omitempty"`
 	Components    []InteractionComponent    `json:"components,omitempty"`
 	Value         json.RawMessage           `json:"value,omitempty"`
 	ID            Snowflake                 `json:"id"`
