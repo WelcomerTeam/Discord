@@ -118,6 +118,7 @@ type WebhookMessageParams struct {
 	Components      []InteractionComponent   `json:"components"`
 	Files           []File                   `json:"-"`
 	Attachments     []MessageAttachment      `json:"attachments,omitempty"`
+	Flags           MessageFlags             `json:"flags,omitempty"`
 	TTS             bool                     `json:"tts,omitempty"`
 }
 
