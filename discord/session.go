@@ -21,8 +21,8 @@ type RESTInterface interface {
 	// Fetch constructs a request. It will return a response body along with any errors.
 	// Errors can include ErrInvalidToken, ErrRateLimited,
 	Fetch(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header) ([]byte, error)
-	FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error
-	FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error
+	FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response any) error
+	FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload any, headers http.Header, response any) error
 
 	SetDebug(value bool)
 }
@@ -137,7 +137,7 @@ func (bi *BaseInterface) Fetch(ctx context.Context, session *Session, method, en
 	return response, nil
 }
 
-func (bi *BaseInterface) FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error {
+func (bi *BaseInterface) FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response any) error {
 	resp, err := bi.Fetch(ctx, session, method, endpoint, contentType, body, headers)
 	if err != nil {
 		return err
@@ -153,7 +153,7 @@ func (bi *BaseInterface) FetchBJ(ctx context.Context, session *Session, method, 
 	return nil
 }
 
-func (bi *BaseInterface) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
+func (bi *BaseInterface) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload any, headers http.Header, response any) error {
 	var body []byte
 
 	var err error
@@ -262,7 +262,7 @@ func (tl *TwilightProxy) Fetch(ctx context.Context, session *Session, method, en
 	return response, nil
 }
 
-func (tl *TwilightProxy) FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response interface{}) error {
+func (tl *TwilightProxy) FetchBJ(ctx context.Context, session *Session, method, endpoint, contentType string, body []byte, headers http.Header, response any) error {
 	resp, err := tl.Fetch(ctx, session, method, endpoint, contentType, body, headers)
 	if err != nil {
 		return err
@@ -278,7 +278,7 @@ func (tl *TwilightProxy) FetchBJ(ctx context.Context, session *Session, method, 
 	return nil
 }
 
-func (tl *TwilightProxy) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload interface{}, headers http.Header, response interface{}) error {
+func (tl *TwilightProxy) FetchJJ(ctx context.Context, session *Session, method, endpoint string, payload any, headers http.Header, response any) error {
 	var body []byte
 
 	var err error

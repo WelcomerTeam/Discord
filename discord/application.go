@@ -173,7 +173,7 @@ type ApplicationSelectOption struct {
 
 // Integration represents the structure of an integration.
 type Integration struct {
-	SyncedAt          time.Time                  `json:"synced_at,omitempty"`
+	SyncedAt          time.Time                  `json:"synced_at"`
 	ExpireBehavior    *IntegrationExpireBehavior `json:"expire_behavior,omitempty"`
 	User              *User                      `json:"user,omitempty"`
 	Application       *Application               `json:"application,omitempty"`

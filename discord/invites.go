@@ -36,7 +36,7 @@ const (
 
 // Invite represents the structure of Invite data.
 type Invite struct {
-	ExpiresAt                time.Time            `json:"expires_at,omitempty"`
+	ExpiresAt                time.Time            `json:"expires_at"`
 	CreatedAt                time.Time            `json:"created_at"`
 	ScheduledEvent           *ScheduledEvent      `json:"guild_scheduled_event,omitempty"`
 	StageInstance            *InviteStageInstance `json:"stage_instance,omitempty"`

@@ -21,10 +21,10 @@ type ModifyStickerParams struct {
 	Description *string `json:"description,omitempty"`
 }
 
-func ListNitroStickerPacks(ctx context.Context, session *Session) ([]interface{}, error) {
+func ListNitroStickerPacks(ctx context.Context, session *Session) ([]any, error) {
 	endpoint := "/sticker-packs"
 
-	var stickerPacks []interface{}
+	var stickerPacks []any
 
 	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &stickerPacks)
 	if err != nil {

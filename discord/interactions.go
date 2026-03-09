@@ -264,7 +264,7 @@ type InteractionComponentDefaultValue struct {
 }
 
 type InteractionComponentMediaGalleryItem struct {
-	Media       MediaItem `json:"media,omitempty"`
+	Media       MediaItem `json:"media"`
 	Description string    `json:"description,omitempty"`
 	Spoiler     bool      `json:"spoiler,omitempty"`
 }

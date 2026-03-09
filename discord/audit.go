@@ -161,8 +161,8 @@ type AuditLogEntry struct {
 }
 
 type AuditLogChanges struct {
-	NewValue interface{}       `json:"new_value"`
-	OldValue interface{}       `json:"old_value"`
+	NewValue any               `json:"new_value"`
+	OldValue any               `json:"old_value"`
 	Key      AuditLogChangeKey `json:"key"`
 }
 

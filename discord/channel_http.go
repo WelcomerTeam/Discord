@@ -585,7 +585,7 @@ func ListThreadMembers(ctx context.Context, session *Session, channelID Snowflak
 }
 
 // ListPublicArchivedThreads lists archived public threads in a channel.
-func ListPublicArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (interface{}, error) {
+func ListPublicArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (any, error) {
 	endpoint := EndpointChannel(channelID.String()) + "/threads/archived/public"
 
 	values := url.Values{}
@@ -602,7 +602,7 @@ func ListPublicArchivedThreads(ctx context.Context, session *Session, channelID 
 		endpoint += "?" + values.Encode()
 	}
 
-	var threads interface{}
+	var threads any
 
 	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
 	if err != nil {
@@ -613,7 +613,7 @@ func ListPublicArchivedThreads(ctx context.Context, session *Session, channelID 
 }
 
 // ListPrivateArchivedThreads lists archived private threads in a channel.
-func ListPrivateArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (interface{}, error) {
+func ListPrivateArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (any, error) {
 	endpoint := EndpointChannel(channelID.String()) + "/threads/archived/private"
 
 	values := url.Values{}
@@ -630,7 +630,7 @@ func ListPrivateArchivedThreads(ctx context.Context, session *Session, channelID
 		endpoint += "?" + values.Encode()
 	}
 
-	var threads interface{}
+	var threads any
 
 	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
 	if err != nil {
@@ -641,7 +641,7 @@ func ListPrivateArchivedThreads(ctx context.Context, session *Session, channelID
 }
 
 // ListJoinedPrivateArchivedThreads lists archived private threads the current user is a member of.
-func ListJoinedPrivateArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (interface{}, error) {
+func ListJoinedPrivateArchivedThreads(ctx context.Context, session *Session, channelID Snowflake, before *string, limit *int32) (any, error) {
 	endpoint := EndpointChannel(channelID.String()) + "/users/@me/threads/archived/private"
 
 	values := url.Values{}
@@ -658,7 +658,7 @@ func ListJoinedPrivateArchivedThreads(ctx context.Context, session *Session, cha
 		endpoint += "?" + values.Encode()
 	}
 
-	var threads interface{}
+	var threads any
 
 	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
 	if err != nil {

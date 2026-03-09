@@ -74,8 +74,8 @@ type GatewayPayload struct {
 
 // SentPayload represents the base payload we send to discords gateway.
 type SentPayload struct {
-	Data interface{} `json:"d"`
-	Op   GatewayOp   `json:"op"`
+	Data any       `json:"d"`
+	Op   GatewayOp `json:"op"`
 }
 
 // Gateway Commands
