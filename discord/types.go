@@ -142,4 +142,7 @@ type (
 	PresenceStatusList                = List[PresenceStatus]
 	MessageReactionList               = List[MessageReaction]
 	MessageAttachmentList             = List[MessageAttachment]
+	SoundboardSoundList               = List[SoundboardSound]
+	PollAnswerList                    = List[PollAnswer]
+	ForumTagList                      = List[ForumTag]
 )

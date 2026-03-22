@@ -7,12 +7,22 @@ import (
 
 // invites.go contains all structures for invites.
 
+// InviteType represents the type of an invite.
+type InviteType uint16
+
+const (
+	InviteTypeGuild   InviteType = iota
+	InviteTypeGroupDM
+	InviteTypeFriend
+)
+
 // InviteTargetType represents the type of an invites target.
 type InviteTargetType uint16
 
 const (
 	InviteTargetTypeStream InviteTargetType = 1 + iota
 	InviteTargetTypeEmbeddedApplication
+	InviteTargetTypeRoleSubscriptionPurchase
 )
 
 // EventStatus represents the status of an event.
@@ -36,24 +46,27 @@ const (
 
 // Invite represents the structure of Invite data.
 type Invite struct {
-	ExpiresAt                time.Time            `json:"expires_at"`
-	CreatedAt                time.Time            `json:"created_at"`
-	ScheduledEvent           *ScheduledEvent      `json:"guild_scheduled_event,omitempty"`
-	StageInstance            *InviteStageInstance `json:"stage_instance,omitempty"`
-	Inviter                  *User                `json:"inviter,omitempty"`
-	TargetType               *InviteTargetType    `json:"target_type,omitempty"`
-	TargetUser               *User                `json:"target_user,omitempty"`
-	TargetApplication        Application          `json:"target_application"`
-	Guild                    *Guild               `json:"guild,omitempty"`
-	Channel                  *Channel             `json:"channel,omitempty"`
-	GuildID                  *Snowflake           `json:"guild_id,omitempty"`
-	Code                     string               `json:"code"`
-	ApproximateMemberCount   int32                `json:"approximate_member_count,omitempty"`
-	Uses                     int32                `json:"uses"`
-	MaxUses                  int32                `json:"max_uses"`
-	MaxAge                   int32                `json:"max_age"`
-	ApproximatePresenceCount int32                `json:"approximate_presence_count,omitempty"`
-	Temporary                bool                 `json:"temporary"`
+	ExpiresAt                *time.Time       `json:"expires_at,omitempty"`
+	CreatedAt                time.Time        `json:"created_at"`
+	ScheduledEvent           *ScheduledEvent  `json:"guild_scheduled_event,omitempty"`
+	Inviter                  *User            `json:"inviter,omitempty"`
+	TargetType               *InviteTargetType `json:"target_type,omitempty"`
+	TargetUser               *User            `json:"target_user,omitempty"`
+	TargetApplication        *Application     `json:"target_application,omitempty"`
+	Guild                    *Guild           `json:"guild,omitempty"`
+	Channel                  *Channel         `json:"channel,omitempty"`
+	GuildID                  *Snowflake       `json:"guild_id,omitempty"`
+	Code                     string           `json:"code"`
+	ApproximateMemberCount   int32            `json:"approximate_member_count,omitempty"`
+	Uses                     int32            `json:"uses"`
+	MaxUses                  int32            `json:"max_uses"`
+	MaxAge                   int32            `json:"max_age"`
+	ApproximatePresenceCount int32            `json:"approximate_presence_count,omitempty"`
+	Flags                    int32            `json:"flags,omitempty"`
+	Type                     InviteType       `json:"type,omitempty"`
+	Temporary                bool             `json:"temporary"`
+	IsContact                bool             `json:"is_contact,omitempty"`
+	IsNicknameChangeable     bool             `json:"is_nickname_changeable,omitempty"`
 }
 
 // Delete deletes an invite.
@@ -79,9 +92,10 @@ type ScheduledEvent struct {
 	Creator            *User                    `json:"creator,omitempty"`
 	EntityMetadata     *EventMetadata           `json:"entity_metadata,omitempty"`
 	EntityID           *Snowflake               `json:"entity_id,omitempty"`
+	Image              *string                  `json:"image,omitempty"`
 	PrivacyLevel       StageChannelPrivacyLevel `json:"privacy_level"`
 	ScheduledStartTime string                   `json:"scheduled_start_time"`
-	ScheduledEndTime   string                   `json:"scheduled_end_time"`
+	ScheduledEndTime   string                   `json:"scheduled_end_time,omitempty"`
 	Description        string                   `json:"description,omitempty"`
 	Name               string                   `json:"name"`
 	ID                 Snowflake                `json:"id"`

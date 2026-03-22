@@ -298,3 +298,73 @@ func DeleteApplicationEmoji(ctx context.Context, session *Session, applicationID
 
 	return nil
 }
+
+// GetApplication returns the application object for the given application ID.
+func GetApplication(ctx context.Context, session *Session, applicationID Snowflake) (*Application, error) {
+	endpoint := EndpointApplication(applicationID.String())
+
+	var application *Application
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &application)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get application: %w", err)
+	}
+
+	return application, nil
+}
+
+// ModifyApplication modifies an application.
+func ModifyApplication(ctx context.Context, session *Session, applicationID Snowflake, params Application) (*Application, error) {
+	endpoint := EndpointApplication(applicationID.String())
+
+	var application *Application
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, nil, &application)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify application: %w", err)
+	}
+
+	return application, nil
+}
+
+// ModifyCurrentApplication modifies the current application.
+func ModifyCurrentApplication(ctx context.Context, session *Session, params Application) (*Application, error) {
+	endpoint := EndpointApplications + "/@me"
+
+	var application *Application
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPatch, endpoint, params, nil, &application)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify current application: %w", err)
+	}
+
+	return application, nil
+}
+
+// GetApplicationRoleConnectionMetadataRecords returns a list of role connection metadata records for an application.
+func GetApplicationRoleConnectionMetadataRecords(ctx context.Context, session *Session, applicationID Snowflake) ([]ApplicationRoleConnectionMetadata, error) {
+	endpoint := EndpointApplicationRoleConnectionsMetadata(applicationID.String())
+
+	var records []ApplicationRoleConnectionMetadata
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &records)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get application role connection metadata records: %w", err)
+	}
+
+	return records, nil
+}
+
+// UpdateApplicationRoleConnectionMetadataRecords updates the role connection metadata records for an application.
+func UpdateApplicationRoleConnectionMetadataRecords(ctx context.Context, session *Session, applicationID Snowflake, params []ApplicationRoleConnectionMetadata) ([]ApplicationRoleConnectionMetadata, error) {
+	endpoint := EndpointApplicationRoleConnectionsMetadata(applicationID.String())
+
+	var records []ApplicationRoleConnectionMetadata
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, params, nil, &records)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update application role connection metadata records: %w", err)
+	}
+
+	return records, nil
+}

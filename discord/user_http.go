@@ -98,3 +98,71 @@ func CreateDM(ctx context.Context, session *Session, recipientID Snowflake) (*Ch
 
 	return channel, nil
 }
+
+// GetCurrentUserConnections returns a list of the current user's connections.
+func GetCurrentUserConnections(ctx context.Context, session *Session) ([]UserConnection, error) {
+	endpoint := EndpointUserConnections
+
+	var connections []UserConnection
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &connections)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current user connections: %w", err)
+	}
+
+	return connections, nil
+}
+
+// GetCurrentUserApplicationRoleConnection returns the role connection for the current user to an application.
+func GetCurrentUserApplicationRoleConnection(ctx context.Context, session *Session, applicationID Snowflake) (*ApplicationRoleConnection, error) {
+	endpoint := EndpointUserApplicationRoleConnection(applicationID.String())
+
+	var roleConnection *ApplicationRoleConnection
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &roleConnection)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current user application role connection: %w", err)
+	}
+
+	return roleConnection, nil
+}
+
+// UpdateCurrentUserApplicationRoleConnection updates the role connection for the current user to an application.
+func UpdateCurrentUserApplicationRoleConnection(ctx context.Context, session *Session, applicationID Snowflake, params ApplicationRoleConnection) (*ApplicationRoleConnection, error) {
+	endpoint := EndpointUserApplicationRoleConnection(applicationID.String())
+
+	var roleConnection *ApplicationRoleConnection
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, params, nil, &roleConnection)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update current user application role connection: %w", err)
+	}
+
+	return roleConnection, nil
+}
+
+// DeleteCurrentUserApplicationRoleConnection deletes the role connection for the current user to an application.
+func DeleteCurrentUserApplicationRoleConnection(ctx context.Context, session *Session, applicationID Snowflake) error {
+	endpoint := EndpointUserApplicationRoleConnection(applicationID.String())
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodDelete, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to delete current user application role connection: %w", err)
+	}
+
+	return nil
+}
+
+// GetCurrentUserEntitlements returns entitlements for the current user for a given application.
+func GetCurrentUserEntitlements(ctx context.Context, session *Session, applicationID Snowflake) ([]Entitlement, error) {
+	endpoint := EndpointUserCurrentEntitlements(applicationID.String())
+
+	var entitlements []Entitlement
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &entitlements)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current user entitlements: %w", err)
+	}
+
+	return entitlements, nil
+}

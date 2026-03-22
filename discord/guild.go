@@ -83,56 +83,61 @@ const (
 
 // Guild represents a guild on discord.
 type Guild struct {
-	JoinedAt                    time.Time                  `json:"joined_at"`
-	WidgetChannelID             *Snowflake                 `json:"widget_channel_id,omitempty"`
-	NSFWLevel                   GuildNSFWLevelType         `json:"nsfw_level"`
-	PublicUpdatesChannelID      *Snowflake                 `json:"public_updates_channel_id,omitempty"`
-	PremiumTier                 *PremiumTier               `json:"premium_tier,omitempty"`
-	RulesChannelID              *Snowflake                 `json:"rules_channel_id,omitempty"`
-	SystemChannelFlags          *SystemChannelFlags        `json:"system_channel_flags,omitempty"`
-	OwnerID                     *Snowflake                 `json:"owner_id,omitempty"`
-	Permissions                 *Int64                     `json:"permissions,omitempty"`
-	SystemChannelID             *Snowflake                 `json:"system_channel_id,omitempty"`
-	AFKChannelID                *Snowflake                 `json:"afk_channel_id,omitempty"`
-	ApplicationID               *Snowflake                 `json:"application_id,omitempty"`
-	Description                 string                     `json:"description"`
-	PreferredLocale             string                     `json:"preferred_locale"`
-	Name                        string                     `json:"name"`
-	Icon                        string                     `json:"icon"`
-	IconHash                    string                     `json:"icon_hash"`
-	Banner                      string                     `json:"banner"`
-	VanityURLCode               string                     `json:"vanity_url_code"`
-	Splash                      string                     `json:"splash"`
-	DiscoverySplash             string                     `json:"discovery_splash"`
-	Region                      string                     `json:"region"`
-	Presences                   ActivityList               `json:"presences,omitempty"`
-	GuildScheduledEvents        ScheduledEventList         `json:"guild_scheduled_events"`
-	Stickers                    StickerList                `json:"stickers"`
-	Features                    StringList                 `json:"features"`
-	StageInstances              StageInstanceList          `json:"stage_instances,omitempty"`
-	Roles                       RoleList                   `json:"roles"`
-	Emojis                      EmojiList                  `json:"emojis"`
-	VoiceStates                 VoiceStateList             `json:"voice_states,omitempty"`
-	Members                     GuildMemberList            `json:"members,omitempty"`
-	Channels                    ChannelList                `json:"channels,omitempty"`
-	ID                          Snowflake                  `json:"id"`
-	ExplicitContentFilter       ExplicitContentFilterLevel `json:"explicit_content_filter"`
-	DefaultMessageNotifications MessageNotificationLevel   `json:"default_message_notifications"`
-	ApproximateMemberCount      int32                      `json:"approximate_member_count"`
-	MaxMembers                  int32                      `json:"max_members"`
-	MemberCount                 int32                      `json:"member_count"`
-	AFKTimeout                  int32                      `json:"afk_timeout"`
-	MaxPresences                int32                      `json:"max_presences"`
-	PremiumSubscriptionCount    int32                      `json:"premium_subscription_count"`
-	ApproximatePresenceCount    int32                      `json:"approximate_presence_count"`
-	MaxVideoChannelUsers        int32                      `json:"max_video_channel_users"`
-	Unavailable                 bool                       `json:"unavailable"`
-	WidgetEnabled               bool                       `json:"widget_enabled"`
-	VerificationLevel           VerificationLevel          `json:"verification_level"`
-	Large                       bool                       `json:"large"`
-	MFALevel                    MFALevel                   `json:"mfa_level"`
-	Owner                       bool                       `json:"owner"`
-	PremiumProgressBarEnabled   bool                       `json:"premium_progress_bar_enabled"`
+	JoinedAt                                time.Time                  `json:"joined_at"`
+	WidgetChannelID                         *Snowflake                 `json:"widget_channel_id,omitempty"`
+	NSFWLevel                               GuildNSFWLevelType         `json:"nsfw_level"`
+	PublicUpdatesChannelID                  *Snowflake                 `json:"public_updates_channel_id,omitempty"`
+	PremiumTier                             *PremiumTier               `json:"premium_tier,omitempty"`
+	RulesChannelID                          *Snowflake                 `json:"rules_channel_id,omitempty"`
+	SafetyAlertsChannelID                   *Snowflake                 `json:"safety_alerts_channel_id,omitempty"`
+	SystemChannelFlags                      *SystemChannelFlags        `json:"system_channel_flags,omitempty"`
+	OwnerID                                 *Snowflake                 `json:"owner_id,omitempty"`
+	Permissions                             *Int64                     `json:"permissions,omitempty"`
+	SystemChannelID                         *Snowflake                 `json:"system_channel_id,omitempty"`
+	AFKChannelID                            *Snowflake                 `json:"afk_channel_id,omitempty"`
+	ApplicationID                           *Snowflake                 `json:"application_id,omitempty"`
+	Description                             string                     `json:"description"`
+	HomeHeader                              string                     `json:"home_header,omitempty"`
+	PreferredLocale                         string                     `json:"preferred_locale"`
+	Name                                    string                     `json:"name"`
+	Icon                                    string                     `json:"icon"`
+	IconHash                                string                     `json:"icon_hash"`
+	Banner                                  string                     `json:"banner"`
+	VanityURLCode                           string                     `json:"vanity_url_code"`
+	Splash                                  string                     `json:"splash"`
+	DiscoverySplash                         string                     `json:"discovery_splash"`
+	Region                                  string                     `json:"region"`
+	Presences                               ActivityList               `json:"presences,omitempty"`
+	GuildScheduledEvents                    ScheduledEventList         `json:"guild_scheduled_events"`
+	Stickers                                StickerList                `json:"stickers"`
+	Features                                StringList                 `json:"features"`
+	StageInstances                          StageInstanceList          `json:"stage_instances,omitempty"`
+	Roles                                   RoleList                   `json:"roles"`
+	Emojis                                  EmojiList                  `json:"emojis"`
+	VoiceStates                             VoiceStateList             `json:"voice_states,omitempty"`
+	Members                                 GuildMemberList            `json:"members,omitempty"`
+	Channels                                ChannelList                `json:"channels,omitempty"`
+	ID                                      Snowflake                  `json:"id"`
+	ExplicitContentFilter                   ExplicitContentFilterLevel `json:"explicit_content_filter"`
+	DefaultMessageNotifications             MessageNotificationLevel   `json:"default_message_notifications"`
+	ApproximateMemberCount                  int32                      `json:"approximate_member_count"`
+	MaxMembers                              int32                      `json:"max_members"`
+	MemberCount                             int32                      `json:"member_count"`
+	AFKTimeout                              int32                      `json:"afk_timeout"`
+	MaxPresences                            int32                      `json:"max_presences"`
+	MaxStageVideoChannelUsers               int32                      `json:"max_stage_video_channel_users,omitempty"`
+	PremiumSubscriptionCount                int32                      `json:"premium_subscription_count"`
+	ApproximatePresenceCount                int32                      `json:"approximate_presence_count"`
+	MaxVideoChannelUsers                    int32                      `json:"max_video_channel_users"`
+	Unavailable                             bool                       `json:"unavailable"`
+	WidgetEnabled                           bool                       `json:"widget_enabled"`
+	VerificationLevel                       VerificationLevel          `json:"verification_level"`
+	Large                                   bool                       `json:"large"`
+	MFALevel                                MFALevel                   `json:"mfa_level"`
+	Owner                                   bool                       `json:"owner"`
+	PremiumProgressBarEnabled               bool                       `json:"premium_progress_bar_enabled"`
+	PremiumProgressBarEnabledUserUpdatedAt  string                     `json:"premium_progress_bar_enabled_user_updated_at,omitempty"`
+	NSFW                                    bool                       `json:"nsfw"`
 }
 
 // GuildParams represents the parameters sent when modifying a guild.
@@ -341,6 +346,7 @@ type GuildMember struct {
 	GuildID                    *Snowflake            `json:"guild_id,omitempty"`
 	Permissions                *Int64                `json:"permissions,omitempty"`
 	AvatarDecorationData       *AvatarDecorationData `json:"avatar_decoration_data,omitempty"`
+	Collectibles               *UserCollectibles     `json:"collectibles,omitempty"`
 	Nick                       string                `json:"nick,omitempty"`
 	Avatar                     string                `json:"avatar,omitempty"`
 	Banner                     string                `json:"banner,omitempty"`
@@ -495,16 +501,16 @@ func (gm *GuildMember) Send(ctx context.Context, session *Session, params Messag
 
 // VoiceState represents the voice state on discord.
 type VoiceState struct {
-	RequestToSpeakTimestamp time.Time    `json:"request_to_speak_timestamp"`
+	RequestToSpeakTimestamp *time.Time   `json:"request_to_speak_timestamp,omitempty"`
 	GuildID                 *Snowflake   `json:"guild_id,omitempty"`
+	ChannelID               *Snowflake   `json:"channel_id,omitempty"`
 	Member                  *GuildMember `json:"member,omitempty"`
 	SessionID               string       `json:"session_id"`
 	UserID                  Snowflake    `json:"user_id"`
-	ChannelID               Snowflake    `json:"channel_id"`
 	Mute                    bool         `json:"mute"`
 	SelfDeaf                bool         `json:"self_deaf"`
 	SelfMute                bool         `json:"self_mute"`
-	SelfStream              bool         `json:"self_stream"`
+	SelfStream              *bool        `json:"self_stream,omitempty"`
 	SelfVideo               bool         `json:"self_video"`
 	Suppress                bool         `json:"suppress"`
 	Deaf                    bool         `json:"deaf"`

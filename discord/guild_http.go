@@ -1033,3 +1033,93 @@ func DeleteGuildTemplate(ctx context.Context, session *Session, guildID Snowflak
 
 	return nil
 }
+
+// GetGuildRole returns a specific role in a guild.
+func GetGuildRole(ctx context.Context, session *Session, guildID, roleID Snowflake) (*Role, error) {
+	endpoint := EndpointGuildRole(guildID.String(), roleID.String())
+
+	var role *Role
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &role)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild role: %w", err)
+	}
+
+	return role, nil
+}
+
+// GetActiveGuildThreads returns all active threads in a guild.
+func GetActiveGuildThreads(ctx context.Context, session *Session, guildID Snowflake) (*ThreadsResponse, error) {
+	endpoint := EndpointGuildActiveThreads(guildID.String())
+
+	var threads *ThreadsResponse
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &threads)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get active guild threads: %w", err)
+	}
+
+	return threads, nil
+}
+
+// GetGuildOnboarding returns the onboarding flow for a guild.
+func GetGuildOnboarding(ctx context.Context, session *Session, guildID Snowflake) (*GuildOnboarding, error) {
+	endpoint := EndpointGuildOnboarding(guildID.String())
+
+	var onboarding *GuildOnboarding
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &onboarding)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get guild onboarding: %w", err)
+	}
+
+	return onboarding, nil
+}
+
+// ModifyGuildOnboarding modifies the onboarding flow for a guild.
+func ModifyGuildOnboarding(ctx context.Context, session *Session, guildID Snowflake, params GuildOnboarding, reason *string) (*GuildOnboarding, error) {
+	endpoint := EndpointGuildOnboarding(guildID.String())
+
+	headers := http.Header{}
+
+	if reason != nil {
+		headers.Add(AuditLogReasonHeader, *reason)
+	}
+
+	var onboarding *GuildOnboarding
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPut, endpoint, params, headers, &onboarding)
+	if err != nil {
+		return nil, fmt.Errorf("failed to modify guild onboarding: %w", err)
+	}
+
+	return onboarding, nil
+}
+
+// GetCurrentUserVoiceState returns the current user's voice state in a guild.
+func GetCurrentUserVoiceState(ctx context.Context, session *Session, guildID Snowflake) (*VoiceState, error) {
+	endpoint := EndpointGuildVoiceStateSelf(guildID.String())
+
+	var voiceState *VoiceState
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &voiceState)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current user voice state: %w", err)
+	}
+
+	return voiceState, nil
+}
+
+// GetUserVoiceState returns a user's voice state in a guild.
+func GetUserVoiceState(ctx context.Context, session *Session, guildID, userID Snowflake) (*VoiceState, error) {
+	endpoint := EndpointGuildVoiceState(guildID.String(), userID.String())
+
+	var voiceState *VoiceState
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &voiceState)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user voice state: %w", err)
+	}
+
+	return voiceState, nil
+}

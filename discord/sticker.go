@@ -14,9 +14,10 @@ const (
 type StickerFormatType uint16
 
 const (
-	StickerFormatTypePNG StickerFormatType = 1 + iota
+	StickerFormatTypePNG    StickerFormatType = 1 + iota
 	StickerFormatTypeAPNG
 	StickerFormatTypeLOTTIE
+	StickerFormatTypeGIF
 )
 
 // Sticker represents a sticker object.
@@ -39,4 +40,15 @@ type MessageSticker struct {
 	FormatType StickerFormatType `json:"format_type"`
 	Name       string            `json:"name"`
 	ID         Snowflake         `json:"id"`
+}
+
+// StickerPack represents a pack of standard stickers.
+type StickerPack struct {
+	ID             Snowflake  `json:"id"`
+	SKUID          Snowflake  `json:"sku_id"`
+	Name           string     `json:"name"`
+	Description    *string    `json:"description,omitempty"`
+	Stickers       []Sticker  `json:"stickers"`
+	CoverStickerID *Snowflake `json:"cover_sticker_id,omitempty"`
+	BannerAssetID  *Snowflake `json:"banner_asset_id,omitempty"`
 }

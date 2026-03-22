@@ -3,18 +3,22 @@ package discord
 import "time"
 
 type Entitlement struct {
-	UserID         *Snowflake      `json:"user_id,omitempty"`
-	GiftCodeFlags  *GiftCodeFlags  `json:"gift_code_flags,omitempty"`
-	StartsAt       *time.Time      `json:"starts_at,omitempty"`
-	EndsAt         *time.Time      `json:"ends_at,omitempty"`
-	GuildID        *Snowflake      `json:"guild_id,omitempty"`
-	SubscriptionID *Snowflake      `json:"subscription_id,omitempty"`
-	ID             Snowflake       `json:"id"`
-	SkuID          Snowflake       `json:"sku_id"`
-	ApplicationID  Snowflake       `json:"application_id"`
-	Type           EntitlementType `json:"type"`
-	Deleted        bool            `json:"deleted"`
-	Consumed       bool            `json:"consumed"`
+	UserID             *Snowflake      `json:"user_id,omitempty"`
+	GiftCodeFlags      *GiftCodeFlags  `json:"gift_code_flags,omitempty"`
+	StartsAt           *time.Time      `json:"starts_at,omitempty"`
+	EndsAt             *time.Time      `json:"ends_at,omitempty"`
+	FulfilledAt        *time.Time      `json:"fulfilled_at,omitempty"`
+	GuildID            *Snowflake      `json:"guild_id,omitempty"`
+	SubscriptionID     *Snowflake      `json:"subscription_id,omitempty"`
+	GifterUserID       *Snowflake      `json:"gifter_user_id,omitempty"`
+	ParentID           *Snowflake      `json:"parent_id,omitempty"`
+	FulfillmentStatus  *int32          `json:"fulfillment_status,omitempty"`
+	ID                 Snowflake       `json:"id"`
+	SkuID              Snowflake       `json:"sku_id"`
+	ApplicationID      Snowflake       `json:"application_id"`
+	Type               EntitlementType `json:"type"`
+	Deleted            bool            `json:"deleted"`
+	Consumed           bool            `json:"consumed"`
 }
 
 // EntitlementParams represents the payload sent to discord.
@@ -44,6 +48,8 @@ const (
 	EntitlementTypePremiumPurchase EntitlementType = 7
 	// EntitlementTypeApplicationSubscription is an entitlement that was purchased as an app subscription.
 	EntitlementTypeApplicationSubscription EntitlementType = 8
+	// EntitlementTypeQuestReward is an entitlement awarded as a quest reward.
+	EntitlementTypeQuestReward EntitlementType = 10
 )
 
 // GiftCodeFlags is undocumented, but present in the API.

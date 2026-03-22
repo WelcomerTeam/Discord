@@ -235,3 +235,33 @@ func DeleteWebhookMessage(ctx context.Context, session *Session, webhookID Snowf
 
 	return nil
 }
+
+// ExecuteSlackCompatibleWebhook executes a Slack-compatible webhook.
+func ExecuteSlackCompatibleWebhook(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, wait bool, params any) error {
+	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken) + "/slack"
+	if wait {
+		endpoint += "?wait=true"
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to execute slack compatible webhook: %w", err)
+	}
+
+	return nil
+}
+
+// ExecuteGitHubCompatibleWebhook executes a GitHub-compatible webhook.
+func ExecuteGitHubCompatibleWebhook(ctx context.Context, session *Session, webhookID Snowflake, webhookToken string, wait bool, params any) error {
+	endpoint := EndpointWebhookToken(webhookID.String(), webhookToken) + "/github"
+	if wait {
+		endpoint += "?wait=true"
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to execute github compatible webhook: %w", err)
+	}
+
+	return nil
+}

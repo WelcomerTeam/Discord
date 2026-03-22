@@ -29,7 +29,7 @@ type GatewayIntent uint32
 const (
 	IntentGuilds GatewayIntent = 1 << iota
 	IntentGuildMembers
-	IntentGuildBans
+	IntentGuildModeration
 	IntentGuildEmojis
 	IntentGuildIntegrations
 	IntentGuildWebhooks
@@ -43,6 +43,22 @@ const (
 	IntentDirectMessageReactions
 	IntentDirectMessageTyping
 	IntentMessageContent
+	IntentGuildScheduledEvents
+	_
+	_
+	_
+	IntentAutoModerationConfiguration
+	IntentAutoModerationExecution
+	_
+	_
+	IntentGuildMessagePolls
+	IntentDirectMessagePolls
+)
+
+// Deprecated intent aliases.
+const (
+	IntentGuildBans    = IntentGuildModeration
+	IntentGuildBanning = IntentGuildModeration
 )
 
 // Gateway close codes.
@@ -124,4 +140,24 @@ type UpdateStatus struct {
 	Activities ActivityList `json:"activities,omitempty"`
 	Since      int32        `json:"since,omitempty"`
 	AFK        bool         `json:"afk"`
+}
+
+// GatewayBot represents gateway connection information for a bot.
+type GatewayBot struct {
+	SessionStartLimit GatewayBotSessionStartLimit `json:"session_start_limit"`
+	URL               string                      `json:"url"`
+	Shards            int32                       `json:"shards"`
+}
+
+// GatewayBotSessionStartLimit represents the session start limit for a bot gateway.
+type GatewayBotSessionStartLimit struct {
+	MaxConcurrency int32 `json:"max_concurrency"`
+	Remaining      int32 `json:"remaining"`
+	ResetAfter     int32 `json:"reset_after"`
+	Total          int32 `json:"total"`
+}
+
+// Gateway represents the gateway URL response.
+type Gateway struct {
+	URL string `json:"url"`
 }

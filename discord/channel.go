@@ -14,20 +14,26 @@ import (
 type ChannelType uint16
 
 const (
-	ChannelTypeGuildText ChannelType = iota
-	ChannelTypeDM
-	ChannelTypeGuildVoice
-	ChannelTypeGroupDM
-	ChannelTypeGuildCategory
-	ChannelTypeGuildNews
-	ChannelTypeGuildStore
-	_
-	_
-	_
-	ChannelTypeGuildNewsThread
-	ChannelTypeGuildPublicThread
-	ChannelTypeGuildPrivateThread
-	ChannelTypeGuildStageVoice
+	ChannelTypeGuildText     ChannelType = 0
+	ChannelTypeDM                        = 1
+	ChannelTypeGuildVoice                = 2
+	ChannelTypeGroupDM                   = 3
+	ChannelTypeGuildCategory             = 4
+
+	ChannelTypeGuildNews         = 5
+	ChannelTypeGuildAnnouncement = 5
+
+	ChannelTypeGuildStore = 6
+
+	ChannelTypeNewsThread         = 10
+	ChannelTypeAnnouncementThread = 10
+
+	ChannelTypeGuildPublicThread  = 11
+	ChannelTypeGuildPrivateThread = 12
+	ChannelTypeGuildStageVoice    = 13
+	ChannelTypeGuildDirectory     = 14
+	ChannelTypeGuildForum         = 15
+	ChannelTypeGuildMedia         = 16
 )
 
 // VideoQualityMode represents the quality of the video.
@@ -48,32 +54,40 @@ const (
 
 // Channel represents a Discord channel.
 type Channel struct {
-	OwnerID                    *Snowflake           `json:"owner_id,omitempty"`
-	GuildID                    *Snowflake           `json:"guild_id,omitempty"`
-	Permissions                *Int64               `json:"permissions,omitempty"`
-	ThreadMember               *ThreadMember        `json:"member,omitempty"`
-	ThreadMetadata             *ThreadMetadata      `json:"thread_metadata,omitempty"`
-	VideoQualityMode           *VideoQualityMode    `json:"video_quality_mode,omitempty"`
-	LastPinTimestamp           *time.Time           `json:"last_pin_timestamp,omitempty"`
-	ParentID                   *Snowflake           `json:"parent_id,omitempty"`
-	ApplicationID              *Snowflake           `json:"application_id,omitempty"`
-	RTCRegion                  string               `json:"rtc_region,omitempty"`
-	Topic                      string               `json:"topic,omitempty"`
-	Icon                       string               `json:"icon,omitempty"`
-	Name                       string               `json:"name,omitempty"`
-	LastMessageID              string               `json:"last_message_id,omitempty"`
-	PermissionOverwrites       ChannelOverwriteList `json:"permission_overwrites,omitempty"`
-	Recipients                 UserList             `json:"recipients,omitempty"`
-	ID                         Snowflake            `json:"id"`
-	UserLimit                  int32                `json:"user_limit,omitempty"`
-	Bitrate                    int32                `json:"bitrate,omitempty"`
-	MessageCount               int32                `json:"message_count,omitempty"`
-	MemberCount                int32                `json:"member_count,omitempty"`
-	RateLimitPerUser           int32                `json:"rate_limit_per_user,omitempty"`
-	Position                   int32                `json:"position,omitempty"`
-	DefaultAutoArchiveDuration int32                `json:"default_auto_archive_duration,omitempty"`
-	NSFW                       bool                 `json:"nsfw"`
-	Type                       ChannelType          `json:"type"`
+	OwnerID                       *Snowflake            `json:"owner_id,omitempty"`
+	GuildID                       *Snowflake            `json:"guild_id,omitempty"`
+	Permissions                   *Int64                `json:"permissions,omitempty"`
+	ThreadMember                  *ThreadMember         `json:"member,omitempty"`
+	ThreadMetadata                *ThreadMetadata       `json:"thread_metadata,omitempty"`
+	VideoQualityMode              *VideoQualityMode     `json:"video_quality_mode,omitempty"`
+	LastPinTimestamp              *time.Time            `json:"last_pin_timestamp,omitempty"`
+	ParentID                      *Snowflake            `json:"parent_id,omitempty"`
+	ApplicationID                 *Snowflake            `json:"application_id,omitempty"`
+	DefaultReactionEmoji          *DefaultReactionEmoji `json:"default_reaction_emoji,omitempty"`
+	DefaultSortOrder              *int32                `json:"default_sort_order,omitempty"`
+	HDStreamingBuyerID            *Snowflake            `json:"hd_streaming_buyer_id,omitempty"`
+	RTCRegion                     string                `json:"rtc_region,omitempty"`
+	Topic                         string                `json:"topic,omitempty"`
+	Icon                          string                `json:"icon,omitempty"`
+	Name                          string                `json:"name,omitempty"`
+	LastMessageID                 string                `json:"last_message_id,omitempty"`
+	HDStreamingUntil              string                `json:"hd_streaming_until,omitempty"`
+	PermissionOverwrites          ChannelOverwriteList  `json:"permission_overwrites,omitempty"`
+	Recipients                    UserList              `json:"recipients,omitempty"`
+	AvailableTags                 []ForumTag            `json:"available_tags,omitempty"`
+	ID                            Snowflake             `json:"id"`
+	UserLimit                     int32                 `json:"user_limit,omitempty"`
+	Bitrate                       int32                 `json:"bitrate,omitempty"`
+	MessageCount                  int32                 `json:"message_count,omitempty"`
+	MemberCount                   int32                 `json:"member_count,omitempty"`
+	RateLimitPerUser              int32                 `json:"rate_limit_per_user,omitempty"`
+	Position                      int32                 `json:"position,omitempty"`
+	DefaultAutoArchiveDuration    int32                 `json:"default_auto_archive_duration,omitempty"`
+	DefaultThreadRateLimitPerUser int32                 `json:"default_thread_rate_limit_per_user,omitempty"`
+	DefaultForumLayout            int32                 `json:"default_forum_layout,omitempty"`
+	Flags                         int32                 `json:"flags,omitempty"`
+	NSFW                          bool                  `json:"nsfw"`
+	Type                          ChannelType           `json:"type"`
 }
 
 // ChannelParams the data that is provided when creating a channel.
@@ -249,28 +263,47 @@ const (
 // ThreadMetadata contains thread-specific channel fields.
 type ThreadMetadata struct {
 	ArchiveTimestamp    time.Time `json:"archive_timestamp"`
+	CreateTimestamp     string    `json:"create_timestamp,omitempty"`
 	AutoArchiveDuration int32     `json:"auto_archive_duration"`
 	Archived            bool      `json:"archived"`
 	Locked              bool      `json:"locked"`
+	Invitable           bool      `json:"invitable,omitempty"`
 }
 
 // ThreadMember is used to indicate whether a user has joined a thread or not.
 type ThreadMember struct {
-	ID            *Snowflake `json:"id,omitempty"`
-	UserID        *Snowflake `json:"user_id,omitempty"`
-	GuildID       *Snowflake `json:"guild_id,omitempty"`
-	JoinTimestamp time.Time  `json:"join_timestamp"`
-	Flags         int32      `json:"flags"`
+	ID            *Snowflake   `json:"id,omitempty"`
+	UserID        *Snowflake   `json:"user_id,omitempty"`
+	GuildID       *Snowflake   `json:"guild_id,omitempty"`
+	Member        *GuildMember `json:"member,omitempty"`
+	JoinTimestamp time.Time    `json:"join_timestamp"`
+	Flags         int32        `json:"flags"`
 }
 
 // StageInstance represents a stage channel instance.
 type StageInstance struct {
-	PrivacyLabel         StageChannelPrivacyLevel `json:"privacy_level"`
-	Topic                string                   `json:"topic"`
-	ID                   Snowflake                `json:"id"`
-	GuildID              Snowflake                `json:"guild_id"`
-	ChannelID            Snowflake                `json:"channel_id"`
-	DiscoverableDisabled bool                     `json:"discoverable_disabled"`
+	GuildScheduledEventID *Snowflake               `json:"guild_scheduled_event_id,omitempty"`
+	PrivacyLabel          StageChannelPrivacyLevel `json:"privacy_level"`
+	Topic                 string                   `json:"topic"`
+	ID                    Snowflake                `json:"id"`
+	GuildID               Snowflake                `json:"guild_id"`
+	ChannelID             Snowflake                `json:"channel_id"`
+	DiscoverableDisabled  bool                     `json:"discoverable_disabled"`
+}
+
+// ForumTag represents a tag for a forum channel.
+type ForumTag struct {
+	EmojiID   *Snowflake `json:"emoji_id,omitempty"`
+	Name      string     `json:"name"`
+	EmojiName string     `json:"emoji_name,omitempty"`
+	ID        Snowflake  `json:"id"`
+	Moderated bool       `json:"moderated"`
+}
+
+// DefaultReactionEmoji represents the default forum channel reaction emoji.
+type DefaultReactionEmoji struct {
+	EmojiID   *Snowflake `json:"emoji_id,omitempty"`
+	EmojiName string     `json:"emoji_name,omitempty"`
 }
 
 // FollowedChannel represents a followed channel.
@@ -285,4 +318,12 @@ type ChannelPermissionsParams struct {
 	Position        int32     `json:"position"`
 	LockPermissions bool      `json:"lock_permissions"`
 	ParentID        Snowflake `json:"parent_id"`
+}
+
+// ThreadsResponse represents the response for active/archived thread list endpoints.
+type ThreadsResponse struct {
+	Threads       []Channel      `json:"threads"`
+	Members       []ThreadMember `json:"members"`
+	HasMore       bool           `json:"has_more"`
+	FirstMessages []Message      `json:"first_messages,omitempty"`
 }

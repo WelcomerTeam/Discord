@@ -17,6 +17,7 @@ const (
 	InteractionTypeMessageComponent
 	InteractionTypeApplicationCommandAutocomplete
 	InteractionTypeModalSubmit
+	InteractionTypeSocialLayerSKUPurchaseEligibility
 )
 
 // InteractionCallbackType represents the type of interaction callbacks.
@@ -52,6 +53,23 @@ const (
 	// user that ran the interaction, instructing them that whatever they tried to do requires
 	// the premium benefits of your app. It also contains an "Upgrade" button to subscribe.
 	InteractionCallbackTypePremiumRequired
+
+	_
+
+	// InteractionCallbackTypeLaunchActivity launches the Activity associated with the app.
+	InteractionCallbackTypeLaunchActivity
+
+	// InteractionCallbackTypeSocialLayerSKUPurchaseEligibility responds with SKU purchase eligibility.
+	InteractionCallbackTypeSocialLayerSKUPurchaseEligibility
+)
+
+// InteractionContextType represents the context in which an interaction was triggered.
+type InteractionContextType uint8
+
+const (
+	InteractionContextTypeGuild          InteractionContextType = 0
+	InteractionContextTypeBotDM          InteractionContextType = 1
+	InteractionContextTypePrivateChannel InteractionContextType = 2
 )
 
 // InteractionComponentType represents the type of component.
@@ -88,6 +106,11 @@ const (
 	_
 	_
 	InteractionComponentTypeContainer
+	InteractionComponentTypeLabel
+	InteractionComponentTypeFileUpload
+	InteractionComponentTypeRadioGroup
+	InteractionComponentTypeCheckboxGroup
+	InteractionComponentTypeCheckbox
 )
 
 // InteractionComponentStyle represents the style of a component.
@@ -111,21 +134,24 @@ const (
 
 // Interaction represents the structure of an interaction.
 type Interaction struct {
-	Member         *GuildMember     `json:"member,omitempty"`
-	Message        *Message         `json:"message,omitempty"`
-	AppPermissions *Int64           `json:"app_permissions"`
-	Data           *InteractionData `json:"data,omitempty"`
-	GuildID        *Snowflake       `json:"guild_id,omitempty"`
-	ChannelID      *Snowflake       `json:"channel_id,omitempty"`
-	User           *User            `json:"user,omitempty"`
-	Token          string           `json:"token"`
-	Locale         string           `json:"locale,omitempty"`
-	GuildLocale    string           `json:"guild_locale,omitempty"`
-	Entitlements   []Entitlement    `json:"entitlements,omitempty"`
-	ID             Snowflake        `json:"id"`
-	ApplicationID  Snowflake        `json:"application_id"`
-	Version        int32            `json:"version"`
-	Type           InteractionType  `json:"type"`
+	Member                      *GuildMember              `json:"member,omitempty"`
+	Message                     *Message                  `json:"message,omitempty"`
+	AppPermissions              *Int64                    `json:"app_permissions"`
+	Data                        *InteractionData          `json:"data,omitempty"`
+	GuildID                     *Snowflake                `json:"guild_id,omitempty"`
+	ChannelID                   *Snowflake                `json:"channel_id,omitempty"`
+	Channel                     *Channel                  `json:"channel,omitempty"`
+	User                        *User                     `json:"user,omitempty"`
+	Token                       string                    `json:"token"`
+	Locale                      string                    `json:"locale,omitempty"`
+	GuildLocale                 string                    `json:"guild_locale,omitempty"`
+	Entitlements                []Entitlement             `json:"entitlements,omitempty"`
+	AuthorizingIntegrationOwners map[string]Snowflake     `json:"authorizing_integration_owners,omitempty"`
+	Context                     *InteractionContextType   `json:"context,omitempty"`
+	ID                          Snowflake                 `json:"id"`
+	ApplicationID               Snowflake                 `json:"application_id"`
+	Version                     int32                     `json:"version"`
+	Type                        InteractionType           `json:"type"`
 }
 
 func (i *Interaction) GetUser() *User {
@@ -181,18 +207,51 @@ type InteractionFollowup struct {
 // EditFollowup edits the followup message.
 // messageArg: arguments for editing message.
 func (inf *InteractionFollowup) EditFollowup(ctx context.Context, session *Session, messageParams WebhookMessageParams) (*Message, error) {
-	return EditFollowupMessage(ctx, session, inf.ApplicationID, inf.Token, inf.Message.ID, messageParams)
+	return EditFollowupMessage(ctx, session, inf.Interaction.ApplicationID, inf.Token, inf.Message.ID, messageParams)
 }
 
 // DeleteFollowup deletes the followup message.
 func (inf *InteractionFollowup) DeleteFollowup(ctx context.Context, session *Session) error {
-	return DeleteFollowupMessage(ctx, session, inf.ApplicationID, inf.Token, inf.Message.ID)
+	return DeleteFollowupMessage(ctx, session, inf.Interaction.ApplicationID, inf.Token, inf.Message.ID)
 }
 
 // InteractionResponse represents the interaction response object.
 type InteractionResponse struct {
 	Data *InteractionCallbackData `json:"data,omitempty"`
 	Type InteractionCallbackType  `json:"type"`
+}
+
+// SKUIneligibilityReason represents the reason a user is ineligible to purchase a SKU.
+type SKUIneligibilityReason uint8
+
+const (
+	SKUIneligibilityReasonOther                    SKUIneligibilityReason = 0
+	SKUIneligibilityReasonOwnsSKUOrBundleComponent SKUIneligibilityReason = 1
+	SKUIneligibilityReasonPlatformRestriction      SKUIneligibilityReason = 2
+)
+
+// SocialLayerSKUPurchaseEligibilityCallbackData is the data for SKU purchase eligibility callbacks.
+type SocialLayerSKUPurchaseEligibilityCallbackData struct {
+	IneligibleReason            *SKUIneligibilityReason `json:"ineligible_reason,omitempty"`
+	IneligibleReasonDescription *string                 `json:"ineligible_reason_description,omitempty"`
+	Eligible                    bool                    `json:"eligible"`
+}
+
+// InteractionStatus represents the status of an interaction returned when with_response=true.
+type InteractionStatus struct {
+	ResponseMessageID       *Snowflake             `json:"response_message_id,omitempty"`
+	ChannelID               *Snowflake             `json:"channel_id,omitempty"`
+	GuildID                 *Snowflake             `json:"guild_id,omitempty"`
+	ID                      Snowflake              `json:"id"`
+	ResponseMessageLoading  bool                   `json:"response_message_loading"`
+	ResponseMessageEphemeral bool                  `json:"response_message_ephemeral"`
+	Type                    InteractionType        `json:"type"`
+}
+
+// InteractionCallbackResponse is returned by CreateInteractionResponse when with_response=true.
+type InteractionCallbackResponse struct {
+	Interaction *InteractionStatus `json:"interaction,omitempty"`
+	Resource    json.RawMessage    `json:"resource,omitempty"`
 }
 
 // InteractionData represents the structure of interaction data.
@@ -206,10 +265,17 @@ type InteractionData struct {
 	Options       []InteractionDataOption   `json:"options,omitempty"`
 	Values        []string                  `json:"values,omitempty"`
 	Components    []InteractionComponent    `json:"components,omitempty"`
+	Component     InteractionComponent      `json:"component,omitempty"`
 	Value         json.RawMessage           `json:"value,omitempty"`
 	ID            Snowflake                 `json:"id"`
 	Type          ApplicationCommandType    `json:"type"`
 	Focused       bool                      `json:"focused,omitempty"`
+	Label         string                    `json:"label,omitempty"`
+	Description   string                    `json:"description,omitempty"`
+	Required      *bool                     `json:"required,omitempty"`
+	MinValues     *int32                    `json:"min_values,omitempty"`
+	MaxValues     *int32                    `json:"max_values,omitempty"`
+	Default       bool                      `json:"default,omitempty"`
 }
 
 // InteractionData represents the structure of the interaction callback data.
@@ -231,11 +297,14 @@ type InteractionCallbackData struct {
 
 // InteractionDataOption represents the structure of an interaction option.
 type InteractionDataOption struct {
-	Name    string                       `json:"name"`
-	Value   json.RawMessage              `json:"value,omitempty"`
-	Options []InteractionDataOption      `json:"options,omitempty"`
-	Type    ApplicationCommandOptionType `json:"type"`
-	Focused bool                         `json:"focused,omitempty"`
+	Name        string                       `json:"name"`
+	Value       json.RawMessage              `json:"value,omitempty"`
+	Options     []InteractionDataOption      `json:"options,omitempty"`
+	Type        ApplicationCommandOptionType `json:"type"`
+	Focused     bool                         `json:"focused,omitempty"`
+	Label       string                       `json:"label,omitempty"`
+	Description string                       `json:"description,omitempty"`
+	Default     bool                         `json:"default,omitempty"`
 }
 
 // InteractionResolvedData represents any extra payload data for an interaction.

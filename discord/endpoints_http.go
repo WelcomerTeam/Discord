@@ -169,6 +169,67 @@ var (
 		return EndpointGuildScheduledEvent(guildID, eventID) + "/users"
 	}
 
+	EndpointGuildAutoModerationRules = func(guildID string) string {
+		return EndpointGuilds + guildID + "/auto-moderation/rules"
+	}
+	EndpointGuildAutoModerationRule = func(guildID, ruleID string) string {
+		return EndpointGuilds + guildID + "/auto-moderation/rules/" + ruleID
+	}
+
+	EndpointGuildOnboarding = func(guildID string) string {
+		return EndpointGuilds + guildID + "/onboarding"
+	}
+
+	EndpointGuildActiveThreads = func(guildID string) string {
+		return EndpointGuilds + guildID + "/threads/active"
+	}
+
+	EndpointGuildSoundboardSounds = func(guildID string) string {
+		return EndpointGuilds + guildID + "/soundboard-sounds"
+	}
+	EndpointGuildSoundboardSound = func(guildID, soundID string) string {
+		return EndpointGuilds + guildID + "/soundboard-sounds/" + soundID
+	}
+
+	EndpointDefaultSoundboardSounds = "/soundboard-default-sounds"
+
+	EndpointSticker = func(stickerID string) string {
+		return "/stickers/" + stickerID
+	}
+	EndpointStickerPacks = "/sticker-packs"
+	EndpointStickerPack  = func(packID string) string {
+		return "/sticker-packs/" + packID
+	}
+
+	EndpointApplicationRoleConnectionsMetadata = func(applicationID string) string {
+		return EndpointApplication(applicationID) + "/role-connections/metadata"
+	}
+
+	EndpointUserApplicationRoleConnection = func(applicationID string) string {
+		return EndpointUsers + "@me/applications/" + applicationID + "/role-connection"
+	}
+	EndpointUserCurrentEntitlements = func(applicationID string) string {
+		return EndpointUsers + "@me/applications/" + applicationID + "/entitlements"
+	}
+	EndpointUserConnections = EndpointUsers + "@me/connections"
+
+	EndpointEntitlementConsume = func(applicationID, entitlementID string) string {
+		return EndpointEntitlement(applicationID, entitlementID) + "/consume"
+	}
+
+	EndpointChannelPollAnswers = func(channelID, messageID, answerID string) string {
+		return EndpointChannels + channelID + "/polls/" + messageID + "/answers/" + answerID
+	}
+	EndpointChannelPollExpire = func(channelID, messageID string) string {
+		return EndpointChannels + channelID + "/polls/" + messageID + "/expire"
+	}
+	EndpointChannelSendSoundboardSound = func(channelID string) string {
+		return EndpointChannels + channelID + "/send-soundboard-sound"
+	}
+	EndpointChannelThreadsSearch = func(channelID string) string {
+		return EndpointChannels + channelID + "/threads/search"
+	}
+
 	EndpointChannel = func(channelID string) string {
 		return EndpointChannels + channelID
 	}

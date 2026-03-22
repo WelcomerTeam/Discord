@@ -111,3 +111,47 @@ func DeleteGuildSticker(ctx context.Context, session *Session, guildID, stickerI
 
 	return nil
 }
+
+// GetSticker returns a sticker object for the given sticker ID.
+func GetSticker(ctx context.Context, session *Session, stickerID Snowflake) (*Sticker, error) {
+	endpoint := EndpointSticker(stickerID.String())
+
+	var sticker *Sticker
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &sticker)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get sticker: %w", err)
+	}
+
+	return sticker, nil
+}
+
+// ListStickerPacks returns a list of all available sticker packs.
+func ListStickerPacks(ctx context.Context, session *Session) ([]StickerPack, error) {
+	endpoint := EndpointStickerPacks
+
+	var result struct {
+		StickerPacks []StickerPack `json:"sticker_packs"`
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to list sticker packs: %w", err)
+	}
+
+	return result.StickerPacks, nil
+}
+
+// GetStickerPack returns a specific sticker pack.
+func GetStickerPack(ctx context.Context, session *Session, packID Snowflake) (*StickerPack, error) {
+	endpoint := EndpointStickerPack(packID.String())
+
+	var pack *StickerPack
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &pack)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get sticker pack: %w", err)
+	}
+
+	return pack, nil
+}

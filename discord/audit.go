@@ -1,5 +1,7 @@
 package discord
 
+import "encoding/json"
+
 const AuditLogReasonHeader = "X-Audit-Log-Reason"
 
 type AuditLogActionType uint16
@@ -64,6 +66,37 @@ const (
 	AuditLogActionThreadCreate AuditLogActionType = 110
 	AuditLogActionThreadUpdate AuditLogActionType = 111
 	AuditLogActionThreadDelete AuditLogActionType = 112
+
+	AuditLogActionApplicationCommandPermissionUpdate AuditLogActionType = 121
+
+	AuditLogActionSoundboardSoundCreate AuditLogActionType = 130
+	AuditLogActionSoundboardSoundUpdate AuditLogActionType = 131
+	AuditLogActionSoundboardSoundDelete AuditLogActionType = 132
+
+	AuditLogActionAutoModerationRuleCreate          AuditLogActionType = 140
+	AuditLogActionAutoModerationRuleUpdate          AuditLogActionType = 141
+	AuditLogActionAutoModerationRuleDelete          AuditLogActionType = 142
+	AuditLogActionAutoModerationBlockMessage        AuditLogActionType = 143
+	AuditLogActionAutoModerationFlagToChannel       AuditLogActionType = 144
+	AuditLogActionAutoModerationUserCommunicationDisabled AuditLogActionType = 145
+	AuditLogActionAutoModerationQuarantineUser      AuditLogActionType = 146
+
+	AuditLogActionCreatorMonetizationRequestCreated AuditLogActionType = 150
+	AuditLogActionCreatorMonetizationTermsAccepted  AuditLogActionType = 151
+
+	AuditLogActionOnboardingPromptCreate AuditLogActionType = 163
+	AuditLogActionOnboardingPromptUpdate AuditLogActionType = 164
+	AuditLogActionOnboardingPromptDelete AuditLogActionType = 165
+	AuditLogActionOnboardingCreate       AuditLogActionType = 166
+	AuditLogActionOnboardingUpdate       AuditLogActionType = 167
+
+	AuditLogActionHomeSettingsCreate AuditLogActionType = 190
+	AuditLogActionHomeSettingsUpdate AuditLogActionType = 191
+
+	AuditLogActionVoiceChannelStatusCreate AuditLogActionType = 192
+	AuditLogActionVoiceChannelStatusDelete AuditLogActionType = 193
+
+	AuditLogActionGuildProfileUpdate AuditLogActionType = 211
 )
 
 type AuditLogChangeKey string
@@ -142,12 +175,14 @@ const (
 )
 
 type GuildAuditLog struct {
-	AuditLogEntries AuditLogEntryList  `json:"audit_log_entries"`
-	ScheduledEvents ScheduledEventList `json:"guild_scheduled_events"`
-	Integrations    IntegrationList    `json:"integrations"`
-	Threads         ChannelList        `json:"threads"`
-	Users           UserList           `json:"users"`
-	Webhooks        WebhookList        `json:"webhooks"`
+	AuditLogEntries    AuditLogEntryList  `json:"audit_log_entries"`
+	ScheduledEvents    ScheduledEventList `json:"guild_scheduled_events"`
+	Integrations       IntegrationList    `json:"integrations"`
+	Threads            ChannelList        `json:"threads"`
+	Users              UserList           `json:"users"`
+	Webhooks           WebhookList        `json:"webhooks"`
+	ApplicationCommands []ApplicationCommand `json:"application_commands"`
+	AutoModerationRules json.RawMessage    `json:"auto_moderation_rules,omitempty"`
 }
 
 type AuditLogEntry struct {

@@ -14,6 +14,7 @@ type WebhookType uint16
 const (
 	WebhookTypeIncoming WebhookType = iota + 1
 	WebhookTypeChannelFollower
+	WebhookTypeApplication
 )
 
 // Webhook represents a webhook on discord.

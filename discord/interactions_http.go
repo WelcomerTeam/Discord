@@ -29,6 +29,31 @@ func CreateInteractionResponse(ctx context.Context, session *Session, interactio
 	return nil
 }
 
+func CreateInteractionResponseWithCallback(ctx context.Context, session *Session, interactionID Snowflake, interactionToken string, interactionResponse InteractionResponse) (*InteractionCallbackResponse, error) {
+	endpoint := EndpointInteractionResponse(interactionID.String(), interactionToken) + "?with_response=true"
+
+	var callbackResponse *InteractionCallbackResponse
+
+	if interactionResponse.Data != nil && len(interactionResponse.Data.Files) > 0 {
+		contentType, body, err := multipartBodyWithJSON(interactionResponse, interactionResponse.Data.Files)
+		if err != nil {
+			return nil, err
+		}
+
+		err = session.Interface.FetchBJ(ctx, session, http.MethodPost, endpoint, contentType, body, nil, &callbackResponse)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create interaction response: %w", err)
+		}
+	} else {
+		err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, interactionResponse, nil, &callbackResponse)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create interaction response: %w", err)
+		}
+	}
+
+	return callbackResponse, nil
+}
+
 func GetOriginalInteractionResponse(ctx context.Context, session *Session, applicationID Snowflake, interactionToken string) (*Message, error) {
 	endpoint := EndpointInteractionResponseActions(applicationID.String(), interactionToken)
 

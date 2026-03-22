@@ -92,3 +92,15 @@ func DeleteTestEntitlement(ctx context.Context, session *Session, applicationID,
 
 	return nil
 }
+
+// ConsumeEntitlement marks a One-Time Purchase entitlement as consumed.
+func ConsumeEntitlement(ctx context.Context, session *Session, applicationID, entitlementID Snowflake) error {
+	endpoint := EndpointEntitlementConsume(applicationID.String(), entitlementID.String())
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, nil, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to consume entitlement: %w", err)
+	}
+
+	return nil
+}

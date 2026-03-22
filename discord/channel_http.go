@@ -691,3 +691,59 @@ func GroupDMRemoveRecipient(ctx context.Context, session *Session, channelID, us
 
 	return nil
 }
+
+// GetPollAnswers returns the users who voted for a specific answer in a poll.
+func GetPollAnswers(ctx context.Context, session *Session, channelID, messageID Snowflake, answerID int32, after *Snowflake, limit *int32) ([]User, error) {
+	endpoint := EndpointChannelPollAnswers(channelID.String(), messageID.String(), strconv.Itoa(int(answerID)))
+
+	values := url.Values{}
+
+	if after != nil {
+		values.Set("after", after.String())
+	}
+
+	if limit != nil {
+		values.Set("limit", strconv.Itoa(int(*limit)))
+	}
+
+	if len(values) > 0 {
+		endpoint += "?" + values.Encode()
+	}
+
+	var result struct {
+		Users []User `json:"users"`
+	}
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodGet, endpoint, nil, nil, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get poll answers: %w", err)
+	}
+
+	return result.Users, nil
+}
+
+// ExpirePoll immediately expires (ends) a poll in a channel.
+func ExpirePoll(ctx context.Context, session *Session, channelID, messageID Snowflake) (*Message, error) {
+	endpoint := EndpointChannelPollExpire(channelID.String(), messageID.String())
+
+	var message *Message
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, nil, nil, &message)
+	if err != nil {
+		return nil, fmt.Errorf("failed to expire poll: %w", err)
+	}
+
+	return message, nil
+}
+
+// SendSoundboardSound sends a soundboard sound to a voice channel.
+func SendSoundboardSound(ctx context.Context, session *Session, channelID Snowflake, params SoundboardSoundSendParams) error {
+	endpoint := EndpointChannelSendSoundboardSound(channelID.String())
+
+	err := session.Interface.FetchJJ(ctx, session, http.MethodPost, endpoint, params, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to send soundboard sound: %w", err)
+	}
+
+	return nil
+}

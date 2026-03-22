@@ -73,8 +73,24 @@ type User struct {
 
 // AvatarDecorationData represents the avatar decoration data for a user.
 type AvatarDecorationData struct {
-	Asset string    `json:"asset"`
-	SKUID Snowflake `json:"sku_id"`
+	Asset string     `json:"asset"`
+	SKUID *Snowflake `json:"sku_id,omitempty"`
+}
+
+// UserCollectibles represents collectibles attached to a user.
+type UserCollectibles struct {
+	Nameplate *UserNameplate `json:"nameplate,omitempty"`
+}
+
+// NameplatePalette represents the palette name for a nameplate.
+type NameplatePalette string
+
+// UserNameplate represents a user nameplate collectible.
+type UserNameplate struct {
+	SKUID   *Snowflake       `json:"sku_id,omitempty"`
+	Asset   string           `json:"asset"`
+	Label   string           `json:"label"`
+	Palette NameplatePalette `json:"palette"`
 }
 
 // UserPrimaryGuild represents the primary guild information for a user.
@@ -149,4 +165,37 @@ func (u *ClientUser) Edit(ctx context.Context, session *Session, username *strin
 type UserParam struct {
 	Username *string `json:"username,omitempty"`
 	Avatar   *string `json:"avatar,omitempty"`
+}
+
+// UserConnection represents a connected external account.
+type UserConnection struct {
+	ID           string    `json:"id"`
+	Name         *string   `json:"name,omitempty"`
+	Type         string    `json:"type"`
+	FriendSync   bool      `json:"friend_sync"`
+	ShowActivity bool      `json:"show_activity"`
+	TwoWayLink   bool      `json:"two_way_link"`
+	Verified     bool      `json:"verified"`
+	Visibility   int32     `json:"visibility"`
+	Revoked      bool      `json:"revoked"`
+}
+
+// ApplicationRoleConnectionMetadataType represents the type of role connection metadata.
+type ApplicationRoleConnectionMetadataType int32
+
+// ApplicationRoleConnectionMetadata represents metadata for application role connections.
+type ApplicationRoleConnectionMetadata struct {
+	Type                     ApplicationRoleConnectionMetadataType `json:"type"`
+	Key                      string                                `json:"key"`
+	Name                     string                                `json:"name"`
+	NameLocalizations        map[string]string                     `json:"name_localizations,omitempty"`
+	Description              string                                `json:"description"`
+	DescriptionLocalizations map[string]string                     `json:"description_localizations,omitempty"`
+}
+
+// ApplicationRoleConnection represents a user's role connection to an application.
+type ApplicationRoleConnection struct {
+	PlatformName     *string           `json:"platform_name,omitempty"`
+	PlatformUsername *string           `json:"platform_username,omitempty"`
+	Metadata         map[string]string `json:"metadata,omitempty"`
 }
