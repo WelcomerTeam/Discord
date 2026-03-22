@@ -360,6 +360,7 @@ type InteractionComponent struct {
 	Placeholder   string                                 `json:"placeholder,omitempty"`
 	URL           string                                 `json:"url,omitempty"`
 	Value         string                                 `json:"value,omitempty"`
+	Values        []string                               `json:"values,omitempty"`
 	ChannelTypes  []ChannelType                          `json:"channel_types,omitempty"`
 	Components    []InteractionComponent                 `json:"components,omitempty"`
 	DefaultValues []InteractionComponentDefaultValue     `json:"default_values,omitempty"`
