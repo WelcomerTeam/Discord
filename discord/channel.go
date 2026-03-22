@@ -14,26 +14,23 @@ import (
 type ChannelType uint16
 
 const (
-	ChannelTypeGuildText     ChannelType = 0
-	ChannelTypeDM                        = 1
-	ChannelTypeGuildVoice                = 2
-	ChannelTypeGroupDM                   = 3
-	ChannelTypeGuildCategory             = 4
-
-	ChannelTypeGuildNews         = 5
-	ChannelTypeGuildAnnouncement = 5
-
-	ChannelTypeGuildStore = 6
-
-	ChannelTypeNewsThread         = 10
-	ChannelTypeAnnouncementThread = 10
-
-	ChannelTypeGuildPublicThread  = 11
-	ChannelTypeGuildPrivateThread = 12
-	ChannelTypeGuildStageVoice    = 13
-	ChannelTypeGuildDirectory     = 14
-	ChannelTypeGuildForum         = 15
-	ChannelTypeGuildMedia         = 16
+	ChannelTypeGuildText ChannelType = iota
+	ChannelTypeDM
+	ChannelTypeGuildVoice
+	ChannelTypeGroupDM
+	ChannelTypeGuildCategory
+	ChannelTypeGuildAnnouncement
+	ChannelTypeGuildStore
+	_
+	_
+	_
+	ChannelTypeAnnouncementThread
+	ChannelTypeGuildPublicThread
+	ChannelTypeGuildPrivateThread
+	ChannelTypeGuildStageVoice
+	ChannelTypeGuildDirectory
+	ChannelTypeGuildForum
+	ChannelTypeGuildMedia
 )
 
 // VideoQualityMode represents the quality of the video.
