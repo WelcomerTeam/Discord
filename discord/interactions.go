@@ -138,6 +138,7 @@ type Interaction struct {
 	Message                      *Message                `json:"message,omitempty"`
 	AppPermissions               *Int64                  `json:"app_permissions"`
 	Data                         *InteractionData        `json:"data,omitempty"`
+	Guild                        *Guild                  `json:"guild,omitempty"`
 	GuildID                      *Snowflake              `json:"guild_id,omitempty"`
 	ChannelID                    *Snowflake              `json:"channel_id,omitempty"`
 	Channel                      *Channel                `json:"channel,omitempty"`
@@ -152,6 +153,7 @@ type Interaction struct {
 	ApplicationID                Snowflake               `json:"application_id"`
 	Version                      int32                   `json:"version"`
 	Type                         InteractionType         `json:"type"`
+	AttachmentSizeLimit          int                     `json:"attachment_size_limit"`
 }
 
 func (i *Interaction) GetUser() *User {
@@ -260,22 +262,13 @@ type InteractionData struct {
 	Resolved      *InteractionResolvedData  `json:"resolved,omitempty"`
 	GuildID       *Snowflake                `json:"guild_id,omitempty"`
 	ComponentType *InteractionComponentType `json:"component_type,omitempty"`
-	Name          string                    `json:"name"`
+	Name          string                    `json:"name,omitempty"`
 	CustomID      string                    `json:"custom_id,omitempty"`
 	Options       []InteractionDataOption   `json:"options,omitempty"`
 	Values        []string                  `json:"values,omitempty"`
 	Components    []InteractionComponent    `json:"components,omitempty"`
-	Component     InteractionComponent      `json:"component,omitempty"`
-	Value         json.RawMessage           `json:"value,omitempty"`
 	ID            Snowflake                 `json:"id"`
 	Type          ApplicationCommandType    `json:"type"`
-	Focused       bool                      `json:"focused,omitempty"`
-	Label         string                    `json:"label,omitempty"`
-	Description   string                    `json:"description,omitempty"`
-	Required      *bool                     `json:"required,omitempty"`
-	MinValues     *int32                    `json:"min_values,omitempty"`
-	MaxValues     *int32                    `json:"max_values,omitempty"`
-	Default       bool                      `json:"default,omitempty"`
 }
 
 // InteractionData represents the structure of the interaction callback data.
@@ -349,12 +342,16 @@ const (
 type InteractionComponent struct {
 	AccentColor   *uint32                                `json:"accent_color,omitempty"`
 	Accessory     *InteractionComponent                  `json:"accessory,omitempty"`
+	Component     *InteractionComponent                  `json:"component,omitempty"`
 	Divider       *bool                                  `json:"divider,omitempty"`
 	Emoji         *Emoji                                 `json:"emoji,omitempty"`
 	File          *MediaItem                             `json:"file,omitempty"`
+	MaxLength     *int32                                 `json:"max_length,omitempty"`
 	MaxValues     *int32                                 `json:"max_values,omitempty"`
 	Media         *MediaItem                             `json:"media,omitempty"`
+	MinLength     *int32                                 `json:"min_length,omitempty"`
 	MinValues     *int32                                 `json:"min_values,omitempty"`
+	Required      *bool                                  `json:"required,omitempty"`
 	Spoiler       *bool                                  `json:"spoiler,omitempty"`
 	Content       string                                 `json:"content,omitempty"`
 	CustomID      string                                 `json:"custom_id,omitempty"`
@@ -362,6 +359,7 @@ type InteractionComponent struct {
 	Label         string                                 `json:"label,omitempty"`
 	Placeholder   string                                 `json:"placeholder,omitempty"`
 	URL           string                                 `json:"url,omitempty"`
+	Value         string                                 `json:"value,omitempty"`
 	ChannelTypes  []ChannelType                          `json:"channel_types,omitempty"`
 	Components    []InteractionComponent                 `json:"components,omitempty"`
 	DefaultValues []InteractionComponentDefaultValue     `json:"default_values,omitempty"`
