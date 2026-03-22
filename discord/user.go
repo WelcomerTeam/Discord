@@ -169,15 +169,15 @@ type UserParam struct {
 
 // UserConnection represents a connected external account.
 type UserConnection struct {
-	ID           string    `json:"id"`
-	Name         *string   `json:"name,omitempty"`
-	Type         string    `json:"type"`
-	FriendSync   bool      `json:"friend_sync"`
-	ShowActivity bool      `json:"show_activity"`
-	TwoWayLink   bool      `json:"two_way_link"`
-	Verified     bool      `json:"verified"`
-	Visibility   int32     `json:"visibility"`
-	Revoked      bool      `json:"revoked"`
+	ID           string  `json:"id"`
+	Name         *string `json:"name,omitempty"`
+	Type         string  `json:"type"`
+	FriendSync   bool    `json:"friend_sync"`
+	ShowActivity bool    `json:"show_activity"`
+	TwoWayLink   bool    `json:"two_way_link"`
+	Verified     bool    `json:"verified"`
+	Visibility   int32   `json:"visibility"`
+	Revoked      bool    `json:"revoked"`
 }
 
 // ApplicationRoleConnectionMetadataType represents the type of role connection metadata.

@@ -20,22 +20,22 @@ const (
 
 // GuildOnboarding represents the onboarding configuration for a guild.
 type GuildOnboarding struct {
-	GuildID          Snowflake            `json:"guild_id"`
-	Prompts          []OnboardingPrompt   `json:"prompts"`
-	DefaultChannelIDs []Snowflake         `json:"default_channel_ids"`
-	Enabled          bool                 `json:"enabled"`
-	Mode             *GuildOnboardingMode `json:"mode,omitempty"`
+	GuildID           Snowflake            `json:"guild_id"`
+	Prompts           []OnboardingPrompt   `json:"prompts"`
+	DefaultChannelIDs []Snowflake          `json:"default_channel_ids"`
+	Enabled           bool                 `json:"enabled"`
+	Mode              *GuildOnboardingMode `json:"mode,omitempty"`
 }
 
 // OnboardingPrompt represents a prompt shown during guild onboarding.
 type OnboardingPrompt struct {
-	ID           Snowflake              `json:"id"`
-	Title        string                 `json:"title"`
+	ID           Snowflake                `json:"id"`
+	Title        string                   `json:"title"`
 	Options      []OnboardingPromptOption `json:"options"`
-	SingleSelect bool                   `json:"single_select"`
-	Required     bool                   `json:"required"`
-	InOnboarding bool                   `json:"in_onboarding"`
-	Type         OnboardingPromptType   `json:"type"`
+	SingleSelect bool                     `json:"single_select"`
+	Required     bool                     `json:"required"`
+	InOnboarding bool                     `json:"in_onboarding"`
+	Type         OnboardingPromptType     `json:"type"`
 }
 
 // OnboardingPromptOption represents an option in an onboarding prompt.

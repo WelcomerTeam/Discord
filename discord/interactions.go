@@ -134,24 +134,24 @@ const (
 
 // Interaction represents the structure of an interaction.
 type Interaction struct {
-	Member                      *GuildMember              `json:"member,omitempty"`
-	Message                     *Message                  `json:"message,omitempty"`
-	AppPermissions              *Int64                    `json:"app_permissions"`
-	Data                        *InteractionData          `json:"data,omitempty"`
-	GuildID                     *Snowflake                `json:"guild_id,omitempty"`
-	ChannelID                   *Snowflake                `json:"channel_id,omitempty"`
-	Channel                     *Channel                  `json:"channel,omitempty"`
-	User                        *User                     `json:"user,omitempty"`
-	Token                       string                    `json:"token"`
-	Locale                      string                    `json:"locale,omitempty"`
-	GuildLocale                 string                    `json:"guild_locale,omitempty"`
-	Entitlements                []Entitlement             `json:"entitlements,omitempty"`
-	AuthorizingIntegrationOwners map[string]Snowflake     `json:"authorizing_integration_owners,omitempty"`
-	Context                     *InteractionContextType   `json:"context,omitempty"`
-	ID                          Snowflake                 `json:"id"`
-	ApplicationID               Snowflake                 `json:"application_id"`
-	Version                     int32                     `json:"version"`
-	Type                        InteractionType           `json:"type"`
+	Member                       *GuildMember            `json:"member,omitempty"`
+	Message                      *Message                `json:"message,omitempty"`
+	AppPermissions               *Int64                  `json:"app_permissions"`
+	Data                         *InteractionData        `json:"data,omitempty"`
+	GuildID                      *Snowflake              `json:"guild_id,omitempty"`
+	ChannelID                    *Snowflake              `json:"channel_id,omitempty"`
+	Channel                      *Channel                `json:"channel,omitempty"`
+	User                         *User                   `json:"user,omitempty"`
+	Token                        string                  `json:"token"`
+	Locale                       string                  `json:"locale,omitempty"`
+	GuildLocale                  string                  `json:"guild_locale,omitempty"`
+	Entitlements                 []Entitlement           `json:"entitlements,omitempty"`
+	AuthorizingIntegrationOwners map[string]Snowflake    `json:"authorizing_integration_owners,omitempty"`
+	Context                      *InteractionContextType `json:"context,omitempty"`
+	ID                           Snowflake               `json:"id"`
+	ApplicationID                Snowflake               `json:"application_id"`
+	Version                      int32                   `json:"version"`
+	Type                         InteractionType         `json:"type"`
 }
 
 func (i *Interaction) GetUser() *User {
@@ -239,13 +239,13 @@ type SocialLayerSKUPurchaseEligibilityCallbackData struct {
 
 // InteractionStatus represents the status of an interaction returned when with_response=true.
 type InteractionStatus struct {
-	ResponseMessageID       *Snowflake             `json:"response_message_id,omitempty"`
-	ChannelID               *Snowflake             `json:"channel_id,omitempty"`
-	GuildID                 *Snowflake             `json:"guild_id,omitempty"`
-	ID                      Snowflake              `json:"id"`
-	ResponseMessageLoading  bool                   `json:"response_message_loading"`
-	ResponseMessageEphemeral bool                  `json:"response_message_ephemeral"`
-	Type                    InteractionType        `json:"type"`
+	ResponseMessageID        *Snowflake      `json:"response_message_id,omitempty"`
+	ChannelID                *Snowflake      `json:"channel_id,omitempty"`
+	GuildID                  *Snowflake      `json:"guild_id,omitempty"`
+	ID                       Snowflake       `json:"id"`
+	ResponseMessageLoading   bool            `json:"response_message_loading"`
+	ResponseMessageEphemeral bool            `json:"response_message_ephemeral"`
+	Type                     InteractionType `json:"type"`
 }
 
 // InteractionCallbackResponse is returned by CreateInteractionResponse when with_response=true.

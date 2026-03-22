@@ -13,12 +13,12 @@ const (
 
 // Poll represents a poll attached to a message.
 type Poll struct {
-	Question        PollMedia        `json:"question"`
-	Answers         []PollAnswer     `json:"answers"`
-	Expiry          time.Time        `json:"expiry"`
-	Results         *PollResults     `json:"results,omitempty"`
-	LayoutType      PollLayoutType   `json:"layout_type"`
-	AllowMultiselect bool            `json:"allow_multiselect"`
+	Question         PollMedia      `json:"question"`
+	Answers          []PollAnswer   `json:"answers"`
+	Expiry           time.Time      `json:"expiry"`
+	Results          *PollResults   `json:"results,omitempty"`
+	LayoutType       PollLayoutType `json:"layout_type"`
+	AllowMultiselect bool           `json:"allow_multiselect"`
 }
 
 // PollAnswer represents an answer in a poll.

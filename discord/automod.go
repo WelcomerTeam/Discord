@@ -25,10 +25,10 @@ const (
 type AutoModerationActionType int32
 
 const (
-	AutoModerationActionTypeBlockMessage            AutoModerationActionType = 1
-	AutoModerationActionTypeSendAlertMessage        AutoModerationActionType = 2
-	AutoModerationActionTypeTimeout                 AutoModerationActionType = 3
-	AutoModerationActionTypeBlockMemberInteraction  AutoModerationActionType = 4
+	AutoModerationActionTypeBlockMessage           AutoModerationActionType = 1
+	AutoModerationActionTypeSendAlertMessage       AutoModerationActionType = 2
+	AutoModerationActionTypeTimeout                AutoModerationActionType = 3
+	AutoModerationActionTypeBlockMemberInteraction AutoModerationActionType = 4
 )
 
 // AutoModerationKeywordPresetType represents preset keyword lists.

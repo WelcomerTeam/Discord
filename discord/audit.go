@@ -73,13 +73,13 @@ const (
 	AuditLogActionSoundboardSoundUpdate AuditLogActionType = 131
 	AuditLogActionSoundboardSoundDelete AuditLogActionType = 132
 
-	AuditLogActionAutoModerationRuleCreate          AuditLogActionType = 140
-	AuditLogActionAutoModerationRuleUpdate          AuditLogActionType = 141
-	AuditLogActionAutoModerationRuleDelete          AuditLogActionType = 142
-	AuditLogActionAutoModerationBlockMessage        AuditLogActionType = 143
-	AuditLogActionAutoModerationFlagToChannel       AuditLogActionType = 144
+	AuditLogActionAutoModerationRuleCreate                AuditLogActionType = 140
+	AuditLogActionAutoModerationRuleUpdate                AuditLogActionType = 141
+	AuditLogActionAutoModerationRuleDelete                AuditLogActionType = 142
+	AuditLogActionAutoModerationBlockMessage              AuditLogActionType = 143
+	AuditLogActionAutoModerationFlagToChannel             AuditLogActionType = 144
 	AuditLogActionAutoModerationUserCommunicationDisabled AuditLogActionType = 145
-	AuditLogActionAutoModerationQuarantineUser      AuditLogActionType = 146
+	AuditLogActionAutoModerationQuarantineUser            AuditLogActionType = 146
 
 	AuditLogActionCreatorMonetizationRequestCreated AuditLogActionType = 150
 	AuditLogActionCreatorMonetizationTermsAccepted  AuditLogActionType = 151
@@ -175,14 +175,14 @@ const (
 )
 
 type GuildAuditLog struct {
-	AuditLogEntries    AuditLogEntryList  `json:"audit_log_entries"`
-	ScheduledEvents    ScheduledEventList `json:"guild_scheduled_events"`
-	Integrations       IntegrationList    `json:"integrations"`
-	Threads            ChannelList        `json:"threads"`
-	Users              UserList           `json:"users"`
-	Webhooks           WebhookList        `json:"webhooks"`
+	AuditLogEntries     AuditLogEntryList    `json:"audit_log_entries"`
+	ScheduledEvents     ScheduledEventList   `json:"guild_scheduled_events"`
+	Integrations        IntegrationList      `json:"integrations"`
+	Threads             ChannelList          `json:"threads"`
+	Users               UserList             `json:"users"`
+	Webhooks            WebhookList          `json:"webhooks"`
 	ApplicationCommands []ApplicationCommand `json:"application_commands"`
-	AutoModerationRules json.RawMessage    `json:"auto_moderation_rules,omitempty"`
+	AutoModerationRules json.RawMessage      `json:"auto_moderation_rules,omitempty"`
 }
 
 type AuditLogEntry struct {

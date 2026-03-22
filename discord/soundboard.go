@@ -16,7 +16,7 @@ type SoundboardSound struct {
 
 // SoundboardSoundSendParams represents the payload for sending a soundboard sound.
 type SoundboardSoundSendParams struct {
-	SoundID      Snowflake  `json:"sound_id"`
+	SoundID       Snowflake  `json:"sound_id"`
 	SourceGuildID *Snowflake `json:"source_guild_id,omitempty"`
 }
 

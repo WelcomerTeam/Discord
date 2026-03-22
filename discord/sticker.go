@@ -14,7 +14,7 @@ const (
 type StickerFormatType uint16
 
 const (
-	StickerFormatTypePNG    StickerFormatType = 1 + iota
+	StickerFormatTypePNG StickerFormatType = 1 + iota
 	StickerFormatTypeAPNG
 	StickerFormatTypeLOTTIE
 	StickerFormatTypeGIF

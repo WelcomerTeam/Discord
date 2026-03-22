@@ -90,43 +90,43 @@ const (
 
 // Message represents a message on discord.
 type Message struct {
-	Timestamp            time.Time               `json:"timestamp"`
-	EditedTimestamp      *time.Time              `json:"edited_timestamp,omitempty"`
-	Author               User                    `json:"author"`
-	WebhookID            *Snowflake              `json:"webhook_id,omitempty"`
-	Member               *GuildMember            `json:"member,omitempty"`
-	GuildID              *Snowflake              `json:"guild_id,omitempty"`
-	Thread               *Channel                `json:"thread,omitempty"`
-	Interaction          *MessageInteraction     `json:"interaction,omitempty"`
-	InteractionMetadata  json.RawMessage         `json:"interaction_metadata,omitempty"`
-	ReferencedMessage    *Message                `json:"referenced_message,omitempty"`
-	Flags                *MessageFlags           `json:"flags,omitempty"`
-	Application          *Application            `json:"application,omitempty"`
-	ApplicationID        *Snowflake              `json:"application_id,omitempty"`
-	Activity             *MessageActivity        `json:"activity,omitempty"`
-	Call                 *MessageCall            `json:"call,omitempty"`
+	Timestamp            time.Time                    `json:"timestamp"`
+	EditedTimestamp      *time.Time                   `json:"edited_timestamp,omitempty"`
+	Author               User                         `json:"author"`
+	WebhookID            *Snowflake                   `json:"webhook_id,omitempty"`
+	Member               *GuildMember                 `json:"member,omitempty"`
+	GuildID              *Snowflake                   `json:"guild_id,omitempty"`
+	Thread               *Channel                     `json:"thread,omitempty"`
+	Interaction          *MessageInteraction          `json:"interaction,omitempty"`
+	InteractionMetadata  json.RawMessage              `json:"interaction_metadata,omitempty"`
+	ReferencedMessage    *Message                     `json:"referenced_message,omitempty"`
+	Flags                *MessageFlags                `json:"flags,omitempty"`
+	Application          *Application                 `json:"application,omitempty"`
+	ApplicationID        *Snowflake                   `json:"application_id,omitempty"`
+	Activity             *MessageActivity             `json:"activity,omitempty"`
+	Call                 *MessageCall                 `json:"call,omitempty"`
 	RoleSubscriptionData *MessageRoleSubscriptionData `json:"role_subscription_data,omitempty"`
-	PurchaseNotification *PurchaseNotification   `json:"purchase_notification,omitempty"`
-	Poll                 *Poll                   `json:"poll,omitempty"`
-	Resolved             *InteractionResolvedData `json:"resolved,omitempty"`
-	MessageReference     *MessageReference       `json:"message_reference,omitempty"`
-	Content              string                  `json:"content"`
-	Embeds               EmbedList               `json:"embeds"`
-	MentionRoles         SnowflakeList           `json:"mention_roles"`
-	Reactions            MessageReactionList      `json:"reactions"`
-	StickerItems         []MessageSticker        `json:"sticker_items,omitempty"`
-	Attachments          MessageAttachmentList    `json:"attachments"`
-	Components           []InteractionComponent   `json:"components,omitempty"`
-	MentionChannels      []MessageChannelMention  `json:"mention_channels,omitempty"`
-	Mentions             UserList                `json:"mentions"`
-	MessageSnapshots     []MessageSnapshot       `json:"message_snapshots,omitempty"`
-	ID                   Snowflake               `json:"id"`
-	ChannelID            Snowflake               `json:"channel_id"`
-	Position             int32                   `json:"position,omitempty"`
-	MentionEveryone      bool                    `json:"mention_everyone"`
-	TTS                  bool                    `json:"tts"`
-	Type                 MessageType             `json:"type"`
-	Pinned               bool                    `json:"pinned"`
+	PurchaseNotification *PurchaseNotification        `json:"purchase_notification,omitempty"`
+	Poll                 *Poll                        `json:"poll,omitempty"`
+	Resolved             *InteractionResolvedData     `json:"resolved,omitempty"`
+	MessageReference     *MessageReference            `json:"message_reference,omitempty"`
+	Content              string                       `json:"content"`
+	Embeds               EmbedList                    `json:"embeds"`
+	MentionRoles         SnowflakeList                `json:"mention_roles"`
+	Reactions            MessageReactionList          `json:"reactions"`
+	StickerItems         []MessageSticker             `json:"sticker_items,omitempty"`
+	Attachments          MessageAttachmentList        `json:"attachments"`
+	Components           []InteractionComponent       `json:"components,omitempty"`
+	MentionChannels      []MessageChannelMention      `json:"mention_channels,omitempty"`
+	Mentions             UserList                     `json:"mentions"`
+	MessageSnapshots     []MessageSnapshot            `json:"message_snapshots,omitempty"`
+	ID                   Snowflake                    `json:"id"`
+	ChannelID            Snowflake                    `json:"channel_id"`
+	Position             int32                        `json:"position,omitempty"`
+	MentionEveryone      bool                         `json:"mention_everyone"`
+	TTS                  bool                         `json:"tts"`
+	Type                 MessageType                  `json:"type"`
+	Pinned               bool                         `json:"pinned"`
 }
 
 // AddReaction adds a reaction to a message
@@ -361,8 +361,8 @@ type PurchaseNotification struct {
 
 // GuildProductPurchase represents a guild product purchase.
 type GuildProductPurchase struct {
-	ListingID Snowflake `json:"listing_id"`
-	ProductName string  `json:"product_name"`
+	ListingID   Snowflake `json:"listing_id"`
+	ProductName string    `json:"product_name"`
 }
 
 // MessageSnapshot represents a forwarded message snapshot.

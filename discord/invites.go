@@ -11,7 +11,7 @@ import (
 type InviteType uint16
 
 const (
-	InviteTypeGuild   InviteType = iota
+	InviteTypeGuild InviteType = iota
 	InviteTypeGroupDM
 	InviteTypeFriend
 )
@@ -46,27 +46,27 @@ const (
 
 // Invite represents the structure of Invite data.
 type Invite struct {
-	ExpiresAt                *time.Time       `json:"expires_at,omitempty"`
-	CreatedAt                time.Time        `json:"created_at"`
-	ScheduledEvent           *ScheduledEvent  `json:"guild_scheduled_event,omitempty"`
-	Inviter                  *User            `json:"inviter,omitempty"`
+	ExpiresAt                *time.Time        `json:"expires_at,omitempty"`
+	CreatedAt                time.Time         `json:"created_at"`
+	ScheduledEvent           *ScheduledEvent   `json:"guild_scheduled_event,omitempty"`
+	Inviter                  *User             `json:"inviter,omitempty"`
 	TargetType               *InviteTargetType `json:"target_type,omitempty"`
-	TargetUser               *User            `json:"target_user,omitempty"`
-	TargetApplication        *Application     `json:"target_application,omitempty"`
-	Guild                    *Guild           `json:"guild,omitempty"`
-	Channel                  *Channel         `json:"channel,omitempty"`
-	GuildID                  *Snowflake       `json:"guild_id,omitempty"`
-	Code                     string           `json:"code"`
-	ApproximateMemberCount   int32            `json:"approximate_member_count,omitempty"`
-	Uses                     int32            `json:"uses"`
-	MaxUses                  int32            `json:"max_uses"`
-	MaxAge                   int32            `json:"max_age"`
-	ApproximatePresenceCount int32            `json:"approximate_presence_count,omitempty"`
-	Flags                    int32            `json:"flags,omitempty"`
-	Type                     InviteType       `json:"type,omitempty"`
-	Temporary                bool             `json:"temporary"`
-	IsContact                bool             `json:"is_contact,omitempty"`
-	IsNicknameChangeable     bool             `json:"is_nickname_changeable,omitempty"`
+	TargetUser               *User             `json:"target_user,omitempty"`
+	TargetApplication        *Application      `json:"target_application,omitempty"`
+	Guild                    *Guild            `json:"guild,omitempty"`
+	Channel                  *Channel          `json:"channel,omitempty"`
+	GuildID                  *Snowflake        `json:"guild_id,omitempty"`
+	Code                     string            `json:"code"`
+	ApproximateMemberCount   int32             `json:"approximate_member_count,omitempty"`
+	Uses                     int32             `json:"uses"`
+	MaxUses                  int32             `json:"max_uses"`
+	MaxAge                   int32             `json:"max_age"`
+	ApproximatePresenceCount int32             `json:"approximate_presence_count,omitempty"`
+	Flags                    int32             `json:"flags,omitempty"`
+	Type                     InviteType        `json:"type,omitempty"`
+	Temporary                bool              `json:"temporary"`
+	IsContact                bool              `json:"is_contact,omitempty"`
+	IsNicknameChangeable     bool              `json:"is_nickname_changeable,omitempty"`
 }
 
 // Delete deletes an invite.
