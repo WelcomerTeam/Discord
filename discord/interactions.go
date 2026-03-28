@@ -354,10 +354,12 @@ type InteractionComponent struct {
 	MinValues     *int32                                 `json:"min_values,omitempty"`
 	Required      *bool                                  `json:"required,omitempty"`
 	Spoiler       *bool                                  `json:"spoiler,omitempty"`
+	Default       *bool                                  `json:"default,omitempty"`
 	Content       string                                 `json:"content,omitempty"`
 	CustomID      string                                 `json:"custom_id,omitempty"`
 	Description   string                                 `json:"description,omitempty"`
 	Label         string                                 `json:"label,omitempty"`
+	Placeholder   string                                 `json:"placeholder,omitempty"`
 	URL           string                                 `json:"url,omitempty"`
 	Value         string                                 `json:"value,omitempty"`
 	Values        []string                               `json:"values,omitempty"`
