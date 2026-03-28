@@ -108,6 +108,7 @@ const (
 	InteractionComponentTypeContainer
 	InteractionComponentTypeLabel
 	InteractionComponentTypeFileUpload
+	_
 	InteractionComponentTypeRadioGroup
 	InteractionComponentTypeCheckboxGroup
 	InteractionComponentTypeCheckbox
@@ -357,7 +358,6 @@ type InteractionComponent struct {
 	CustomID      string                                 `json:"custom_id,omitempty"`
 	Description   string                                 `json:"description,omitempty"`
 	Label         string                                 `json:"label,omitempty"`
-	Placeholder   string                                 `json:"placeholder,omitempty"`
 	URL           string                                 `json:"url,omitempty"`
 	Value         string                                 `json:"value,omitempty"`
 	Values        []string                               `json:"values,omitempty"`
