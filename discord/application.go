@@ -139,6 +139,8 @@ type ApplicationCommandPermissions struct {
 
 // ApplicationCommandOption represents the options for an application command.
 type ApplicationCommandOption struct {
+	DefaultMemberPermission  *Int64                           `json:"default_member_permissions,omitempty"`
+	DMPermission             *bool                            `json:"dm_permission,omitempty"`
 	MinValue                 *int32                           `json:"min_value,omitempty"`
 	Autocomplete             *bool                            `json:"autocomplete,omitempty"`
 	NameLocalizations        map[string]string                `json:"name_localizations,omitempty"`
