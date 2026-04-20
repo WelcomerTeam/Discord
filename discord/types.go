@@ -53,6 +53,12 @@ func (s Snowflake) String() string {
 	return strconv.FormatInt(int64(s), 10)
 }
 
+func SnowFlakeFromString(s string) *Snowflake {
+	i, _ := strconv.ParseInt(s, 10, 64)
+	sf := Snowflake(i)
+	return &sf
+}
+
 // Time returns the creation time of the Snowflake.
 func (s Snowflake) Time() time.Time {
 	nsec := (int64(s) >> 22) + DiscordCreation
