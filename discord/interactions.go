@@ -276,11 +276,11 @@ type InteractionData struct {
 // Not all message fields are supported, allowed fields are: tts, content
 // embeds, allowed_mentions, flags, components and attachments.
 type InteractionCallbackData struct {
+	AllowedMentions *MessageAllowedMentions          `json:"allowed_mentions"`
 	Content         string                           `json:"content,omitempty"`
 	Title           string                           `json:"title,omitempty"`
 	CustomID        string                           `json:"custom_id,omitempty"`
 	Embeds          []Embed                          `json:"embeds,omitempty"`
-	AllowedMentions []MessageAllowedMentions         `json:"allowed_mentions,omitempty"`
 	Attachments     []MessageAttachment              `json:"attachments,omitempty"`
 	Files           []File                           `json:"-"`
 	Components      []InteractionComponent           `json:"components,omitempty"`

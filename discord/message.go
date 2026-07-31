@@ -200,17 +200,17 @@ func (m *Message) Unpin(ctx context.Context, session *Session, reason *string) e
 
 // MessageParams represents the structure for sending a message on discord.
 type MessageParams struct {
-	MessageReference *MessageReference        `json:"message_reference"`
-	PayloadJSON      *json.RawMessage         `json:"payload_json"`
-	Content          string                   `json:"content"`
-	Embeds           []Embed                  `json:"embeds"`
-	AllowedMentions  []MessageAllowedMentions `json:"allowed_mentions,omitempty"`
-	Components       []InteractionComponent   `json:"components"`
-	StickerIDs       []Snowflake              `json:"sticker_ids,omitempty"`
-	Files            []File                   `json:"-"`
-	Attachments      []MessageAttachment      `json:"attachments,omitempty"`
-	Flags            MessageFlags             `json:"flags,omitempty"`
-	TTS              bool                     `json:"tts,omitempty"`
+	AllowedMentions  *MessageAllowedMentions `json:"allowed_mentions"`
+	MessageReference *MessageReference       `json:"message_reference"`
+	PayloadJSON      *json.RawMessage        `json:"payload_json"`
+	Content          string                  `json:"content"`
+	Embeds           []Embed                 `json:"embeds"`
+	Components       []InteractionComponent  `json:"components"`
+	StickerIDs       []Snowflake             `json:"sticker_ids,omitempty"`
+	Files            []File                  `json:"-"`
+	Attachments      []MessageAttachment     `json:"attachments,omitempty"`
+	Flags            MessageFlags            `json:"flags,omitempty"`
+	TTS              bool                    `json:"tts,omitempty"`
 }
 
 func NewMessage(content string) *MessageParams {
@@ -227,12 +227,6 @@ func (m *MessageParams) SetTTS(tts bool) *MessageParams {
 
 func (m *MessageParams) AddEmbed(embed Embed) *MessageParams {
 	m.Embeds = append(m.Embeds, embed)
-
-	return m
-}
-
-func (m *MessageParams) AddAllowedMention(allowedMention MessageAllowedMentions) *MessageParams {
-	m.AllowedMentions = append(m.AllowedMentions, allowedMention)
 
 	return m
 }
